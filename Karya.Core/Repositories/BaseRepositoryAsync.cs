@@ -1,5 +1,4 @@
-﻿using Karya.Core.Abstracts.Entities;
-using Karya.Core.Helpers.Generals;
+﻿using Karya.Core.Helpers.Generals;
 using Karya.Core.Interfaces.Entities;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;

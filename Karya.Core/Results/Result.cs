@@ -1,8 +1,15 @@
-﻿
-using Karya.Core.Interfaces.Results;
+﻿using Karya.Core.Interfaces.Results;
 
 namespace Karya.Core.Results;
-public record Result : IBaseResult
+
+public enum ResultType
+{
+    Success,
+    Error,
+    Warning
+}
+
+public record BaseResult 
 {
     public bool IsSuccess { get; init; }
 
@@ -10,41 +17,78 @@ public record Result : IBaseResult
 
     public string Message { get; init; } = string.Empty;
 
-    public Dictionary<string, string>? Errors { get; init; } = new();
+    public Dictionary<string, string>? Errors { get; init; }
+    public Dictionary<string, string>? Infos { get; init; }
+    public Dictionary<string, string>? Warnings { get; init; }
 
-    protected Result(bool isSuccess, string code, string? message = null)
+    protected BaseResult(bool isSuccess, string code, string? message = null)
     {
-        IsSuccess = isSuccess;
-        Code = code;
-        Message = message ?? string.Empty;
+        IsSuccess   = isSuccess;
+        Code        = code;
+        Message     = message ?? string.Empty;
     }
 
-    public static Result Success(string code = "100") => new(true, code, null);
-
-    public static Result Error(string errorCode, string errorMessage) => new(false, errorCode, errorMessage);
-
-    public static Result Error(Dictionary<string, string> errors) => new(false, "400", "Has a multiple errors")
+    protected BaseResult(ResultType resultType, bool isSuccess, string code, string? message = null, Dictionary<string, string>? values=null):this(isSuccess, code, message)
     {
-        Errors = errors
-    };
+        if (resultType == ResultType.Success)
+            Infos = values;
+        else if (resultType == ResultType.Error)
+            Errors = values;
+        else
+            Warnings = values;
+    }
+
+    public static BaseResult Success()
+    {
+        return new(ResultType.Success, true, "200");
+    }
+
+    public static BaseResult Success(string code)
+    {
+        return new(ResultType.Success, true, code);
+    }
+
+    public static BaseResult Success(string code, string? message, Dictionary<string, string>? infos = null)
+    {
+        return new(ResultType.Success,true, code, message);
+    } 
+        
+
+    public static BaseResult Error(string errorCode, string? errorMessage, Dictionary<string, string>? errors = null)
+    {
+        return new(ResultType.Error, false, errorCode, errorMessage);
+    } 
+
+    public static BaseResult Warning(string code, string? message, Dictionary<string, string>? infos = null)
+        => new(ResultType.Warning,true, code, message,infos);
+
 }
 
-public record Result<T> : Result, IBaseResult<T> 
+public record BaseResult<T> : BaseResult
 {
     public T? Data { get; init; }
-
-    protected Result(bool isSuccess, string code, T data, string? message = null) : base(isSuccess, code, message)
+    public BaseResult(BaseResult result,T? data):base(result)
     {
         Data = data;
     }
-
-    public static Result<T> Success(T data, string code = "200") => new(true, code, data, null);
-    public static Result<T> Error(T data, string errorCode, string errorMessage) => new(false, errorCode, data, errorMessage);
-    public static Result<T> Error(T data, Dictionary<string, string> errors)
+    protected BaseResult(bool isSuccess, string code, T? data, string? message = null) : base(isSuccess, code, message)
     {
-        return new Result<T>(false, "400", data, "Has a multiple errors")
-        {
-            Errors = errors
-        };
+        Data = data;
     }
+    protected BaseResult(ResultType resultType, bool isSuccess, string code, T? data, string? message = null, Dictionary<string, string>? values=null) 
+        : base(resultType,isSuccess, code ,message,values)
+    {
+        Data = data;
+    }
+ 
+    public static BaseResult<T> Success(string code, string? message, T? data, Dictionary<string, string>? errors = null)
+        => new(ResultType.Success, true, code, data, message, errors);
+
+    public static BaseResult<T> Error(string code, string? message, T? data, Dictionary<string, string>? errors = null)
+        => new(ResultType.Error, false, code, data, message, errors);
+
+    public static BaseResult<T> Warning(string code, string? message, T? data, Dictionary<string, string>? warnings = null)
+        => new(ResultType.Warning, true, code, data, message, warnings);
+
+    
 }

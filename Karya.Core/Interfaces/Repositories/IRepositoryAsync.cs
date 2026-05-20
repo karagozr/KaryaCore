@@ -8,19 +8,21 @@ public interface IRepository
 
 }
 
-public interface ITanentRepository
+public interface ITenantRepository
 {
 
 }
-public interface IRepositoryAsync<TEntity,TId> : IRepository, ITanentRepository, IQuery<TEntity, TId> where TEntity : IBaseEntity<TId>, new()
+public interface IRepositoryAsync<TEntity,TId> : IRepository, ITenantRepository, IQuery<TEntity, TId> where TEntity : IBaseEntity<TId>, new()
 {
     Task<TEntity?> GetByIdAsync(TId id, 
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, 
         CancellationToken ct = default);
+
     Task<bool> AnyAsync(
         Expression<Func<TEntity, bool>>? expression = null,
         bool withDeleted = false,
         CancellationToken ct = default);
+
     Task<IEnumerable<TEntity>> GetAsync(
         Expression<Func<TEntity, bool>>? expression = null, 
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
@@ -39,7 +41,6 @@ public interface IRepositoryAsync<TEntity,TId> : IRepository, ITanentRepository,
     Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = default);
     Task UpdateAsync(TEntity entity, CancellationToken ct = default);
     Task UpdateAsync(TEntity entity, string[] columns, CancellationToken ct = default);
-
     Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = default);
     Task DeleteAsync(TId id, CancellationToken ct = default);
     Task DeleteRangeAsync(IEnumerable<TId> ids, CancellationToken ct = default);

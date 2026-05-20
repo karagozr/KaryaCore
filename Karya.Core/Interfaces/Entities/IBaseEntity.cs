@@ -13,6 +13,4 @@ public interface IBaseEntity<TId>: IEntity
 
 public interface IBaseEntity:IBaseEntity<Guid>
 {
-    [Key]
-    Guid Id { get; set; }
 }

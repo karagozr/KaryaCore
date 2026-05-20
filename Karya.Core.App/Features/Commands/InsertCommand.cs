@@ -1,8 +1,7 @@
 ﻿using Karya.Core.App.Interfaces.Commands;
 using Karya.Core.Interfaces.DTOs;
-using Karya.Core.Interfaces.Results;
 using Karya.Core.Interfaces.Services;
-using System.Linq.Expressions;
+using Karya.Core.Results;
 
 namespace Karya.Core.App.Features.Commands;
 
@@ -10,9 +9,9 @@ public record InsertCommand<TEntity, TId, TDto>(
     TDto Dto,
     IBaseService<TEntity, TId> Service,
     string Permission = ""
-) : IExecutableCrudRequest<IBaseResult<TDto>>
+) : IExecutableCrudRequest<BaseResult>
     where TDto : class, IInsertDto, new()
 {
-    public Task<IBaseResult<TDto>> ExecuteAsync(CancellationToken ct = default)
-        => Service.Insert<TDto>(Dto);
+    public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
+        => Service.Insert(Dto);
 }

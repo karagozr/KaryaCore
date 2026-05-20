@@ -1,4 +1,4 @@
-﻿using Karya.Core.Interfaces.Results;
+﻿using Karya.Core.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Karya.Core.Web.Returns.Api;
@@ -11,7 +11,7 @@ public class ApiResult : ActionResult, IActionResult
     protected readonly Dictionary<string, string>? Errors;
 
 
-    public ApiResult(IBaseResult result)
+    public ApiResult(BaseResult result)
     {
         Code = result.Code;
         Message = result.Message;
@@ -40,7 +40,7 @@ public class ApiResult<T> : ApiResult
 {
 
     private readonly T? Data;
-    public ApiResult(IBaseResult<T> result) : base(result) => Data = result.Data;
+    public ApiResult(BaseResult<T> result) : base(result) => Data = result.Data;
 
     public override async Task ExecuteResultAsync(ActionContext context)
     {

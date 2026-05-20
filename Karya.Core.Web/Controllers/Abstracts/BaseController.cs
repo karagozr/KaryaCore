@@ -1,13 +1,13 @@
-﻿using Karya.Core.Interfaces.DTOs;
-using Karya.Core.Interfaces.Results;
-using Karya.Core.Interfaces.Services;
-using Karya.Core.App.Features.Commands;
+﻿using Karya.Core.Interfaces.Services;
+using Karya.Core.Results;
 using Karya.Core.Web.Returns.Api;
-using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Karya.Core.Web.Abstracts.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public abstract class BaseController<TEntity, TId> : ControllerBase
@@ -22,6 +22,6 @@ public abstract class BaseController<TEntity, TId> : ControllerBase
         _service = service;
     }
 
-    protected ApiResult<TData> ApiActionResult<TData>(IBaseResult<TData> result) => new(result);
-    protected ApiResult ApiActionResult(IBaseResult result) => new(result);
+    protected ApiResult<TData> ApiActionResult<TData>(BaseResult<TData> result) => new(result);
+    protected ApiResult ApiActionResult(BaseResult result) => new(result);
 }

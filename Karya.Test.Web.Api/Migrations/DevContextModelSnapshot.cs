@@ -57,7 +57,8 @@ namespace Karya.Test.Web.Api.Migrations
             modelBuilder.Entity("Karya.TestApi.Entities.Inventory", b =>
                 {
                     b.Property<string>("TanentId")
-                        .HasColumnType("nvarchar(450)")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnOrder(1);
 
                     b.Property<string>("Id")
@@ -73,7 +74,7 @@ namespace Karya.Test.Web.Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryTanentId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -89,7 +90,8 @@ namespace Karya.Test.Web.Api.Migrations
             modelBuilder.Entity("Karya.TestApi.Entities.InventoryCategory", b =>
                 {
                     b.Property<string>("TanentId")
-                        .HasColumnType("nvarchar(450)")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnOrder(1);
 
                     b.Property<string>("Id")

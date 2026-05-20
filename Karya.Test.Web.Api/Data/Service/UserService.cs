@@ -1,5 +1,4 @@
 ﻿using Karya.Core.Interfaces.Identities;
-using Karya.Core.Interfaces.Results;
 using Karya.Core.Results;
 using Karya.Core.Services;
 using Karya.Test.Web.Api.DTOs;
@@ -15,12 +14,12 @@ public class UserService : BaseService<UserRepository, User, string>
         _tokenService = tokenService;
     }
 
-    public async Task<IBaseResult<string>> Login(UserLoginDto userLoginDto)
+    public async Task<BaseResult<string>> Login(UserLoginDto userLoginDto)
     {
         var user = await _uow.Repo<UserRepository>().GetSingleAsync(x => x.Id == userLoginDto.UserId && x.Password == userLoginDto.Password);
 
         if (user==null)
-            return Result<string>.Error(null,"400","username or password is not correct");
+            return Core.Results.BaseResult<string>.Error(null,"400","username or password is not correct");
         
 
         var token = _tokenService.CreateToken(new UserAuthInfo
@@ -30,7 +29,7 @@ public class UserService : BaseService<UserRepository, User, string>
         });
 
 
-        return Result<string>.Success(token);
+        return BaseResult<string>.Success("200","", token);
     }
 }
 
@@ -42,12 +41,12 @@ public class AuthService : BaseService<UserRepository, User, string>
         _tokenService = tokenService;
     }
 
-    public async Task<IBaseResult<string>> Login(UserLoginDto userLoginDto)
+    public async Task<BaseResult<string>> Login(UserLoginDto userLoginDto)
     {
         var user = await _uow.Repo<UserRepository>().GetSingleAsync(x => x.Id == userLoginDto.UserId && x.Password == userLoginDto.Password);
 
         if (user == null)
-            return Result<string>.Error(null, "400", "username or password is not correct");
+            return Core.Results.BaseResult<string>.Error(null, "400", "username or password is not correct");
 
 
         var token = _tokenService.CreateToken(new UserAuthInfo
@@ -57,7 +56,7 @@ public class AuthService : BaseService<UserRepository, User, string>
         });
 
 
-        return Result<string>.Success(token);
+        return Core.Results.BaseResult<string>.Success("201", "", token);
     }
 }
 

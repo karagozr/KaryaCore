@@ -1,12 +1,17 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Karya.Core.Results;
+
 
 namespace Karya.Core.App.Commons;
 
 public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
+    where TResponse : BaseResult
 {
+
+
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
         try
@@ -15,13 +20,14 @@ public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TR
         }
         catch (UnauthorizedAccessException ex)
         {
-            logger.LogWarning(ex, "Yetki hatası — {Request}", typeof(TRequest).Name);
-            throw;
+            return (TResponse)BaseResult.Error("403", ex.Message);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Beklenmedik hata — {Request}", typeof(TRequest).Name);
-            throw;
+            var typeOfTresponse = typeof(TResponse);
+            
+            return (TResponse)BaseResult.Error("500",ex.Message); 
+
         }
     }
 }

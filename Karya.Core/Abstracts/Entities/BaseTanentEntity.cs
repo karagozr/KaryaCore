@@ -5,14 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Karya.Core.Abstracts.Entities;
 
-[PrimaryKey(nameof(TanentId), nameof(Id))]
-public abstract class BaseTanentEntity<TId> : BaseEntity<TId>, IBaseTanentEntity<TId, string>
+[PrimaryKey(nameof(TenantId), nameof(Id))]
+public abstract class BaseTenantEntity<TId> : BaseEntity<TId>, IBaseTenantEntity<TId, string>
 {
+    [Required]
+    [MinLength(8)]
+    [MaxLength(10)]
     [Column(Order = 1)]
-    public string TanentId { get; set; }
+    public string TenantId { get; set; }
 }
 
-public abstract class BaseTanentEntity : BaseTanentEntity<Guid>
+public abstract class BaseTanentEntity : BaseTenantEntity<Guid>
 {
 
 }

@@ -2,7 +2,6 @@
 using Karya.Core.Interfaces.DTOs;
 using Karya.Core.Interfaces.Entities;
 using Karya.Core.Interfaces.Repositories;
-using Karya.Core.Interfaces.Results;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
@@ -10,11 +9,25 @@ using System.Linq.Expressions;
 
 namespace Karya.Core.Services;
 
-public abstract class BaseService<TRepo, TEntity, TId> : IBaseService<TEntity, TId>
+
+public abstract class BaseService : IBaseService
+{
+    public void Dispose()
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
+
+public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseService<TEntity, TId>
     where TRepo : class, IRepositoryAsync<TEntity, TId>
     where TEntity : class, IBaseEntity<TId>, new()
 {
     protected readonly IUnitOfWork _uow;
+
+    private string _tableName = nameof(TEntity);
+
 
     protected BaseService(IUnitOfWork uow)
     {
@@ -27,59 +40,55 @@ public abstract class BaseService<TRepo, TEntity, TId> : IBaseService<TEntity, T
         return query;
     }
 
-    public async Task<IBaseResult<IEnumerable<TDto>>> Select<TDto>(Expression<Func<TEntity, bool>> expression) where TDto : class, ISelectDto, new()
+    public async Task<BaseResult> Select<TDto>(Expression<Func<TEntity, bool>> expression) where TDto : class, ISelectDto, new()
     {
         var entities = await _uow.Repo<TRepo>().GetAsync(expression);
 
-        var dtos = EntityMapper.MapToDto<TEntity, TDto>(entities);
-
-        return Result<IEnumerable<TDto>>.Success(dtos);
+        return BaseResult<IEnumerable<TDto>>.Success("200",null, EntityMapper.MapToDto<TEntity, TDto>(entities));
     }
 
-    public async Task<IBaseResult<TDto>> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()
+    public async Task<BaseResult> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()
     {
+        if (key == null) 
+            return BaseResult<TDto>.Error(code: "400", ServiceMessages.Required("Id"), null);
+
         var entity = await _uow.Repo<TRepo>().GetByIdAsync(key);
-        if (entity == null)
-            return Result<TDto>.Error(null, "404", "Not Found");
 
-        return Result<TDto>.Success(EntityMapper.MapToDto<TEntity, TDto>(entity));
+        if (entity == null) 
+            return BaseResult<TDto>.Error(code: "404", ServiceMessages.NotFound(_tableName, "Id", Convert.ToString(key)), null);
+
+        return BaseResult<TDto>.Success("200", null, EntityMapper.MapToDto<TEntity, TDto>(entity));
+
     }
 
-    public virtual async Task<IBaseResult<TDto>> Insert<TDto>(TDto dto) where TDto : class, IInsertDto, new()
+    public virtual async Task<BaseResult> Insert<TDto>(TDto dto) where TDto : class, IInsertDto, new()
     {
-        var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
-        await _uow.Repo<TRepo>().AddAsync(entity);
+        
+        await _uow.Repo<TRepo>().AddAsync(EntityMapper.MapToEntity<TEntity, TDto>(dto));
+        
         var result = await _uow.CompleteAsync();
 
-        if (result.IsSuccess)
-            return Result<TDto>.Success(EntityMapper.MapToDto<TEntity, TDto>(entity), "201");
-        else
-            return Result<TDto>.Error(EntityMapper.MapToDto<TEntity, TDto>(entity), result.Code, result.Message);
+        return new BaseResult<TDto>(result,data:dto);
+        
     }
 
-    public async Task<IBaseResult<TDto>> Update<TDto>(TId key, TDto dto) where TDto : class, IUpdateDto, new()
+    public async Task<BaseResult> Update<TDto>(TId key, TDto dto) where TDto : class, IUpdateDto, new()
     {
         var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
-        ((IBaseEntity<TId>)entity).Id = key;
+        entity.Id = key;
         var columns = DtoControl.GetActiveKeys(dto);
         await _uow.Repo<TRepo>().UpdateAsync(entity, columns);
         var result = await _uow.CompleteAsync();
 
-        if (result.IsSuccess)
-            return Result<TDto>.Success(dto, "200");
-        else
-            return Result<TDto>.Error(dto, result.Code, result.Message);
+        return new BaseResult<TDto>(result, data: dto);
     }
 
-    public async Task<IBaseResult> Delete(TId key)
+    public async Task<BaseResult> Delete(TId key)
     {
         await _uow.Repo<TRepo>().DeleteAsync(key);
         var result = await _uow.CompleteAsync();
 
-        if (result.IsSuccess)
-            return Result.Success("200");
-        else
-            return Result.Error("400", result.Message);
+        return result;
 
     }
 

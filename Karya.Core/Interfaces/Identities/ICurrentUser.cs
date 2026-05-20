@@ -3,5 +3,5 @@
 public interface ICurrentUser
 {
     string UserId { get; }
-    string TanentId { get; }
+    string TenantId { get; }
 }

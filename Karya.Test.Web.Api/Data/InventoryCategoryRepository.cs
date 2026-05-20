@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Test.Web.Api.Data
 {
-    public class InventoryCategoryRepository : BaseTanentRepositoryAsync<InventoryCategory, string, DbContext>
+    public class InventoryCategoryRepository : BaseTenantRepositoryAsync<InventoryCategory, string, DbContext>
     {
         public InventoryCategoryRepository(DbContext context, ICurrentUser currentUser) : base(context, currentUser)
         {

@@ -12,12 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Karya.Core.App\Karya.Core.App.csproj" />
-    <ProjectReference Include="..\Karya.Core\Karya.Core.csproj" />
+    <Folder Include="Interfaces\Identities\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Identities\" />
+    <ProjectReference Include="..\Karya.Core.App\Karya.Core.App.csproj" />
   </ItemGroup>
 
 </Project>

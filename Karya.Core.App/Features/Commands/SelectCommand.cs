@@ -1,7 +1,7 @@
 ﻿using Karya.Core.App.Interfaces.Commands;
 using Karya.Core.Interfaces.DTOs;
-using Karya.Core.Interfaces.Results;
 using Karya.Core.Interfaces.Services;
+using Karya.Core.Results;
 using System.Linq.Expressions;
 
 namespace Karya.Core.App.Features.Commands;
@@ -10,9 +10,9 @@ public record SelectCommand<TEntity, TId, TDto>(
     Expression<Func<TEntity, bool>> Filter,
     IBaseService<TEntity, TId> Service,
     string Permission = ""
-) : IExecutableCrudRequest<IBaseResult<IEnumerable<TDto>>>
+) : IExecutableCrudRequest<BaseResult>
     where TDto : class, ISelectDto, new()
 {
-    public Task<IBaseResult<IEnumerable<TDto>>> ExecuteAsync(CancellationToken ct = default)
+    public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
         => Service.Select<TDto>(Filter);
 }

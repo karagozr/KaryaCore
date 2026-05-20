@@ -9,21 +9,13 @@ public class CurrentUser : ICurrentUser
 
     private readonly IHttpContextAccessor _accessor;
 
-    public string UserId { get; } = string.Empty;
+    public string UserId => _accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-    public string TanentId { get; } = string.Empty;
+    public string TenantId => _accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "TanentId").Value;
 
-    //public CurrentUser()
-    //{
-    //    UserId = "sys_admin";
-    //    TanentId = "COMP02";
-    //}
     public CurrentUser(IHttpContextAccessor accessor)
     {
         _accessor = accessor;
-        var user = _accessor.HttpContext?.User;
-        UserId = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-        TanentId = user.Claims.FirstOrDefault(c => c.Type == "TanentId").Value;
     }
 
 }

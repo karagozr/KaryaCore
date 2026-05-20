@@ -2,7 +2,7 @@
 
 namespace Karya.TestApi.Entities;
 
-public class Inventory:BaseTanentEntity<string>
+public class Inventory:BaseTenantEntity<string>
 {
     public string Name { get; set; } = null!;
     public string Brand { get; set; } = null!;
@@ -11,7 +11,7 @@ public class Inventory:BaseTanentEntity<string>
 
 }
 
-public class InventoryCategory : BaseTanentEntity<string>
+public class InventoryCategory : BaseTenantEntity<string>
 {
     public string Name { get; set; } = null!;
 

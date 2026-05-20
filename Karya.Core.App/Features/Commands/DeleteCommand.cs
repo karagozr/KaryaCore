@@ -1,6 +1,6 @@
 ﻿using Karya.Core.App.Interfaces.Commands;
-using Karya.Core.Interfaces.Results;
 using Karya.Core.Interfaces.Services;
+using Karya.Core.Results;
 
 namespace Karya.Core.App.Features.Commands;
 
@@ -8,8 +8,8 @@ public record DeleteCommand<TEntity, TId>(
     TId Key,
     IBaseService<TEntity, TId> Service,
     string Permission = ""
-) : IExecutableCrudRequest<IBaseResult>
+) : IExecutableCrudRequest<BaseResult>
 {
-    public Task<IBaseResult> ExecuteAsync(CancellationToken ct = default)
+    public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
         => Service.Delete(Key);
 }
