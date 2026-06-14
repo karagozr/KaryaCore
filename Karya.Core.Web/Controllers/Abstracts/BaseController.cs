@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Karya.Core.Web.Abstracts.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public abstract class BaseController<TEntity, TId> : ControllerBase

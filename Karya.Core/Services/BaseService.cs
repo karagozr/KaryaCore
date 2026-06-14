@@ -1,4 +1,6 @@
-﻿using Karya.Core.Helpers.Generals;
+﻿using Azure.Core;
+using Karya.Core.Common.Data;
+using Karya.Core.Helpers.Generals;
 using Karya.Core.Interfaces.DTOs;
 using Karya.Core.Interfaces.Entities;
 using Karya.Core.Interfaces.Repositories;
@@ -6,6 +8,9 @@ using Karya.Core.Interfaces.Services;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Services;
 
@@ -40,11 +45,33 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
         return query;
     }
 
-    public async Task<BaseResult> Select<TDto>(Expression<Func<TEntity, bool>> expression) where TDto : class, ISelectDto, new()
+    public async Task<BaseResult> Select<TDto>(FilterDataOptions<TEntity> filterDataOptions) where TDto : class, ISelectDto, new()
     {
-        var entities = await _uow.Repo<TRepo>().GetAsync(expression);
+        var query = _uow.Repo<TRepo>().Query(); //await _uow.Repo<TRepo>().GetAsync(filterDataOptions.FilterExpression);
 
-        return BaseResult<IEnumerable<TDto>>.Success("200",null, EntityMapper.MapToDto<TEntity, TDto>(entities));
+        if (filterDataOptions.FilterExpression != null)
+        {
+            query = query.Where(filterDataOptions.FilterExpression);
+        }
+
+        int totalCount = 0;
+        if (filterDataOptions.RequireTotalCount)
+        {
+            totalCount = await query.CountAsync();
+        }
+
+        if (filterDataOptions.OrderByExpression != null)
+        {
+            query = filterDataOptions.OrderByExpression(query);
+        }
+
+        if (filterDataOptions.Skip > 0) query = query.Skip(filterDataOptions.Skip);
+        if (filterDataOptions.Take > 0) query = query.Take(filterDataOptions.Take);
+
+        var data = await query.ToListAsync();
+
+
+        return BaseResult<IEnumerable<TDto>>.Success("200",null, EntityMapper.MapToDto<TEntity, TDto>(data));
     }
 
     public async Task<BaseResult> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()

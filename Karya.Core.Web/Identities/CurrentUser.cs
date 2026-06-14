@@ -9,9 +9,9 @@ public class CurrentUser : ICurrentUser
 
     private readonly IHttpContextAccessor _accessor;
 
-    public string UserId => _accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+    public string UserId => "USR01";//_accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-    public string TenantId => _accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "TanentId").Value;
+    public string TenantId => "COMP0001"; //_accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "TanentId").Value;
 
     public CurrentUser(IHttpContextAccessor accessor)
     {

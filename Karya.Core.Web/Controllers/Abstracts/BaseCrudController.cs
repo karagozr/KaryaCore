@@ -32,7 +32,7 @@ public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, T
     public virtual async Task<ActionResult> Select()
     {
         var result = await _mediator.Send(
-            new SelectCommand<TEntity, TId, TSelectDto>(x => true, _service, $"{typeof(TEntity).Name}.Read"));
+            new SelectCommand<TEntity, TId, TSelectDto>(new Common.Data.FilterDataOptions<TEntity>(), _service, $"{typeof(TEntity).Name}.Read"));
         return ApiActionResult(result);
     }
 

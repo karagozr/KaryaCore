@@ -17,7 +17,10 @@ public class InvController : BaseCrudController<Inventory, string, InvSDto, InvL
     public async Task<ActionResult> GetAll()
     {
         var result = await _mediator.Send(
-            new SelectCommand<Inventory, string, InvLDto>(x => x.Id != "01", _service, "Inventory.Read"));
+            new SelectCommand<Inventory, string, InvLDto>(new Core.Common.Data.FilterDataOptions<Inventory>
+            {
+                FilterExpression = x => true
+            }, _service, "Inventory.Read"));
         return ApiActionResult(result);
     }
 }
