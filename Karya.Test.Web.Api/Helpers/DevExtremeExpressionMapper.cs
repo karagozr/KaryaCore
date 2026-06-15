@@ -7,11 +7,12 @@ namespace Karya.Test.Web.Api.Helpers;
 
 
 
+
 public static class DevExtremeExpressionMapper
 {
-    public static FilterDataOptions<TEntity> ToCleanOptions<TEntity>(this DataSourceLoadOptionsBase source) where TEntity : class
+    public static SelectFilterOptions<TEntity> ToCleanOptions<TEntity>(this DataSourceLoadOptionsBase source) where TEntity : class
     {
-        var options = new FilterDataOptions<TEntity>
+        var options = new SelectFilterOptions<TEntity>
         {
             Skip = source.Skip,
             Take = source.Take,

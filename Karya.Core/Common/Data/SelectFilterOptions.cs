@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Karya.Core.Common.Data
 {
 
-    public class FilterDataOptions<TEntity>
+    public class SelectFilterOptions<TEntity>
     {
         public int Skip { get; set; }
         public int Take { get; set; }
@@ -17,7 +17,7 @@ namespace Karya.Core.Common.Data
         public Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? OrderByExpression { get; set; }
     }
 
-    public class FilterDataResult<TData>
+    public class SelectFilterResult<TData>
     {
         public IEnumerable<TData> Data { get; set; } = Array.Empty<TData>();
         public int TotalCount { get; set; }

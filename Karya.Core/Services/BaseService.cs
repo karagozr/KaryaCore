@@ -11,6 +11,8 @@ using System.Linq.Expressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 
 namespace Karya.Core.Services;
 
@@ -45,33 +47,13 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
         return query;
     }
 
-    public async Task<BaseResult> Select<TDto>(FilterDataOptions<TEntity> filterDataOptions) where TDto : class, ISelectDto, new()
+    public async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new()
     {
-        var query = _uow.Repo<TRepo>().Query(); //await _uow.Repo<TRepo>().GetAsync(filterDataOptions.FilterExpression);
+        var query = _uow.Repo<TRepo>().Query(); 
 
-        if (filterDataOptions.FilterExpression != null)
-        {
-            query = query.Where(filterDataOptions.FilterExpression);
-        }
+        var res = DataSourceLoader.Load(query, filterDataOptions);
 
-        int totalCount = 0;
-        if (filterDataOptions.RequireTotalCount)
-        {
-            totalCount = await query.CountAsync();
-        }
-
-        if (filterDataOptions.OrderByExpression != null)
-        {
-            query = filterDataOptions.OrderByExpression(query);
-        }
-
-        if (filterDataOptions.Skip > 0) query = query.Skip(filterDataOptions.Skip);
-        if (filterDataOptions.Take > 0) query = query.Take(filterDataOptions.Take);
-
-        var data = await query.ToListAsync();
-
-
-        return BaseResult<IEnumerable<TDto>>.Success("200",null, EntityMapper.MapToDto<TEntity, TDto>(data));
+        return BaseResult<LoadResult>.Success("200",null, res);
     }
 
     public async Task<BaseResult> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()

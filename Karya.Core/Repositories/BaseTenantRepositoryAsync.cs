@@ -59,7 +59,7 @@ where TId : notnull
   
     public override IQueryable<TEntity> Query(Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool withDeleted = false, CancellationToken ct = default)
     {
-        var qry = base.Query(include, withDeleted, ct).Where(e => e.TenantId == _currentUser.UserId);
+        var qry = base.Query(include, withDeleted, ct).Where(e => e.TenantId == _currentUser.TenantId);
 
         return include == null ? qry : include(qry);
     }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Karya.Core.Results;
 
-public class SelectDataResult<TEntity>
+public class SelectDataResult<T>
 {
-    public IEnumerable<TEntity> Data { get; set; } = Array.Empty<TEntity>();
+    public IEnumerable<T> Data { get; set; } = Array.Empty<T>();
     public int TotalCount { get; set; }
 
 }
