@@ -141,7 +141,16 @@ var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowViteApp",
+        policy =>
+        {
+            policy.AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowAnyOrigin();
+        });
+});
 
 
 var app = builder.Build();
@@ -171,6 +180,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowViteApp");
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
