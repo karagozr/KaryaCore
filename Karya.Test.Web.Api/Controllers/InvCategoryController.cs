@@ -8,7 +8,6 @@ using Karya.Core.Results;
 using Karya.Core.Web.Abstracts.Controllers;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.DTOs;
-using Karya.Test.Web.Api.Helpers;
 using Karya.TestApi.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

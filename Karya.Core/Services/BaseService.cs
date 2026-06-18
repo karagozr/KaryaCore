@@ -49,9 +49,10 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
 
     public async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new()
     {
-        var query = _uow.Repo<TRepo>().Query(); 
+        
+        var query = _uow.Repo<TRepo>().Query();
 
-        var res = DataSourceLoader.Load(query, filterDataOptions);
+        var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
 
         return BaseResult<LoadResult>.Success("200",null, res);
     }
