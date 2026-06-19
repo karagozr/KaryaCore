@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Karya.Core\Karya.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

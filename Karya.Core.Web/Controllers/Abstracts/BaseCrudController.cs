@@ -1,10 +1,8 @@
-﻿using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Data.ResponseModel;
+﻿using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.App.Features.Commands;
 using Karya.Core.Interfaces.DTOs;
-using Karya.Core.Interfaces.Models;
 using Karya.Core.Interfaces.Services;
-using Karya.Core.Results;
+using Karya.Core.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,9 +31,9 @@ public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, T
     }
 
     [HttpGet]
-    public virtual async Task<ActionResult> Select([FromQuery]DataSourceLoadOptionsBase options)
+    public virtual async Task<ActionResult> Select(DataSourceLoadOptions options)
     {
-       
+
         var result = await _mediator.Send(
             new SelectCommand<TEntity, TId, TSelectDto>(options, _service, $"{typeof(TEntity).Name}.Read"));
         return ApiActionResult<LoadResult>(result);

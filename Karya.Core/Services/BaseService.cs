@@ -17,6 +17,25 @@ using DevExtreme.AspNet.Data.ResponseModel;
 namespace Karya.Core.Services;
 
 
+public static class StringExtensions
+{
+    public static string FirstCharToLowerCase(this string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        char firstChar = input[0];
+        if (firstChar < 'A' || firstChar > 'Z')
+            return input; // Not an English uppercase letter
+
+        return string.Create(input.Length, input, (span, str) =>
+        {
+            str.CopyTo(span);
+            span[0] = (char)(str[0] + 32); // Lowercases English character safely
+        });
+    } 
+}
+
 public abstract class BaseService : IBaseService
 {
     public void Dispose()
@@ -49,8 +68,10 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
 
     public async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new()
     {
-        
+
         var query = _uow.Repo<TRepo>().Query();
+
+        filterDataOptions.Select = typeof(TDto).GetProperties().Select(p => (p.Name).FirstCharToLowerCase()).ToArray();
 
         var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
 
@@ -109,3 +130,4 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
 
 
 }
+
