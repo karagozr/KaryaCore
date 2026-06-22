@@ -27,7 +27,7 @@ where TEntity : class, IBaseEntity<TId>, new()
         var qry = _dbSet.AsQueryable();
 
         if (typeof(TEntity).IsAssignableTo(typeof(ISoftDelete)))
-            qry = withDeleted ? _dbSet.AsQueryable() : _dbSet.Where(x => ((ISoftDelete)x).IsDeleted == false).AsQueryable();
+            qry = withDeleted ? _dbSet.AsQueryable() : _dbSet.Where(x => EF.Property<bool>(x, "IsDeleted") == false).AsQueryable();
 
         return include == null ? qry : include(qry);
     }

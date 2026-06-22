@@ -4,13 +4,17 @@ using Karya.Core.Interfaces.DTOs;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Web.Helpers;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+using System.Text.Json;
 
 namespace Karya.Core.Web.Abstracts.Controllers;
 
+
 [ApiController]
 [Route("api/[controller]")]
-public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, TInsertDto, TUpdateDto> : BaseController<TEntity,TId>
+public abstract class   BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, TInsertDto, TUpdateDto> : BaseController<TEntity,TId>
     where TId : notnull
     where TSingleDto : class, ISingleDto, new()
     where TSelectDto : class, ISelectDto, new()
@@ -36,7 +40,7 @@ public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, T
 
         var result = await _mediator.Send(
             new SelectCommand<TEntity, TId, TSelectDto>(options, _service, $"{typeof(TEntity).Name}.Read"));
-        return ApiActionResult<LoadResult>(result);
+        return ApiActionResult(result);
     }
 
     [HttpPost]
@@ -48,10 +52,11 @@ public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, T
     }
 
     [HttpPut("{key}")]
-    public virtual async Task<ActionResult> Update(TId key, [FromBody] TUpdateDto dto)
+    public virtual async Task<ActionResult> Update(TId key, [FromBody] Dictionary<string, object> updateData)
     {
+
         var result = await _mediator.Send(
-            new UpdateCommand<TEntity, TId, TUpdateDto>(key, dto, _service, $"{typeof(TEntity).Name}.Update"));
+            new UpdateCommand<TEntity, TId, TUpdateDto>(key, updateData, _service, $"{typeof(TEntity).Name}.Update"));
         return ApiActionResult(result);
     }
 

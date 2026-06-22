@@ -1,6 +1,8 @@
-﻿using Karya.Test.Web.Api.Entities;
+﻿using Karya.Core.Common.Attributes.Data;
+using Karya.Test.Web.Api.Entities;
 using Karya.TestApi.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Karya.Test.Web.Api.Data;
 
@@ -16,6 +18,31 @@ public class DevContext:DbContext
     public DbSet<User> Users => Set<User>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(Connection2);
+        optionsBuilder.UseSqlServer(Connection1);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var navigationProperties = entityType.ClrType.GetProperties()
+                .Where(p => p.GetCustomAttribute<TenantForeignKeyAttribute>() != null);
+
+            foreach (var navProp in navigationProperties)
+            {
+                var attr = navProp.GetCustomAttribute<TenantForeignKeyAttribute>()!;
+                string categoryIdName = attr.CategoryIdPropertyName;
+                string navigationName = navProp.Name; 
+
+                modelBuilder.Entity(entityType.ClrType)
+                    .HasOne(navProp.PropertyType, navigationName)
+                    .WithMany()
+                    .HasForeignKey(new[] { "TenantId", categoryIdName })
+                    .HasPrincipalKey(new[] { "TenantId", "Id" })
+                    .OnDelete(DeleteBehavior.Restrict);
+            }
+        }
     }
 }

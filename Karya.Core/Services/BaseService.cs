@@ -1,5 +1,5 @@
-﻿using Azure.Core;
-using Karya.Core.Common.Data;
+﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.Helpers.Generals;
 using Karya.Core.Interfaces.DTOs;
 using Karya.Core.Interfaces.Entities;
@@ -7,12 +7,6 @@ using Karya.Core.Interfaces.Repositories;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
-using System.Linq.Expressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Data.ResponseModel;
 
 namespace Karya.Core.Services;
 
@@ -66,19 +60,21 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
         return query;
     }
 
-    public async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new()
+    public async virtual Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new()
     {
 
         var query = _uow.Repo<TRepo>().Query();
 
-        filterDataOptions.Select = typeof(TDto).GetProperties().Select(p => (p.Name).FirstCharToLowerCase()).ToArray();
+        
+        if(filterDataOptions.Select == null || filterDataOptions.Select.Length == 0)
+            filterDataOptions.Select = typeof(TDto).GetProperties().Select(p => (p.Name).FirstCharToLowerCase()).ToArray();
 
         var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
 
         return BaseResult<LoadResult>.Success("200",null, res);
     }
 
-    public async Task<BaseResult> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()
+    public async Task<BaseResult<TDto>> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()
     {
         if (key == null) 
             return BaseResult<TDto>.Error(code: "400", ServiceMessages.Required("Id"), null);
@@ -103,11 +99,12 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
         
     }
 
-    public async Task<BaseResult> Update<TDto>(TId key, TDto dto) where TDto : class, IUpdateDto, new()
+    public async Task<BaseResult> Update<TDto>(TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new()
     {
+        var dto = updateData.ToObject<TDto>();
         var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
         entity.Id = key;
-        var columns = DtoControl.GetActiveKeys(dto);
+        var columns = UpdateDtoHelper.GetFieldsToUpdate<TDto, TEntity>(updateData);
         await _uow.Repo<TRepo>().UpdateAsync(entity, columns);
         var result = await _uow.CompleteAsync();
 

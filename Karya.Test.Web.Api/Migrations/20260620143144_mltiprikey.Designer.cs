@@ -4,6 +4,7 @@ using Karya.Test.Web.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Karya.Test.Web.Api.Migrations
 {
     [DbContext(typeof(DevContext))]
-    partial class DevContextModelSnapshot : ModelSnapshot
+    [Migration("20260620143144_mltiprikey")]
+    partial class mltiprikey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +76,6 @@ namespace Karya.Test.Web.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("MainCategoryId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -83,8 +83,6 @@ namespace Karya.Test.Web.Api.Migrations
                     b.HasKey("TenantId", "Id");
 
                     b.HasIndex("TenantId", "CategoryId");
-
-                    b.HasIndex("TenantId", "MainCategoryId");
 
                     b.ToTable("Inventories");
                 });
@@ -100,38 +98,13 @@ namespace Karya.Test.Web.Api.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(0);
 
-                    b.Property<string>("MainCategoryId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TenantId", "Id");
-
-                    b.HasIndex("TenantId", "MainCategoryId");
 
                     b.ToTable("InventoryCategories");
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryMainCategory", b =>
-                {
-                    b.Property<string>("TenantId")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnOrder(1);
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TenantId", "Id");
-
-                    b.ToTable("InventoryMainCategory");
                 });
 
             modelBuilder.Entity("Karya.TestApi.Entities.Inventory", b =>
@@ -139,27 +112,10 @@ namespace Karya.Test.Web.Api.Migrations
                     b.HasOne("Karya.TestApi.Entities.InventoryCategory", "Category")
                         .WithMany()
                         .HasForeignKey("TenantId", "CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
-                        .WithMany()
-                        .HasForeignKey("TenantId", "MainCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Category");
-
-                    b.Navigation("MainCategory");
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryCategory", b =>
-                {
-                    b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
-                        .WithMany()
-                        .HasForeignKey("TenantId", "MainCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("MainCategory");
                 });
 #pragma warning restore 612, 618
         }

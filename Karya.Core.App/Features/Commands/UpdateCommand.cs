@@ -7,12 +7,12 @@ namespace Karya.Core.App.Features.Commands;
 
 public record UpdateCommand<TEntity, TId, TDto>(
     TId Key,
-    TDto Dto,
+    Dictionary<string, object> updateData,
     IBaseService<TEntity, TId> Service,
     string Permission = ""
 ) : IExecutableCrudRequest<BaseResult>
     where TDto : class, IUpdateDto, new()
 {
     public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
-        => Service.Update<TDto>(Key, Dto);
+        => Service.Update<TDto>(Key, updateData);
 }
