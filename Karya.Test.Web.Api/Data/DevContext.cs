@@ -18,7 +18,7 @@ public class DevContext:DbContext
     public DbSet<User> Users => Set<User>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(Connection1);
+        optionsBuilder.UseSqlServer(Connection2);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
