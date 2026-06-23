@@ -37,3 +37,4 @@ public class InvMainCategoryService(ICurrentUser currentUser)
     : BaseService<InventoryMainCategoryRepository, InventoryMainCategory, string>(new DevUnitOfWork(currentUser))
 {
 }
+

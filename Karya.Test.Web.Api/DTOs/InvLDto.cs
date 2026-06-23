@@ -14,6 +14,17 @@ public class InvLDto : ISelectDto
     public string? MainCategoryId { get; set; } = null!;
 }
 
+public class InvDetailLDto : ISelectDto
+{
+    public int Id { get; set; }=0;
+    public string InventoryId { get; set; } = null!;
+    public string Note { get; set; } = null!;
+    public string? CategoryName { get; set; } = null!;
+    public string? CategoryId { get; set; } = null!;
+
+    public string? MainCategoryName { get; set; } = null!;
+    public string? MainCategoryId { get; set; } = null!;
+}
 
 public class InvCategoryLDto : ISelectDto
 {

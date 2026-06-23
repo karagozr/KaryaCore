@@ -37,4 +37,28 @@ public class InvService : BaseService<InventoryRepository, Inventory, string>
     }
 }
 
+public class InvDetailService(ICurrentUser currentUser, string inventoryId)
+    : BaseService<InventoryDetailRepository, InventoryDetail, int>(new DevUnitOfWork(currentUser))
+{
+    public override async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions)
+    {
+        var query = _uow.Repo<InventoryDetailRepository>().Query(x => x.Include(i => i.Category)).Select(x => new InvDetailLDto
+        {
+            Id = x.Id,
+            InventoryId = x.InventoryId,
+            Note = x.Note,
+            CategoryId = x.CategoryId,
+            CategoryName = x.Category.Name,
+            MainCategoryId = x.MainCategoryId,
+            MainCategoryName = x.MainCategory.Name
+        });
+
+        var list = await query.ToListAsync();
+
+        var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
+
+        return BaseResult<LoadResult>.Success("200", null, res);
+    }
+}
+
 

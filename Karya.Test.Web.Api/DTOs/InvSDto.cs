@@ -11,6 +11,15 @@ public class InvSDto : ISingleDto
     public string? MainCategoryId { get; set; } = null!;
 }
 
+public class InvDetailSDto : ISingleDto
+{
+    public int Id { get; set; } = 0;
+    public string InventoryId { get; set; } = null!;
+    public string Note { get; set; } = null!;
+    public string? CategoryId { get; set; } = null!;
+    public string? MainCategoryId { get; set; } = null!;
+}
+
 public class InvCategorySDto : ISingleDto
 {
     public string Id { get; set; } = null!;

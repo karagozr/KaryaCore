@@ -11,6 +11,15 @@ public class InvUDto:IUpdateDto
 
 }
 
+public class InvDetailUDto : IUpdateDto
+{
+    public string Id { get; set; } = null!;
+    public string InventoryId { get; set; } = null!;
+    public string Note { get; set; } = null!;
+    public string? CategoryId { get; set; } = null!;
+    public string? MainCategoryId { get; set; } = null!;
+}
+
 public class InvCategoryUDto : IUpdateDto
 {
     public string? Name { get; set; } = null!;

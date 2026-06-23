@@ -15,3 +15,10 @@ public class InvController : BaseCrudController<Inventory, string, InvSDto, InvL
 
     
 }
+
+public class InvDetailController : BaseCrudDetailController<InventoryDetail, int, string, InvDetailSDto, InvDetailLDto, InvDetailADto, InvDetailUDto>
+{
+    public InvDetailController(IMediator mediator, ICurrentUser currentUser) : base(mediator, new InvDetailService(currentUser)) { }
+
+
+}

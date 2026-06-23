@@ -11,6 +11,15 @@ public class InvADto:IInsertDto
     public string? MainCategoryId { get; set; } = null!;
 }
 
+public class InvDetailADto : IInsertDto
+{
+    public int Id { get; set; } = 0;
+    public string InventoryId { get; set; } = null!;
+    public string Note { get; set; } = null!;
+    public string? CategoryId { get; set; } = null!;
+    public string? MainCategoryId { get; set; } = null!;
+}
+
 
 public class InvCategoryADto : IInsertDto
 {

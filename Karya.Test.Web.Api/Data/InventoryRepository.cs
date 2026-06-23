@@ -11,4 +11,11 @@ namespace Karya.Test.Web.Api.Data
         {
         }
     }
+
+    public class InventoryDetailRepository : BaseTenantDetailRepositoryAsync<InventoryDetail, int, string, DbContext>
+    {
+        public InventoryDetailRepository(DbContext context, ICurrentUser currentUser, string inventoryId) : base(context, currentUser, "InventoryId", inventoryId)
+        {
+        }
+    }
 }
