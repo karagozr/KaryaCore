@@ -3,6 +3,7 @@ using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Results;
 using Karya.Core.Services;
+using Karya.Test.Web.Api.Controllers;
 using Karya.Test.Web.Api.DTOs;
 using Karya.TestApi.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -37,12 +38,11 @@ public class InvService : BaseService<InventoryRepository, Inventory, string>
     }
 }
 
-public class InvDetailService(ICurrentUser currentUser, string inventoryId)
-    : BaseService<InventoryDetailRepository, InventoryDetail, int>(new DevUnitOfWork(currentUser))
+public class InvDetailService(ICurrentUser currentUser) : BaseDetailService<InventoryDetailRepository, InventoryDetail, int, InvParentFilter>(new DevUnitOfWork(currentUser))
 {
-    public override async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions)
+    public override async Task<BaseResult<LoadResult>> Select<TDto>(InvParentFilter parent, DataSourceLoadOptionsBase filterDataOptions)
     {
-        var query = _uow.Repo<InventoryDetailRepository>().Query(x => x.Include(i => i.Category)).Select(x => new InvDetailLDto
+        var query = _uow.Repo<InventoryDetailRepository>(parent).Query(x => x.Include(i => i.Category)).Select(x => new InvDetailLDto
         {
             Id = x.Id,
             InventoryId = x.InventoryId,

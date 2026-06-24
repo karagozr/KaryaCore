@@ -14,9 +14,14 @@ public abstract class BaseController<TEntity, TId> : ControllerBase
     where TId : notnull
 {
     protected readonly IMediator _mediator;
-    protected readonly IBaseService<TEntity, TId> _service;
+    protected readonly IBaseService _service;
 
-    protected BaseController(IMediator mediator, IBaseService<TEntity, TId> service)
+    protected BaseController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    protected BaseController(IMediator mediator, IBaseService service)
     {
         _mediator = mediator;
         _service = service;

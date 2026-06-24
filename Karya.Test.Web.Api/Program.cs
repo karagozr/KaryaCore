@@ -4,11 +4,16 @@ using Karya.Core.Indentity;
 using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Web.Identities;
+using Karya.Core.Web.Infrastructure.Swagger;
+using Karya.Test.Web.Api;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,7 +109,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
-
+    options.OperationFilter<ParentRouteSwaggerFilter>();
 
 });
 

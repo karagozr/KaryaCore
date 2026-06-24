@@ -1,30 +1,35 @@
 ﻿using Karya.Core.Abstracts.Entities;
 using Karya.Core.Interfaces.Entities.Tanent;
+using Karya.Core.Interfaces.Filters;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Reflection;
 
 namespace Karya.Core.Repositories;
 
-public class BaseTenantDetailRepositoryAsync<TEntity, TId, TParentId, TContext> : BaseTenantRepositoryAsync<TEntity, TId, TContext>, ITenantRepository
+public class BaseTenantDetailRepositoryAsync<TEntity, TId, TParentFilter, TContext> : BaseTenantRepositoryAsync<TEntity, TId, TContext>, IDetailTenantRepository
 where TContext : DbContext
 where TEntity : BaseTenantEntity<TId>, new()
 where TId : notnull
+where TParentFilter : IParentFilter
 {
 
-    private readonly string _parentFieldName;
-    private readonly TParentId _parentFieldValue;
+    private readonly TParentFilter _parentFilter;
 
-    public BaseTenantDetailRepositoryAsync(TContext context, ICurrentUser currentUser, string parentFieldName, TParentId parentFieldValue) : base(context, currentUser)
+    public BaseTenantDetailRepositoryAsync(TContext context, ICurrentUser currentUser, TParentFilter parentFilter) : base(context, currentUser)
     {
-        _parentFieldName = parentFieldName;
-        _parentFieldValue = parentFieldValue;
+        _parentFilter = parentFilter;
     }
 
     protected override Task BeforeCreate(TEntity entity)
     {
-        entity.GetType().GetProperty(_parentFieldName)?.SetValue(entity, _parentFieldValue);
+        foreach (var item in _parentFilter.GetType().GetProperties())
+        {
+            entity.GetType().GetProperty(item.Name)?.SetValue(item.Name, item.GetValue(item));
+        }
+        
         entity.TenantId = _currentUser.TenantId;
         return base.BeforeCreate(entity);
     }
@@ -33,7 +38,11 @@ where TId : notnull
     {
         foreach (var entity in entities)
         {
-            entity.GetType().GetProperty(_parentFieldName)?.SetValue(entity, _parentFieldValue);
+            foreach (var item in _parentFilter.GetType().GetProperties())
+            {
+                entity.GetType().GetProperty(item.Name)?.SetValue(item.Name, item.GetValue(_parentFilter));
+            }
+           
         }
 
         return base.BeforeCreate(entities);
@@ -42,16 +51,19 @@ where TId : notnull
 
     protected override Task BeforeUpdate(TEntity entity, bool checkVersion = false, EntityEntry<TEntity>? entry = null)
     {
-        var parentProperty = entity.GetType().GetProperty(_parentFieldName);
-        if(parentProperty?.GetValue(entity) != null)
-            throw new UnauthorizedAccessException("Cannot change the parent field value.");
+        foreach (var item in _parentFilter.GetType().GetProperties())
+        {
+            if (entity.GetType().GetProperty(item.Name)?.GetValue(entity) != null)
+                throw new UnauthorizedAccessException("Cannot change the parent field value.");
+        }
+        
 
         return base.BeforeUpdate(entity, checkVersion, entry);
     }
 
     protected override Task BeforeUpdate(IEnumerable<TEntity> entities)
     {
-        var hasParentValue = entities.Any(e => e.GetType().GetProperty(_parentFieldName)?.GetValue(e) != null);
+        var hasParentValue = entities.Any(e => e.GetType().GetProperties().Any(x=> _parentFilter.GetType().GetProperties().Select(s=>s.Name).Contains(x.Name)));
 
         if (hasParentValue)
             throw new UnauthorizedAccessException("Cannot change the parent field value.");
@@ -61,17 +73,21 @@ where TId : notnull
 
     protected override Task BeforeDelete(TEntity? entity)
     {
-        var parentProperty = entity.GetType().GetProperty(_parentFieldName);
-        if (parentProperty?.GetValue(entity) != null)
-            throw new UnauthorizedAccessException("Cannot change the parent field value.");
+        //var parentProperty = entity.GetType().GetProperty(_parentFieldName);
+        //if (parentProperty?.GetValue(entity) != null)
+        //    throw new UnauthorizedAccessException("Cannot change the parent field value.");
 
         return base.BeforeDelete(entity);
     }
 
     public override IQueryable<TEntity> Query(Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool withDeleted = false, CancellationToken ct = default)
     {
-        var qry = base.Query(include, withDeleted, ct).Where(e => e.TenantId == _currentUser.TenantId && EF.Property<TParentId>(e, _parentFieldName).Equals(_parentFieldValue));
-
+        var qry = base.Query(include, withDeleted, ct).Where(e => e.TenantId == _currentUser.TenantId);
+        
+        foreach (var item in _parentFilter.GetType().GetProperties())
+            if( typeof(TEntity).GetProperty(item.Name) != null)
+                qry = qry.Where(e => EF.Property<object>(e, item.Name).Equals(item.GetValue(_parentFilter)));
+        
         return include == null ? qry : include(qry);
     }
 

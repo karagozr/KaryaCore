@@ -1,4 +1,5 @@
-﻿using Karya.Core.Interfaces.Identities;
+﻿using Karya.Core.Interfaces.Filters;
+using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
@@ -12,16 +13,22 @@ public abstract class BaseUnitOfWork : IUnitOfWork
 {
     protected readonly DbContext _context;
     protected readonly ICurrentUser _currentUser;
-
+    protected readonly IParentFilter? _parentFilter;
     protected BaseUnitOfWork(DbContext context, ICurrentUser currentUser)
     {
         _context = context;
         _currentUser = currentUser;
     }
 
+
     public TRepo Repo<TRepo>() where TRepo : class, IRepository
     {
         return (Activator.CreateInstance(typeof(TRepo), _context, _currentUser) as TRepo)!;
+    }
+
+    public TRepo Repo<TRepo>(IParentFilter parentFilter) where TRepo : class, IDetailTenantRepository
+    {
+        return (Activator.CreateInstance(typeof(TRepo), _context, _currentUser, parentFilter) as TRepo)!;
     }
 
     public BaseResult Complete()

@@ -1,4 +1,5 @@
-﻿using Karya.Core.Interfaces.DTOs;
+﻿using Karya.Core.Abstracts.Entities;
+using Karya.Core.Interfaces.DTOs;
 
 namespace Karya.Test.Web.Api.DTOs;
 
@@ -13,7 +14,7 @@ public class InvUDto:IUpdateDto
 
 public class InvDetailUDto : IUpdateDto
 {
-    public string Id { get; set; } = null!;
+    
     public string InventoryId { get; set; } = null!;
     public string Note { get; set; } = null!;
     public string? CategoryId { get; set; } = null!;

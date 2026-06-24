@@ -1,18 +1,21 @@
 ﻿using Karya.Core.App.Interfaces.Commands;
 using Karya.Core.Interfaces.DTOs;
+using Karya.Core.Interfaces.Filters;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Results;
 
-namespace Karya.Core.App.Features.Commands;
+namespace Karya.Core.App.Features.Commands.DetailCommands;
 
-public record UpdateCommand<TEntity, TId, TDto>(
+public record UpdateDetailCommand<TEntity, TId, TParentFilter, TDto>(
+    TParentFilter ParentFilter,
     TId Key,
     Dictionary<string, object> updateData,
-    IBaseService<TEntity, TId> Service,
+    IBaseDetailService<TEntity, TId, TParentFilter> Service,
     string Permission = ""
 ) : IExecutableCrudRequest<BaseResult>
     where TDto : class, IUpdateDto, new()
+    where TParentFilter : class, IParentFilter, new()
 {
     public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
-        => Service.Update<TDto>(Key, updateData);
+        => Service.Update<TDto>(ParentFilter, Key, updateData);
 }

@@ -12,7 +12,12 @@ public interface ITenantRepository
 {
 
 }
-public interface IRepositoryAsync<TEntity,TId> : IRepository, ITenantRepository, IQuery<TEntity, TId> where TEntity : IBaseEntity<TId>, new()
+
+public interface IDetailTenantRepository
+{
+
+}
+public interface IRepositoryAsync<TEntity,TId> : IRepository, ITenantRepository, IDetailTenantRepository, IQuery<TEntity, TId> where TEntity : IBaseEntity<TId>, new()
 {
     Task<TEntity?> GetByIdAsync(TId id, 
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, 

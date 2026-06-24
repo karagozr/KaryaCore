@@ -24,7 +24,7 @@ public class Inventory:BaseTenantEntity<string>
 public class InventoryDetail : BaseTenantEntity<int>
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public  int Id { get; set; }
+    public override int Id { get; set; }
 
     public string InventoryId { get; set; }
 

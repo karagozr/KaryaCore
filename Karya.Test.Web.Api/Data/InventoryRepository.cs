@@ -1,5 +1,6 @@
 ﻿using Karya.Core.Interfaces.Identities;
 using Karya.Core.Repositories;
+using Karya.Test.Web.Api.Controllers;
 using Karya.TestApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +13,9 @@ namespace Karya.Test.Web.Api.Data
         }
     }
 
-    public class InventoryDetailRepository : BaseTenantDetailRepositoryAsync<InventoryDetail, int, string, DbContext>
+    public class InventoryDetailRepository : BaseTenantDetailRepositoryAsync<InventoryDetail, int, InvParentFilter, DbContext>
     {
-        public InventoryDetailRepository(DbContext context, ICurrentUser currentUser, string inventoryId) : base(context, currentUser, "InventoryId", inventoryId)
+        public InventoryDetailRepository(DbContext context, ICurrentUser currentUser, InvParentFilter parentFilter) : base(context, currentUser, parentFilter)
         {
         }
     }

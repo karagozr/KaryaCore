@@ -16,3 +16,4 @@ public record SelectCommand<TEntity, TId, TDto>(DataSourceLoadOptionsBase LoadOp
         return await Service.Select<TDto>(LoadOptions);
     }
 }
+

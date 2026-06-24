@@ -21,9 +21,10 @@ public abstract class   BaseCrudController<TEntity, TId, TSingleDto, TSelectDto,
     where TInsertDto : class, IInsertDto, new()
     where TUpdateDto : class, IUpdateDto, new()
 {
-
-    protected BaseCrudController(IMediator mediator, IBaseService<TEntity, TId> service):base(mediator, service)
+    protected new IBaseService<TEntity, TId> _service;
+    protected BaseCrudController(IMediator mediator, IBaseService<TEntity, TId> service):base(mediator,service)
     {
+        _service = service;
     }
 
     [HttpGet("{key}")]
