@@ -45,7 +45,6 @@ public class InvDetailService(ICurrentUser currentUser) : BaseDetailService<Inve
         var query = _uow.Repo<InventoryDetailRepository>(parent).Query(x => x.Include(i => i.Category)).Select(x => new InvDetailLDto
         {
             Id = x.Id,
-            InventoryId = x.InventoryId,
             Note = x.Note,
             CategoryId = x.CategoryId,
             CategoryName = x.Category.Name,

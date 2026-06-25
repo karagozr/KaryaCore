@@ -17,7 +17,6 @@ public class InvLDto : ISelectDto
 public class InvDetailLDto : ISelectDto
 {
     public int Id { get; set; }=0;
-    public string InventoryId { get; set; } = null!;
     public string Note { get; set; } = null!;
     public string? CategoryName { get; set; } = null!;
     public string? CategoryId { get; set; } = null!;

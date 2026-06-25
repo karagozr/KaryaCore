@@ -1,4 +1,5 @@
 ﻿using Karya.Core.Abstracts.Entities;
+using Karya.Core.Helpers.Generals;
 using Karya.Core.Interfaces.Entities.Tanent;
 using Karya.Core.Interfaces.Filters;
 using Karya.Core.Interfaces.Identities;
@@ -27,7 +28,13 @@ where TParentFilter : IParentFilter
     {
         foreach (var item in _parentFilter.GetType().GetProperties())
         {
-            entity.GetType().GetProperty(item.Name)?.SetValue(item.Name, item.GetValue(item));
+            var prop = entity.GetType().GetProperty(item.Name) as PropertyInfo;
+            if (prop != null)
+            {
+                var propVal = item.GetValue(_parentFilter);
+                typeof(TEntity).GetProperty(item.Name)?.SetValue(entity, propVal);
+            }
+                
         }
         
         entity.TenantId = _currentUser.TenantId;
