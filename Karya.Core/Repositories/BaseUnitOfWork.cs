@@ -67,7 +67,7 @@ public abstract class BaseUnitOfWork : IUnitOfWork
 
             var inn = ex.InnerException;
             if(inn == null)
-                return BaseResult.Error("500","Unknown DB Error");
+                return BaseResult.ErrorCoded("500", MessageCodes.DbError, "Unknown DB Error");
             else
             {
                 var sqlEx = inn as SqlException;
