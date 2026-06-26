@@ -1,11 +1,11 @@
-﻿using Karya.Core.Interfaces.Filters;
+﻿using Karya.Core.Helpers.Repository;
+using Karya.Core.Interfaces.Filters;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Karya.Core.Repositories;
 
@@ -71,17 +71,18 @@ public abstract class BaseUnitOfWork : IUnitOfWork
             else
             {
                 var sqlEx = inn as SqlException;
-                if(sqlEx == null)
-                    return BaseResult.Error("500", "DB Error : " + sqlEx?.Message);
 
-                return BaseResult.Error("400", sqlEx.Number.ToString() + "-" + sqlEx.Message);
+                return BaseResult.Error("400", SqlErrorHandlerHelper.GetUserFriendlyErrorMessage(sqlEx));
             }
                 
         }
+    
     }
 
     #region Disposing
     private bool _disposed = false;
+    private object qlEx;
+
     public void Dispose()
     {
         Dispose(true);
