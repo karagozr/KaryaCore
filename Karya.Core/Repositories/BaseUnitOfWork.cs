@@ -36,13 +36,11 @@ public abstract class BaseUnitOfWork : IUnitOfWork
         try
         {
             _context.SaveChanges();
-            return BaseResult.Success();
+            return BaseResult.SuccessCoded("200", MessageCodes.Success);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            var inex = ex.InnerException;
-            var message = inex != null ? inex.Message : ex.Message;
-            return BaseResult.Error("500",message);
+            return BaseResult.ErrorCoded("500", MessageCodes.ServerError);
         }
     }
 
@@ -55,11 +53,11 @@ public abstract class BaseUnitOfWork : IUnitOfWork
                      .Any(e => e.State == EntityState.Added);
 
             await _context.SaveChangesAsync();
-            
-            if(isCreated)
-                return BaseResult.Success("201");
 
-            return BaseResult.Success();
+            if(isCreated)
+                return BaseResult.SuccessCoded("201", MessageCodes.Created);
+
+            return BaseResult.SuccessCoded("200", MessageCodes.Success);
 
         }
         catch (DbUpdateException ex)
@@ -67,16 +65,16 @@ public abstract class BaseUnitOfWork : IUnitOfWork
 
             var inn = ex.InnerException;
             if(inn == null)
-                return BaseResult.ErrorCoded("500", MessageCodes.DbError, "Unknown DB Error");
+                return BaseResult.ErrorCoded("500", MessageCodes.DbError);
             else
             {
                 var sqlEx = inn as SqlException;
 
-                return BaseResult.Error("400", SqlErrorHandlerHelper.GetUserFriendlyErrorMessage(sqlEx));
+                return BaseResult.ErrorCoded("400", SqlErrorHandlerHelper.GetMessageCode(sqlEx));
             }
-                
+
         }
-    
+
     }
 
     #region Disposing

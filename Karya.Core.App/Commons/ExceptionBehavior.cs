@@ -20,13 +20,13 @@ public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TR
         }
         catch (UnauthorizedAccessException ex)
         {
-            return (TResponse)BaseResult.Error("403", ex.Message);
+            logger.LogWarning(ex, "Unauthorized access for {Request}", typeof(TRequest).Name);
+            return (TResponse)BaseResult.ErrorCoded("403", MessageCodes.Unauthorized);
         }
         catch (Exception ex)
         {
-            var typeOfTresponse = typeof(TResponse);
-            
-            return (TResponse)BaseResult.Error("500",ex.Message); 
+            logger.LogError(ex, "Unhandled exception for {Request}", typeof(TRequest).Name);
+            return (TResponse)BaseResult.ErrorCoded("500", MessageCodes.ServerError); 
 
         }
     }

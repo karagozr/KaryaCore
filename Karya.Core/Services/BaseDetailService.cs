@@ -50,12 +50,12 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
     public async Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, ISingleDto, new()
     {
         if (key == null)
-            return BaseResult<TDto>.Error(code: "400", ServiceMessages.Required("Id"), null);
+            return BaseResult<TDto>.ErrorCoded("400", MessageCodes.Required, null, "Id");
 
         var entity = await _uow.Repo<TRepo>(parentFilter).GetByIdAsync(key);
 
         if (entity == null)
-            return BaseResult<TDto>.Error(code: "404", ServiceMessages.NotFound(_tableName, "Id", Convert.ToString(key)), null);
+            return BaseResult<TDto>.ErrorCoded("404", MessageCodes.NotFound, null, _tableName, "Id", Convert.ToString(key));
 
         return BaseResult<TDto>.Success("200", null, EntityMapper.MapToDto<TEntity, TDto>(entity));
 

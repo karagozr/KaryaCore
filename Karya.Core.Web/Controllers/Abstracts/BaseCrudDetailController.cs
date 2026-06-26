@@ -1,7 +1,5 @@
-﻿using Karya.Core.App.Features.Commands;
-using Karya.Core.App.Features.Commands.DetailCommands;
+﻿using Karya.Core.App.Features.Commands.DetailCommands;
 using Karya.Core.Interfaces.DTOs;
-using Karya.Core.Interfaces.Entities;
 using Karya.Core.Interfaces.Filters;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Web.Helpers;

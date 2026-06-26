@@ -17,6 +17,17 @@ public record BaseResult
 
     public string Message { get; init; } = string.Empty;
 
+    /// <summary>
+    /// Semantic message key (see <see cref="MessageCodes"/>). When set, the
+    /// response edge resolves it to localized text using the request language.
+    /// </summary>
+    public string? MessageCode { get; init; }
+
+    /// <summary>
+    /// Arguments applied to the localized text placeholders ({0}, {1}, ...).
+    /// </summary>
+    public object[]? MessageArgs { get; init; }
+
     public Dictionary<string, string>? Errors { get; init; }
     public Dictionary<string, string>? Infos { get; init; }
     public Dictionary<string, string>? Warnings { get; init; }
@@ -62,6 +73,19 @@ public record BaseResult
     public static BaseResult Warning(string code, string? message, Dictionary<string, string>? infos = null)
         => new(ResultType.Warning,true, code, message,infos);
 
+    // --- Coded (localizable) factories ---------------------------------------
+    // 'code' is the HTTP status; 'messageCode' is the translation key resolved
+    // at the response edge using the request language.
+
+    public static BaseResult SuccessCoded(string code, string messageCode, params object[] args)
+        => new(ResultType.Success, true, code) { MessageCode = messageCode, MessageArgs = args };
+
+    public static BaseResult ErrorCoded(string code, string messageCode, params object[] args)
+        => new(ResultType.Error, false, code) { MessageCode = messageCode, MessageArgs = args };
+
+    public static BaseResult WarningCoded(string code, string messageCode, params object[] args)
+        => new(ResultType.Warning, true, code) { MessageCode = messageCode, MessageArgs = args };
+
 }
 
 public record BaseResult<T> : BaseResult
@@ -90,5 +114,16 @@ public record BaseResult<T> : BaseResult
     public static BaseResult<T> Warning(string code, string? message, T? data, Dictionary<string, string>? warnings = null)
         => new(ResultType.Warning, true, code, data, message, warnings);
 
-    
+    // --- Coded (localizable) factories ---------------------------------------
+
+    public static BaseResult<T> SuccessCoded(string code, string messageCode, T? data, params object[] args)
+        => new(ResultType.Success, true, code, data) { MessageCode = messageCode, MessageArgs = args };
+
+    public static BaseResult<T> ErrorCoded(string code, string messageCode, T? data, params object[] args)
+        => new(ResultType.Error, false, code, data) { MessageCode = messageCode, MessageArgs = args };
+
+    public static BaseResult<T> WarningCoded(string code, string messageCode, T? data, params object[] args)
+        => new(ResultType.Warning, true, code, data) { MessageCode = messageCode, MessageArgs = args };
+
+
 }

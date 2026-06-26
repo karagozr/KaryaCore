@@ -3,11 +3,13 @@ using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity;
 using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Interfaces.Identities;
+using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
 using Karya.Core.Web.Infrastructure.Swagger;
 using Karya.Test.Web.Api;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
+using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -146,6 +148,10 @@ var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Localization (DB-backed message catalog)
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IMessageLocalizer, DbMessageLocalizer>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowViteApp",
@@ -167,6 +173,9 @@ using (var scope = app.Services.CreateScope())
     {
         // Önce roller ve kullanıcılar
         await IdentityDataSeeder.SeedUsersAsync(services);
+
+        // Dil/çeviri kayıtları (varsayılan tr/en)
+        await LocalizationSeeder.SeedAsync(services);
 
         // Sonra yetkiler (Permissions)
         //await PermissionSeeder.SeedAsync(services);

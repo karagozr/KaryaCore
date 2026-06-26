@@ -18,8 +18,6 @@ public abstract class BaseService : IBaseService
     }
 }
 
-
-
 public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseService<TEntity, TId>
     where TRepo : class, IRepositoryAsync<TEntity, TId>
     where TEntity : class, IBaseEntity<TId>, new()
@@ -58,12 +56,12 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
     public async Task<BaseResult<TDto>> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new()
     {
         if (key == null) 
-            return BaseResult<TDto>.Error(code: "400", ServiceMessages.Required("Id"), null);
+            return BaseResult<TDto>.ErrorCoded("400", MessageCodes.Required, null, "Id");
 
         var entity = await _uow.Repo<TRepo>().GetByIdAsync(key);
 
         if (entity == null) 
-            return BaseResult<TDto>.Error(code: "404", ServiceMessages.NotFound(_tableName, "Id", Convert.ToString(key)), null);
+            return BaseResult<TDto>.ErrorCoded("404", MessageCodes.NotFound, null, _tableName, "Id", Convert.ToString(key));
 
         return BaseResult<TDto>.Success("200", null, EntityMapper.MapToDto<TEntity, TDto>(entity));
 
