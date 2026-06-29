@@ -27,7 +27,8 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             b.Property(x => x.Code).IsRequired().HasMaxLength(150);
             b.Property(x => x.LanguageCode).IsRequired().HasMaxLength(10);
             b.Property(x => x.Value).IsRequired();
-            b.HasIndex(x => new { x.Code, x.LanguageCode }).IsUnique();
+            b.Property(x => x.Scope).HasConversion<byte>();
+            b.HasIndex(x => new { x.Code, x.LanguageCode, x.Scope }).IsUnique();
         });
     }
 

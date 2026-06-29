@@ -20,10 +20,10 @@ public static class LocalizationSeeder
 
         var rows = new List<LocalizationResource>();
 
-        void Add(string code, string tr, string en)
+        void Add(string code, string tr, string en, LocalizationScope scope = LocalizationScope.Server)
         {
-            rows.Add(new LocalizationResource { Code = code, LanguageCode = "tr", Value = tr });
-            rows.Add(new LocalizationResource { Code = code, LanguageCode = "en", Value = en });
+            rows.Add(new LocalizationResource { Code = code, LanguageCode = "tr", Value = tr, Scope = scope });
+            rows.Add(new LocalizationResource { Code = code, LanguageCode = "en", Value = en, Scope = scope });
         }
 
         Add(MessageCodes.Success, "İşlem başarılı.", "Operation completed successfully.");
@@ -42,6 +42,10 @@ public static class LocalizationSeeder
         Add(MessageCodes.DbDeadlock, "İşlem kilitlendi, lütfen tekrar deneyin.", "The operation was deadlocked, please try again.");
         Add(MessageCodes.DbLoginFailed, "Veritabanı oturum açma başarısız oldu.", "Database login failed.");
         Add(MessageCodes.DbCannotOpen, "Veritabanı açılamadı.", "The database could not be opened.");
+
+        // Client-only UI labels (fetched via GET api/language/{lang}).
+        Add("UI_SAVE", "Kaydet", "Save", LocalizationScope.Client);
+        Add("UI_CANCEL", "İptal", "Cancel", LocalizationScope.Client);
 
         await db.LocalizationResources.AddRangeAsync(rows);
         await db.SaveChangesAsync();

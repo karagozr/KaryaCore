@@ -52,7 +52,8 @@ public class DbMessageLocalizer : IMessageLocalizer
             {
                 return _db.LocalizationResources
                     .AsNoTracking()
-                    .Where(r => r.LanguageCode == language)
+                    .Where(r => r.LanguageCode == language &&
+                                (r.Scope == LocalizationScope.Server || r.Scope == LocalizationScope.Both))
                     .ToDictionary(r => r.Code, r => r.Value);
             }
             catch
