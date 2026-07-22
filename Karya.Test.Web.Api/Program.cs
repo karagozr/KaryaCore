@@ -2,6 +2,7 @@
 using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity;
 using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Services;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
@@ -11,6 +12,7 @@ using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
@@ -38,7 +40,8 @@ builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<AppDbCo
 // 2. OpenIddict Kaydı
 builder.Services.AddOpenIddict()
     .AddCore(options => {
-        options.UseEntityFrameworkCore().UseDbContext<AppDbContext>();
+        options.UseEntityFrameworkCore().UseDbContext<AppDbContext>()
+            .ReplaceDefaultEntities<AppApplication, AppAuthorization, AppScope, AppToken, Guid>();
     })
     .AddServer(options => {
         options.SetTokenEndpointUris("/connect/token");
@@ -53,7 +56,8 @@ builder.Services.AddOpenIddict()
 builder.Services.AddOpenIddict()
     .AddCore(options =>
     {
-        options.UseEntityFrameworkCore().UseDbContext<AppDbContext>();
+        options.UseEntityFrameworkCore().UseDbContext<AppDbContext>()
+            .ReplaceDefaultEntities<AppApplication, AppAuthorization, AppScope, AppToken, Guid>();
         //options.UseQuartz(); // Token temizliği için arka plan servisi
     })
     .AddServer(options =>
@@ -84,8 +88,8 @@ builder.Services.AddOpenIddict()
 
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-// Add Swagger services
+builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
+builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

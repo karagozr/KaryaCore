@@ -33,9 +33,8 @@ public class AuthController : ControllerBase
         identity.AddClaim(OpenIddictConstants.Claims.Subject, user.Id.ToString());
         identity.AddClaim("TenantId", user.TenantId); // Senin özel alanın
 
-        // Kullanıcının yetkilerini (Claims) de token'a ekleyelim
-        var principal = await _signInManager.CreateUserPrincipalAsync(user);
-        identity.AddClaims(principal.Claims);
+        // Rol ve grup bilgileri token'a gömülmez; çağrı anında IUserClaimsService
+        // üzerinden veritabanından çözülür.
 
         identity.SetDestinations(c => new[] { OpenIddictConstants.Destinations.AccessToken });
 
