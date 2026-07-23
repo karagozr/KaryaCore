@@ -1,4 +1,5 @@
 ﻿using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Infrastructure;
 using Karya.Test.Web.Api.Localization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -33,50 +34,8 @@ public class AppDbContext : IdentityDbContext<
     {
         base.OnModelCreating(modelBuilder);
 
-        // Replace default OpenIddict entities with the App-prefixed ones.
-        modelBuilder.UseOpenIddict<AppApplication, AppAuthorization, AppScope, AppToken, Guid>();
-
-        modelBuilder.Entity<AppRoleGroup>(b =>
-        {
-            b.ToTable("AppRoleGroups");
-            b.HasKey(x => x.Id);
-            b.Property(x => x.Name).IsRequired().HasMaxLength(256);
-            b.Property(x => x.Description).HasMaxLength(1024);
-            b.Property(x => x.TenantId).HasMaxLength(256);
-            b.HasIndex(x => new { x.TenantId, x.Name }).IsUnique();
-        });
-
-        modelBuilder.Entity<AppRoleGroupRole>(b =>
-        {
-            b.ToTable("AppRoleGroupRoles");
-            b.HasKey(x => new { x.RoleGroupId, x.RoleId });
-
-            b.HasOne(x => x.RoleGroup)
-                .WithMany(g => g.RoleGroupRoles)
-                .HasForeignKey(x => x.RoleGroupId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            b.HasOne(x => x.Role)
-                .WithMany(r => r.RoleGroupRoles)
-                .HasForeignKey(x => x.RoleId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-        modelBuilder.Entity<AppUserRoleGroup>(b =>
-        {
-            b.ToTable("AppUserRoleGroups");
-            b.HasKey(x => new { x.UserId, x.RoleGroupId });
-
-            b.HasOne(x => x.User)
-                .WithMany(u => u.UserRoleGroups)
-                .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            b.HasOne(x => x.RoleGroup)
-                .WithMany(g => g.UserRoleGroups)
-                .HasForeignKey(x => x.RoleGroupId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
+        // OpenIddict + rol grubu model konfigürasyonu Karya.Core.Identity içinde.
+        modelBuilder.ApplyKaryaIdentityModel();
 
         modelBuilder.Entity<LocalizationResource>(b =>
         {

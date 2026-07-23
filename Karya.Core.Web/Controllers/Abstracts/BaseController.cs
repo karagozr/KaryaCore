@@ -10,8 +10,7 @@ namespace Karya.Core.Web.Abstracts.Controllers;
 //[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public abstract class BaseController<TEntity, TId> : ControllerBase
-    where TId : notnull
+public abstract class BaseController: ControllerBase
 {
     protected readonly IMediator _mediator;
     protected readonly IBaseService _service;
@@ -29,4 +28,13 @@ public abstract class BaseController<TEntity, TId> : ControllerBase
 
     protected ApiResult<TData> ApiActionResult<TData>(BaseResult<TData> result) => new(result);
     protected ApiResult ApiActionResult(BaseResult result) => new(result);
+}
+
+public abstract class BaseController<TEntity, TId> : BaseController
+    where TId : notnull
+{
+    protected BaseController(IMediator mediator, IBaseService service)
+        : base(mediator, service)
+    {
+    }
 }

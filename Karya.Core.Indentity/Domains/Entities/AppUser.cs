@@ -1,10 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Karya.Core.Interfaces.Entities;
 
 namespace Karya.Core.Indentity.Domains.Entities;
 
-public class AppUser : IdentityUser<Guid>
+public class AppUser : IdentityUser<Guid>, IBaseEntity<Guid>
 {
+    /// <summary>Kullanıcının aktif/seçili tenant'ı.</summary>
     public string TenantId { get; set; }
+
+    /// <summary>True ise kullanıcı tüm tenant'lara erişebilen sistem adminidir.</summary>
+    public bool IsSystemAdmin { get; set; }
+
+    /// <summary>Kullanıcının erişebildiği tenant üyelikleri (admin için birden çok olabilir).</summary>
+    public ICollection<AppUserTenant> TenantMemberships { get; set; } = new List<AppUserTenant>();
 
     /// <summary>Direct role assignments for this user.</summary>
     public ICollection<AppUserRole> UserRoles { get; set; } = new List<AppUserRole>();

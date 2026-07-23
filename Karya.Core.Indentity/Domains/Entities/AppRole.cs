@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Karya.Core.Interfaces.Entities;
 
 namespace Karya.Core.Indentity.Domains.Entities;
 
-public class AppRole : IdentityRole<Guid>
+public class AppRole : IdentityRole<Guid>, IBaseEntity<Guid>
 {
     /// <summary>Users directly assigned to this role.</summary>
     public ICollection<AppUserRole> UserRoles { get; set; } = new List<AppUserRole>();
