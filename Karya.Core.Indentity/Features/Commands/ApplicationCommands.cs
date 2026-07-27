@@ -1,6 +1,10 @@
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.App.Interfaces.Commands;
+using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.DTOs;
 using Karya.Core.Results;
+using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 
 namespace Karya.Core.Indentity.Features.Commands;
@@ -11,24 +15,24 @@ namespace Karya.Core.Indentity.Features.Commands;
 /// uygulanır; OpenIddict manager her command'a parametre olarak geçirilir.
 /// </summary>
 public record SelectApplicationsCommand(
-    IOpenIddictApplicationManager Manager,
+    DataSourceLoadOptionsBase LoadOptions,
+    DbContext Context,
     string Permission = ""
-) : IExecutableCrudRequest<BaseResult<List<AppApplicationLDto>>>
+) : IExecutableCrudRequest<BaseResult<LoadResult>>
 {
-    public async Task<BaseResult<List<AppApplicationLDto>>> ExecuteAsync(CancellationToken ct = default)
+    public async Task<BaseResult<LoadResult>> ExecuteAsync(CancellationToken ct = default)
     {
-        var items = new List<AppApplicationLDto>();
-        await foreach (var app in Manager.ListAsync(cancellationToken: ct))
-        {
-            items.Add(new AppApplicationLDto
+        var query = Context.Set<AppApplication>().AsNoTracking()
+            .Select(a => new AppApplicationLDto
             {
-                Id = await Manager.GetIdAsync(app, ct),
-                ClientId = await Manager.GetClientIdAsync(app, ct),
-                DisplayName = await Manager.GetDisplayNameAsync(app, ct),
-                ClientType = await Manager.GetClientTypeAsync(app, ct)
+                Id = a.Id.ToString(),
+                ClientId = a.ClientId,
+                DisplayName = a.DisplayName,
+                ClientType = a.ClientType
             });
-        }
-        return BaseResult<List<AppApplicationLDto>>.Success("200", null, items);
+
+        var res = await DataSourceLoader.LoadAsync(query, LoadOptions);
+        return BaseResult<LoadResult>.Success("200", null, res);
     }
 }
 

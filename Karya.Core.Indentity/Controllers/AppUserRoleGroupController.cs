@@ -14,12 +14,12 @@ namespace Karya.Core.Indentity.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class UserRoleGroupController : ControllerBase
+public class AppUserRoleGroupController : ControllerBase
 {
     private readonly DbContext _context;
     private readonly ICurrentUser _currentUser;
 
-    public UserRoleGroupController(DbContext context, ICurrentUser currentUser)
+    public AppUserRoleGroupController(DbContext context, ICurrentUser currentUser)
     {
         _context = context;
         _currentUser = currentUser;

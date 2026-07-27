@@ -1,9 +1,11 @@
 using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Features.Commands;
 using Karya.Core.Web.Abstracts.Controllers;
+using Karya.Core.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 
 namespace Karya.Core.Indentity.Controllers;
@@ -14,22 +16,24 @@ namespace Karya.Core.Indentity.Controllers;
 /// (AppApplication.*) uygulanır. Yalnızca Sistem Admin erişebilir.
 /// </summary>
 [Authorize]
-public class ApplicationController : BaseController
+public class AppApplicationController : BaseController
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
+    private readonly DbContext _context;
 
-    public ApplicationController(IMediator mediator, IOpenIddictApplicationManager applicationManager)
+    public AppApplicationController(IMediator mediator, IOpenIddictApplicationManager applicationManager, DbContext context)
         : base(mediator)
     {
         _applicationManager = applicationManager;
+        _context = context;
     }
 
-    /// <summary>Tüm uygulamaları listeler.</summary>
+    /// <summary>Tüm uygulamaları listeler (DataSourceLoadOptions destekli).</summary>
     [HttpGet]
-    public async Task<ActionResult> Select()
+    public async Task<ActionResult> Select(DataSourceLoadOptions options)
     {
         var result = await _mediator.Send(
-            new SelectApplicationsCommand(_applicationManager, "AppApplication.Read"));
+            new SelectApplicationsCommand(options, _context, "AppApplication.Read"));
         return ApiActionResult(result);
     }
 
