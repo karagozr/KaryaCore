@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Karya.Core.Interfaces.Entities;
 
 namespace Karya.Core.Indentity.Domains.Entities;
 
-public class AppRole : IdentityRole<Guid>
+public class AppRole : IdentityRole<Guid>, IBaseEntity<Guid>
 {
+    /// <summary>Users directly assigned to this role.</summary>
+    public ICollection<AppUserRole> UserRoles { get; set; } = new List<AppUserRole>();
+
+    /// <summary>Role groups that include this role.</summary>
+    public ICollection<AppRoleGroupRole> RoleGroupRoles { get; set; } = new List<AppRoleGroupRole>();
+
+    public ICollection<AppRoleClaim> RoleClaims { get; set; } = new List<AppRoleClaim>();
 }

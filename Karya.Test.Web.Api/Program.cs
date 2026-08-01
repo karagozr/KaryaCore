@@ -1,19 +1,20 @@
 ﻿using Karya.Core.App;
 using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity;
-using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Services;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
-using Karya.Core.Web.Infrastructure.Swagger;
-using Karya.Test.Web.Api;
+using Karya.Core.Web.Infrastructure.OpenApi;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
+using Scalar.AspNetCore;
 
 
 
@@ -21,7 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var service = builder.Services;
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddApplicationPart(Karya.Core.Indentity.AssemblyReference.Assembly);
 
 
 
@@ -32,87 +34,36 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer("Persist Security Info=True;Data Source=.;Initial Catalog=DEV_TEST;User ID=sa;Password=1234;Integrated Security=True;TrustServerCertificate=Yes"));
 
 
-builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<AppDbContext>();
-
-
-// 2. OpenIddict Kaydı
-builder.Services.AddOpenIddict()
-    .AddCore(options => {
-        options.UseEntityFrameworkCore().UseDbContext<AppDbContext>();
-    })
-    .AddServer(options => {
-        options.SetTokenEndpointUris("/connect/token");
-        options.AllowPasswordFlow();
-        options.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
-        options.UseAspNetCore().EnableTokenEndpointPassthrough();
-    })
-    .AddValidation(options => {
-        options.UseLocalServer();
-        options.UseAspNetCore();
-    });
-builder.Services.AddOpenIddict()
-    .AddCore(options =>
-    {
-        options.UseEntityFrameworkCore().UseDbContext<AppDbContext>();
-        //options.UseQuartz(); // Token temizliği için arka plan servisi
-    })
-    .AddServer(options =>
-    {
-        // Endpoint tanımları
-        options.SetTokenEndpointUris("/connect/token");
-
-        // Akış (Flow) izinleri
-        options.AllowPasswordFlow()
-               .AllowRefreshTokenFlow();
-
-        // Sertifikalar (Production'da gerçek sertifika kullanılmalı)
-        options.AddDevelopmentEncryptionCertificate()
-               .AddDevelopmentSigningCertificate();
-
-        // Refresh Token Ayarları
-        options.SetRefreshTokenLifetime(TimeSpan.FromDays(30));
-        options.AcceptAnonymousClients(); // Client_id zorunluluğu durumuna göre
-
-        options.UseAspNetCore()
-               .EnableTokenEndpointPassthrough();
-    })
-    .AddValidation(options =>
-    {
-        options.UseLocalServer();
-        options.UseAspNetCore();
-    });
+// Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
+builder.Services.AddCoreIdentityRegistiration<AppDbContext>();
 
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-// Add Swagger services
+builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
+builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+
+// Identity endpoint'lerinin bulunduğu assembly (ayrı OpenAPI dökümanı için).
+var identityAssembly = Karya.Core.Indentity.AssemblyReference.Assembly;
+
+static bool IsFromAssembly(ApiDescription api, System.Reflection.Assembly assembly) =>
+    api.ActionDescriptor is ControllerActionDescriptor cad &&
+    cad.ControllerTypeInfo.Assembly == assembly;
+
+// v1: Identity dışındaki tüm endpoint'ler
+builder.Services.AddOpenApi("v1", options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "ERP API",
-        Version = "v1"
-    });
+    options.ShouldInclude = api => !IsFromAssembly(api, identityAssembly);
+    options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
+    options.AddOperationTransformer<ParentRouteOperationTransformer>();
+});
 
-    // 🔴 Bearer tanımı
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Token gir: Bearer {token}"
-    });
-
-    // 🔴 Tüm endpointlere uygula
-    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
-    {
-        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-    });
-    options.OperationFilter<ParentRouteSwaggerFilter>();
-
+// identity: Yalnızca Karya.Core.Identity endpoint'leri
+builder.Services.AddOpenApi("identity", options =>
+{
+    options.ShouldInclude = api => IsFromAssembly(api, identityAssembly);
+    options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
+    options.AddOperationTransformer<ParentRouteOperationTransformer>();
 });
 
 
@@ -176,12 +127,6 @@ using (var scope = app.Services.CreateScope())
 
         // Dil/çeviri kayıtları (varsayılan tr/en)
         await LocalizationSeeder.SeedAsync(services);
-
-        // Sonra yetkiler (Permissions)
-        //await PermissionSeeder.SeedAsync(services);
-
-        // OpenIddict istemcileri (Postman vb.)
-        //await ClientSeeder.SeedAsync(services);
     }
     catch (Exception ex)
     {
@@ -191,8 +136,17 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // OpenAPI dökümanları: /openapi/v1.json ve /openapi/identity.json
+    app.MapOpenApi();
+
+    // Scalar UI: /scalar
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("Karya API")
+            .AddDocument("v1", "ERP API")
+            .AddDocument("identity", "Identity API");
+    });
 }
 app.UseCors("AllowViteApp");
 

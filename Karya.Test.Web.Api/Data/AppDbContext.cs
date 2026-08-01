@@ -1,4 +1,5 @@
 ﻿using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Infrastructure;
 using Karya.Test.Web.Api.Localization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,16 +10,32 @@ namespace Karya.Test.Web.Api.Data;
 // Define a custom IdentityUser with Guid as the key
 
 
-public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
+public class AppDbContext : IdentityDbContext<
+    AppUser,
+    AppRole,
+    Guid,
+    AppUserClaim,
+    AppUserRole,
+    AppUserLogin,
+    AppRoleClaim,
+    AppUserToken>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<LocalizationResource> LocalizationResources => Set<LocalizationResource>();
 
+    public DbSet<AppRoleGroup> RoleGroups => Set<AppRoleGroup>();
+
+    public DbSet<AppRoleGroupRole> RoleGroupRoles => Set<AppRoleGroupRole>();
+
+    public DbSet<AppUserRoleGroup> UserRoleGroups => Set<AppUserRoleGroup>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.UseOpenIddict();
+
+        // OpenIddict + rol grubu model konfigürasyonu Karya.Core.Identity içinde.
+        modelBuilder.ApplyKaryaIdentityModel();
 
         modelBuilder.Entity<LocalizationResource>(b =>
         {

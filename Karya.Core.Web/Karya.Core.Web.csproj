@@ -16,11 +16,13 @@
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="10.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.9" />
-    <PackageReference Include="Microsoft.OpenApi" Version="2.4.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.14" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Infrastructure\Swagger\" />
     <Folder Include="NewFolder\" />
   </ItemGroup>
 

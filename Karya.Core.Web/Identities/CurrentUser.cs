@@ -11,9 +11,14 @@ public class CurrentUser : ICurrentUser
 
     private const string DefaultLanguage = "en";
 
-    public string UserId => "USR01";//_accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+    public string UserId =>
+        _accessor.HttpContext?.User?.FindFirst("sub")?.Value
+        ?? _accessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        ?? string.Empty;
 
-    public string TenantId => "COMP0001"; //_accessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "TanentId").Value;
+    public string TenantId =>
+        _accessor.HttpContext?.User?.FindFirst("TenantId")?.Value
+        ?? string.Empty;
 
     // Language is a non-sensitive UI preference, so it is read per-request:
     // 1) "LanguageId" header  -> allows instant runtime switching (no new token)

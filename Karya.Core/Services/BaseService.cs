@@ -78,7 +78,7 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
         
     }
 
-    public async Task<BaseResult> Update<TDto>(TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new()
+    public virtual async Task<BaseResult> Update<TDto>(TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new()
     {
         var dto = updateData.ToObject<TDto>();
         var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
