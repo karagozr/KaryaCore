@@ -11,7 +11,6 @@ using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 
 
@@ -41,42 +40,8 @@ builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger/OpenAPI configuration with Swashbuckle
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "Karya API",
-        Version = "v1",
-        Description = "Karya ERP API Documentation"
-    });
-
-    // JWT Bearer authentication scheme
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+// OpenAPI with native .NET 10 support
+builder.Services.AddOpenApi();
 
 
 
@@ -148,18 +113,14 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options =>
-    {
-        options.RouteTemplate = "openapi/{documentName}.json";
-    });
+    app.MapOpenApi();
 
     app.MapScalarApiReference(options =>
     {
         options
             .WithTitle("Karya API")
             .WithTheme(ScalarTheme.Saturn)
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
-            .WithOpenApiRoutePattern("/openapi/{documentName}.json");
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
 app.UseCors("AllowViteApp");
