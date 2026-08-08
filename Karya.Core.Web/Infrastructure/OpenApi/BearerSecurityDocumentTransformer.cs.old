@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
 
 namespace Karya.Core.Web.Infrastructure.OpenApi;
 
@@ -15,32 +14,31 @@ public sealed class BearerSecurityDocumentTransformer : IOpenApiDocumentTransfor
         var scheme = new OpenApiSecurityScheme
         {
             Name = "Authorization",
-            Type = SecuritySchemeType.Http,
+            Type = OpenApiSecuritySchemeType.Http,
             Scheme = "bearer",
             BearerFormat = "JWT",
-            In = ParameterLocation.Header,
+            In = OpenApiParameterLocation.Header,
             Description = "Token gir: Bearer {token}",
             Reference = new OpenApiReference
             {
                 Id = "Bearer",
-                Type = ReferenceType.SecurityScheme
+                Type = OpenApiReferenceType.SecurityScheme
             }
         };
 
         document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
         document.Components.SecuritySchemes["Bearer"] = scheme;
 
         var requirement = new OpenApiSecurityRequirement
         {
-            [scheme] = new List<string>()
+            [scheme] = []
         };
 
         if (document.Paths is not null)
         {
             foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations.Values))
             {
-                operation.Security ??= new List<OpenApiSecurityRequirement>();
+                operation.Security ??= [];
                 operation.Security.Add(requirement);
             }
         }

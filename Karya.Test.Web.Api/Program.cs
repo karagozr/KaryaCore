@@ -5,16 +5,13 @@ using Karya.Core.Indentity.Services;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
-using Karya.Core.Web.Infrastructure.OpenApi;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
+using Microsoft.OpenApi.Models;
 
 
 
@@ -43,27 +40,41 @@ builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 
-// Identity endpoint'lerinin bulunduğu assembly (ayrı OpenAPI dökümanı için).
-var identityAssembly = Karya.Core.Indentity.AssemblyReference.Assembly;
-
-static bool IsFromAssembly(ApiDescription api, System.Reflection.Assembly assembly) =>
-    api.ActionDescriptor is ControllerActionDescriptor cad &&
-    cad.ControllerTypeInfo.Assembly == assembly;
-
-// v1: Identity dışındaki tüm endpoint'ler
-builder.Services.AddOpenApi("v1", options =>
+// Swagger/OpenAPI configuration with Swashbuckle
+builder.Services.AddSwaggerGen(options =>
 {
-    options.ShouldInclude = api => !IsFromAssembly(api, identityAssembly);
-    options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
-    options.AddOperationTransformer<ParentRouteOperationTransformer>();
-});
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Karya API",
+        Version = "v1",
+        Description = "Karya ERP API Documentation"
+    });
 
-// identity: Yalnızca Karya.Core.Identity endpoint'leri
-builder.Services.AddOpenApi("identity", options =>
-{
-    options.ShouldInclude = api => IsFromAssembly(api, identityAssembly);
-    options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
-    options.AddOperationTransformer<ParentRouteOperationTransformer>();
+    // JWT Bearer authentication scheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 
@@ -136,16 +147,11 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    // OpenAPI dökümanları: /openapi/v1.json ve /openapi/identity.json
-    app.MapOpenApi();
-
-    // Scalar UI: /scalar
-    app.MapScalarApiReference(options =>
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
     {
-        options
-            .WithTitle("Karya API")
-            .AddDocument("v1", "ERP API")
-            .AddDocument("identity", "Identity API");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Karya API v1");
+        options.RoutePrefix = "swagger"; // Swagger UI at /swagger
     });
 }
 app.UseCors("AllowViteApp");
