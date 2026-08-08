@@ -12,6 +12,7 @@ using Karya.Test.Web.Api.Seeders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 
 
 
@@ -147,11 +148,18 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    app.UseSwagger(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Karya API v1");
-        options.RoutePrefix = "swagger"; // Swagger UI at /swagger
+        options.RouteTemplate = "openapi/{documentName}.json";
+    });
+
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("Karya API")
+            .WithTheme(ScalarTheme.Saturn)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
+            .WithOpenApiRoutePattern("/openapi/{documentName}.json");
     });
 }
 app.UseCors("AllowViteApp");
