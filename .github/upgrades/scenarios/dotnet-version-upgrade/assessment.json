@@ -1,0 +1,1051 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-08-08T13:45:08.1272948Z",
+  "analysisEndTime": "2026-08-08T13:45:11.0494169Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 5,
+      "issues": 7,
+      "incidents": 33,
+      "effort": 33
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 15,
+        "Optional": 0,
+        "Potential": 18,
+        "Information": 0
+      },
+      "category": {
+        "NuGet": 16,
+        "Project": 5,
+        "Api": 12
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "Karya.Core.App\\Karya.Core.App.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Karya.Core.App",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 19,
+        "numberOfCodeFiles": 19,
+        "linesTotal": 329,
+        "linesOfCode": 329,
+        "totalApiScanned": 378,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "30580ee1-8acc-4d72-bdfe-0809bc233390",
+          "ruleId": "Project.0002",
+          "projectPath": "Karya.Core.App\\Karya.Core.App.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net9.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net9.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "Karya.Core.App\\Karya.Core.App.csproj",
+            "snippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net9.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Karya.Core\\Karya.Core.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 4,
+      "properties": {
+        "appName": "Karya.Core",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 45,
+        "numberOfCodeFiles": 45,
+        "linesTotal": 1556,
+        "linesOfCode": 1556,
+        "totalApiScanned": 1258,
+        "minLinesOfCodeToChange": 1,
+        "maxLinesOfCodeToChange": 1
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "2125b0c7-1314-4148-b928-5d38b031d544",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core\\Karya.Core.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore, and replace with new package Microsoft.EntityFrameworkCore 10.0.10",
+              "protected": "Microsoft.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore, and replace with new package Microsoft.EntityFrameworkCore 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Core\\Karya.Core.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore, and replace with new package Microsoft.EntityFrameworkCore 10.0.10",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore, and replace with new package Microsoft.EntityFrameworkCore 10.0.10",
+            "label": "Microsoft.EntityFrameworkCore 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "5e6001b0-c124-49fc-a53c-21df141929db",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core\\Karya.Core.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Formats.Asn1, 6.0.1\n\nRecommendation:\n\nRemove System.Formats.Asn1, and replace with new package System.Formats.Asn1 10.0.10",
+              "protected": "System.Formats.Asn1, 6.0.1\n\nRecommendation:\n\nRemove System.Formats.Asn1, and replace with new package System.Formats.Asn1 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Core\\Karya.Core.csproj",
+            "snippet": "System.Formats.Asn1, 6.0.1\n\nRecommendation:\n\nRemove System.Formats.Asn1, and replace with new package System.Formats.Asn1 10.0.10",
+            "protectedSnippet": "System.Formats.Asn1, 6.0.1\n\nRecommendation:\n\nRemove System.Formats.Asn1, and replace with new package System.Formats.Asn1 10.0.10",
+            "label": "System.Formats.Asn1 6.0.1",
+            "properties": {
+              "PackageId": "System.Formats.Asn1",
+              "PackageVersion": "6.0.1",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "60fa4985-45d3-4273-9981-523fa4a3d855",
+          "ruleId": "Project.0002",
+          "projectPath": "Karya.Core\\Karya.Core.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net9.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net9.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "Karya.Core\\Karya.Core.csproj",
+            "snippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net9.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "b513c010-fd66-4030-b9ec-7c50f317ef94",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: System.Text.Json metadata reader now unescapes metadata property names ",
+          "projectPath": "Karya.Core\\Karya.Core.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var convertedJsonValue = JsonSerializer.Deserialize(jsonElement.GetRawText(), property.PropertyType);",
+              "protected": "M:System.Text.Json.JsonSerializer.Deserialize(System.String,System.Type,System.Text.Json.JsonSerializerOptions)"
+            },
+            "kind": "File",
+            "path": "Karya.Core\\Helpers\\Generals\\UpdateDtoHelper.cs",
+            "snippet": "var convertedJsonValue = JsonSerializer.Deserialize(jsonElement.GetRawText(), property.PropertyType);",
+            "protectedSnippet": "M:System.Text.Json.JsonSerializer.Deserialize(System.String,System.Type,System.Text.Json.JsonSerializerOptions)",
+            "label": "M:System.Text.Json.JsonSerializer.Deserialize(System.String,System.Type,System.Text.Json.JsonSerializerOptions)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/serialization/9.0/json-metadata-reader.md",
+                "isCustom": false
+              }
+            ],
+            "line": 37,
+            "column": 20
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+      "startingProject": true,
+      "issues": 5,
+      "storyPoints": 11,
+      "properties": {
+        "appName": "Karya.Core.Indentity",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 67,
+        "numberOfCodeFiles": 67,
+        "linesTotal": 2145,
+        "linesOfCode": 2145,
+        "totalApiScanned": 2803,
+        "minLinesOfCodeToChange": 5,
+        "maxLinesOfCodeToChange": 5
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "129c4e70-6c79-4c99-b6c5-94fe7739639a",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.AspNetCore.Identity.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Identity.EntityFrameworkCore, and replace with new package Microsoft.AspNetCore.Identity.EntityFrameworkCore 10.0.10",
+              "protected": "Microsoft.AspNetCore.Identity.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Identity.EntityFrameworkCore, and replace with new package Microsoft.AspNetCore.Identity.EntityFrameworkCore 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+            "snippet": "Microsoft.AspNetCore.Identity.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Identity.EntityFrameworkCore, and replace with new package Microsoft.AspNetCore.Identity.EntityFrameworkCore 10.0.10",
+            "protectedSnippet": "Microsoft.AspNetCore.Identity.EntityFrameworkCore, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Identity.EntityFrameworkCore, and replace with new package Microsoft.AspNetCore.Identity.EntityFrameworkCore 10.0.10",
+            "label": "Microsoft.AspNetCore.Identity.EntityFrameworkCore 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "f0c24dd7-a823-427d-91de-4c82e1d00452",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Newtonsoft.Json, 13.0.3\n\nRecommendation:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+              "protected": "Newtonsoft.Json, 13.0.3\n\nRecommendation:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+            "snippet": "Newtonsoft.Json, 13.0.3\n\nRecommendation:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+            "protectedSnippet": "Newtonsoft.Json, 13.0.3\n\nRecommendation:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+            "label": "Newtonsoft.Json 13.0.3",
+            "properties": {
+              "PackageId": "Newtonsoft.Json",
+              "PackageVersion": "13.0.3",
+              "PackageNewVersion": "13.0.4",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "9839f42b-7af9-487d-9ef8-4dab0d2fd087",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+              "protected": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+            "snippet": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Reflection.Emit 4.3.0",
+            "properties": {
+              "PackageId": "System.Reflection.Emit",
+              "PackageVersion": "4.3.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "84f1518e-b7a2-461d-adc2-3d9510ace383",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+              "protected": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+            "snippet": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Reflection.Emit.Lightweight 4.3.0",
+            "properties": {
+              "PackageId": "System.Reflection.Emit.Lightweight",
+              "PackageVersion": "4.3.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "adb02c58-913c-4b28-9e5c-390659ebdd0a",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Security.Cryptography.Xml, 9.0.18\n\nRecommendation:\n\nRemove System.Security.Cryptography.Xml, and replace with new package System.Security.Cryptography.Xml 10.0.10",
+              "protected": "System.Security.Cryptography.Xml, 9.0.18\n\nRecommendation:\n\nRemove System.Security.Cryptography.Xml, and replace with new package System.Security.Cryptography.Xml 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+            "snippet": "System.Security.Cryptography.Xml, 9.0.18\n\nRecommendation:\n\nRemove System.Security.Cryptography.Xml, and replace with new package System.Security.Cryptography.Xml 10.0.10",
+            "protectedSnippet": "System.Security.Cryptography.Xml, 9.0.18\n\nRecommendation:\n\nRemove System.Security.Cryptography.Xml, and replace with new package System.Security.Cryptography.Xml 10.0.10",
+            "label": "System.Security.Cryptography.Xml 9.0.18",
+            "properties": {
+              "PackageId": "System.Security.Cryptography.Xml",
+              "PackageVersion": "9.0.18",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "08a6df26-f37a-4306-b39d-7782d6a1e1eb",
+          "ruleId": "Project.0002",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net9.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net9.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+            "snippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net9.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "de4f00ec-8f1f-41f2-9e93-675019dca913",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "descriptor.RedirectUris.Add(new Uri(uri));",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Features\\Commands\\ApplicationCommands.cs",
+            "snippet": "descriptor.RedirectUris.Add(new Uri(uri));",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 82,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "9dbccebb-6deb-44f3-b50d-cc040a2bc424",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "descriptor.RedirectUris.Add(new Uri(uri));",
+              "protected": "M:System.Uri.#ctor(System.String)"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\Features\\Commands\\ApplicationCommands.cs",
+            "snippet": "descriptor.RedirectUris.Add(new Uri(uri));",
+            "protectedSnippet": "M:System.Uri.#ctor(System.String)",
+            "label": "M:System.Uri.#ctor(System.String)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 82,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "f617789e-9e55-4444-8684-6950703cacf8",
+          "ruleId": "Api.0002",
+          "description": "Breaking change: New TimeSpan.From*() overloads that take integers ",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "options.SetRefreshTokenLifetime(TimeSpan.FromDays(30));",
+              "protected": "M:System.TimeSpan.FromDays(System.Int32)"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\AssemblyReference.cs",
+            "snippet": "options.SetRefreshTokenLifetime(TimeSpan.FromDays(30));",
+            "protectedSnippet": "M:System.TimeSpan.FromDays(System.Int32)",
+            "label": "M:System.TimeSpan.FromDays(System.Int32)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/core-libraries/9.0/timespan-from-overloads.md",
+                "isCustom": false
+              }
+            ],
+            "line": 44,
+            "column": 16
+          }
+        },
+        {
+          "incidentId": "0010e98a-329a-4142-adeb-f171703f940a",
+          "ruleId": "Api.0002",
+          "description": "API is available in package Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6. Add package reference to Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "services.AddIdentity\u003CAppUser, AppRole\u003E().AddEntityFrameworkStores\u003CTIdentityContext\u003E();",
+              "protected": "T:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\AssemblyReference.cs",
+            "snippet": "services.AddIdentity\u003CAppUser, AppRole\u003E().AddEntityFrameworkStores\u003CTIdentityContext\u003E();",
+            "protectedSnippet": "T:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions",
+            "label": "T:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+              "PackageNewVersion": "8.0.6"
+            },
+            "line": 14,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "24f39071-13ee-4280-9d9e-0f5fcd4452da",
+          "ruleId": "Api.0002",
+          "description": "API is available in package Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6. Add package reference to Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6",
+          "projectPath": "Karya.Core.Indentity\\Karya.Core.Indentity.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "services.AddIdentity\u003CAppUser, AppRole\u003E().AddEntityFrameworkStores\u003CTIdentityContext\u003E();",
+              "protected": "M:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores\u0060\u00601(Microsoft.AspNetCore.Identity.IdentityBuilder)"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Indentity\\AssemblyReference.cs",
+            "snippet": "services.AddIdentity\u003CAppUser, AppRole\u003E().AddEntityFrameworkStores\u003CTIdentityContext\u003E();",
+            "protectedSnippet": "M:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores\u0060\u00601(Microsoft.AspNetCore.Identity.IdentityBuilder)",
+            "label": "M:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores\u0060\u00601(Microsoft.AspNetCore.Identity.IdentityBuilder)",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+              "PackageNewVersion": "8.0.6"
+            },
+            "line": 14,
+            "column": 8
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Karya.Core.Web\\Karya.Core.Web.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 5,
+      "properties": {
+        "appName": "Karya.Core.Web",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 10,
+        "numberOfCodeFiles": 10,
+        "linesTotal": 632,
+        "linesOfCode": 632,
+        "totalApiScanned": 746,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "53c60e49-9f0f-430d-8aee-a40bef6d7e9a",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core.Web\\Karya.Core.Web.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.AspNetCore.JsonPatch, 10.0.9\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.JsonPatch, and replace with new package Microsoft.AspNetCore.JsonPatch 10.0.10",
+              "protected": "Microsoft.AspNetCore.JsonPatch, 10.0.9\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.JsonPatch, and replace with new package Microsoft.AspNetCore.JsonPatch 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Web\\Karya.Core.Web.csproj",
+            "snippet": "Microsoft.AspNetCore.JsonPatch, 10.0.9\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.JsonPatch, and replace with new package Microsoft.AspNetCore.JsonPatch 10.0.10",
+            "protectedSnippet": "Microsoft.AspNetCore.JsonPatch, 10.0.9\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.JsonPatch, and replace with new package Microsoft.AspNetCore.JsonPatch 10.0.10",
+            "label": "Microsoft.AspNetCore.JsonPatch 10.0.9",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.JsonPatch",
+              "PackageVersion": "10.0.9",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "1b39c6a0-7da6-4a59-9271-f529d9c8152d",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Core.Web\\Karya.Core.Web.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10",
+              "protected": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Web\\Karya.Core.Web.csproj",
+            "snippet": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10",
+            "protectedSnippet": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10",
+            "label": "Microsoft.AspNetCore.OpenApi 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.OpenApi",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "cae62282-50d6-4bd2-960e-5910ea2b5dcc",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Karya.Core.Web\\Karya.Core.Web.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+              "protected": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Web\\Karya.Core.Web.csproj",
+            "snippet": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Reflection.Emit, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Reflection.Emit 4.3.0",
+            "properties": {
+              "PackageId": "System.Reflection.Emit",
+              "PackageVersion": "4.3.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "eb8ba1e2-7a34-4b0c-9d01-5f3fae53aa2e",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Karya.Core.Web\\Karya.Core.Web.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+              "protected": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Web\\Karya.Core.Web.csproj",
+            "snippet": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Reflection.Emit.Lightweight, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Reflection.Emit.Lightweight 4.3.0",
+            "properties": {
+              "PackageId": "System.Reflection.Emit.Lightweight",
+              "PackageVersion": "4.3.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "9efa03fb-d6f1-4ebf-b376-61ac42cb031e",
+          "ruleId": "Project.0002",
+          "projectPath": "Karya.Core.Web\\Karya.Core.Web.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net9.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net9.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "Karya.Core.Web\\Karya.Core.Web.csproj",
+            "snippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net9.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 12,
+      "properties": {
+        "appName": "Karya.Test.Web.Api",
+        "projectKind": "AspNetCore",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 51,
+        "numberOfCodeFiles": 49,
+        "linesTotal": 4619,
+        "linesOfCode": 4596,
+        "totalApiScanned": 5704,
+        "minLinesOfCodeToChange": 6,
+        "maxLinesOfCodeToChange": 6
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "7772dc75-8d94-46c2-b0fb-8956381a00ab",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.AspNetCore.Authentication.JwtBearer, 9.0.15\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Authentication.JwtBearer, and replace with new package Microsoft.AspNetCore.Authentication.JwtBearer 10.0.10",
+              "protected": "Microsoft.AspNetCore.Authentication.JwtBearer, 9.0.15\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Authentication.JwtBearer, and replace with new package Microsoft.AspNetCore.Authentication.JwtBearer 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+            "snippet": "Microsoft.AspNetCore.Authentication.JwtBearer, 9.0.15\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Authentication.JwtBearer, and replace with new package Microsoft.AspNetCore.Authentication.JwtBearer 10.0.10",
+            "protectedSnippet": "Microsoft.AspNetCore.Authentication.JwtBearer, 9.0.15\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.Authentication.JwtBearer, and replace with new package Microsoft.AspNetCore.Authentication.JwtBearer 10.0.10",
+            "label": "Microsoft.AspNetCore.Authentication.JwtBearer 9.0.15",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Authentication.JwtBearer",
+              "PackageVersion": "9.0.15",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "90a4733c-a9c5-4e1a-8e8e-312c0ff4c433",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Design, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Design, and replace with new package Microsoft.EntityFrameworkCore.Design 10.0.10",
+              "protected": "Microsoft.EntityFrameworkCore.Design, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Design, and replace with new package Microsoft.EntityFrameworkCore.Design 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Design, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Design, and replace with new package Microsoft.EntityFrameworkCore.Design 10.0.10",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Design, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Design, and replace with new package Microsoft.EntityFrameworkCore.Design 10.0.10",
+            "label": "Microsoft.EntityFrameworkCore.Design 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Design",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "1537e03b-58a1-47e8-9c7f-e14f076ab947",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.SqlServer, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.SqlServer, and replace with new package Microsoft.EntityFrameworkCore.SqlServer 10.0.10",
+              "protected": "Microsoft.EntityFrameworkCore.SqlServer, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.SqlServer, and replace with new package Microsoft.EntityFrameworkCore.SqlServer 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.SqlServer, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.SqlServer, and replace with new package Microsoft.EntityFrameworkCore.SqlServer 10.0.10",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.SqlServer, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.SqlServer, and replace with new package Microsoft.EntityFrameworkCore.SqlServer 10.0.10",
+            "label": "Microsoft.EntityFrameworkCore.SqlServer 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.SqlServer",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "e19098b9-f244-4b35-8a62-6d278a11ae76",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Tools, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.10",
+              "protected": "Microsoft.EntityFrameworkCore.Tools, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Tools, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.10",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Tools, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.10",
+            "label": "Microsoft.EntityFrameworkCore.Tools 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Tools",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "b5af3754-32f3-4127-b634-6d2853a3816d",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10",
+              "protected": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+            "snippet": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10",
+            "protectedSnippet": "Microsoft.AspNetCore.OpenApi, 9.0.14\n\nRecommendation:\n\nRemove Microsoft.AspNetCore.OpenApi, and replace with new package Microsoft.AspNetCore.OpenApi 10.0.10",
+            "label": "Microsoft.AspNetCore.OpenApi 9.0.14",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.OpenApi",
+              "PackageVersion": "9.0.14",
+              "PackageNewVersion": "10.0.10",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "a805e4b1-96b9-4397-a065-70803ee9eec4",
+          "ruleId": "Project.0002",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net9.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net9.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+            "snippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net9.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net9.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "61f006a0-cd5a-4d9a-a8d4-16ea2e938261",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "return new JwtSecurityTokenHandler().WriteToken(token);",
+              "protected": "T:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Data\\Service\\TokenService.cs",
+            "snippet": "return new JwtSecurityTokenHandler().WriteToken(token);",
+            "protectedSnippet": "T:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler",
+            "label": "T:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler",
+            "line": 63,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "fb851a1e-5a09-43ad-ab72-20174679c51c",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "return new JwtSecurityTokenHandler().WriteToken(token);",
+              "protected": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.#ctor"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Data\\Service\\TokenService.cs",
+            "snippet": "return new JwtSecurityTokenHandler().WriteToken(token);",
+            "protectedSnippet": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.#ctor",
+            "label": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.#ctor",
+            "line": 63,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "aeab6427-8fec-43bb-bc07-e4a57d7f1683",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "return new JwtSecurityTokenHandler().WriteToken(token);",
+              "protected": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(Microsoft.IdentityModel.Tokens.SecurityToken)"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Data\\Service\\TokenService.cs",
+            "snippet": "return new JwtSecurityTokenHandler().WriteToken(token);",
+            "protectedSnippet": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(Microsoft.IdentityModel.Tokens.SecurityToken)",
+            "label": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(Microsoft.IdentityModel.Tokens.SecurityToken)",
+            "line": 63,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "53e56abe-86e9-4e76-9ee2-a685f75f291d",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var token = new JwtSecurityToken(\r\n            issuer: _options.Issuer,\r\n            audience: _options.Audience,\r\n            claims: claims,\r\n            expires: DateTime.Now.AddMinutes(_options.ExpireMinutes),\r\n            signingCredentials: creds\r\n        );",
+              "protected": "T:System.IdentityModel.Tokens.Jwt.JwtSecurityToken"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Data\\Service\\TokenService.cs",
+            "snippet": "var token = new JwtSecurityToken(\r\n            issuer: _options.Issuer,\r\n            audience: _options.Audience,\r\n            claims: claims,\r\n            expires: DateTime.Now.AddMinutes(_options.ExpireMinutes),\r\n            signingCredentials: creds\r\n        );",
+            "protectedSnippet": "T:System.IdentityModel.Tokens.Jwt.JwtSecurityToken",
+            "label": "T:System.IdentityModel.Tokens.Jwt.JwtSecurityToken",
+            "line": 55,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "cd5b9d31-647c-41a7-b289-6bd30de5b7f4",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var token = new JwtSecurityToken(\r\n            issuer: _options.Issuer,\r\n            audience: _options.Audience,\r\n            claims: claims,\r\n            expires: DateTime.Now.AddMinutes(_options.ExpireMinutes),\r\n            signingCredentials: creds\r\n        );",
+              "protected": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityToken.#ctor(System.String,System.String,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Nullable{System.DateTime},System.Nullable{System.DateTime},Microsoft.IdentityModel.Tokens.SigningCredentials)"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Data\\Service\\TokenService.cs",
+            "snippet": "var token = new JwtSecurityToken(\r\n            issuer: _options.Issuer,\r\n            audience: _options.Audience,\r\n            claims: claims,\r\n            expires: DateTime.Now.AddMinutes(_options.ExpireMinutes),\r\n            signingCredentials: creds\r\n        );",
+            "protectedSnippet": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityToken.#ctor(System.String,System.String,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Nullable{System.DateTime},System.Nullable{System.DateTime},Microsoft.IdentityModel.Tokens.SigningCredentials)",
+            "label": "M:System.IdentityModel.Tokens.Jwt.JwtSecurityToken.#ctor(System.String,System.String,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim},System.Nullable{System.DateTime},System.Nullable{System.DateTime},Microsoft.IdentityModel.Tokens.SigningCredentials)",
+            "line": 55,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "f76e99ee-b899-4ad8-a572-19b5fc34584b",
+          "ruleId": "Api.0001",
+          "description": "Breaking change: DynamicallyAccessedMembers annotation removed from trim-unsafe configuration APIs ",
+          "projectPath": "Karya.Test.Web.Api\\Karya.Test.Web.Api.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var jwt = builder.Configuration.GetSection(\u0022Jwt\u0022).Get\u003CJwtOptions\u003E();",
+              "protected": "M:Microsoft.Extensions.Configuration.ConfigurationBinder.Get\u0060\u00601(Microsoft.Extensions.Configuration.IConfiguration)"
+            },
+            "kind": "File",
+            "path": "Karya.Test.Web.Api\\Program.cs",
+            "snippet": "var jwt = builder.Configuration.GetSection(\u0022Jwt\u0022).Get\u003CJwtOptions\u003E();",
+            "protectedSnippet": "M:Microsoft.Extensions.Configuration.ConfigurationBinder.Get\u0060\u00601(Microsoft.Extensions.Configuration.IConfiguration)",
+            "label": "M:Microsoft.Extensions.Configuration.ConfigurationBinder.Get\u0060\u00601(Microsoft.Extensions.Configuration.IConfiguration)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/extensions/10.0/dynamically-accessed-members-configuration.md",
+                "isCustom": false
+              }
+            ],
+            "line": 76,
+            "column": 0
+          }
+        }
+      ],
+      "features": [
+        {
+          "featureId": "IdentityModel",
+          "incidents": [
+            "cd5b9d31-647c-41a7-b289-6bd30de5b7f4",
+            "53e56abe-86e9-4e76-9ee2-a685f75f291d",
+            "aeab6427-8fec-43bb-bc07-e4a57d7f1683",
+            "fb851a1e-5a09-43ad-ab72-20174679c51c",
+            "61f006a0-cd5a-4d9a-a8d4-16ea2e938261"
+          ]
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "NuGet.0002": {
+      "id": "NuGet.0002",
+      "isFeature": false,
+      "description": "NuGet package upgrade is recommended for selected target framework.\n\nStandard .NET packages are recommended to have versions matching version of .NET that project targets.\n\nSome other packages also are known to work better for selected target frameworks.",
+      "label": "NuGet package upgrade is recommended",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262530",
+          "isCustom": false
+        }
+      ]
+    },
+    "Project.0002": {
+      "id": "Project.0002",
+      "isFeature": false,
+      "description": "Project\u0027s target framework(s) needs to be changed to the new target framework that you selected for this upgrade.\n\nDuring upgrade target framework will be adjusted to corresponding platform when applicable. In some cases project would result in multiple target frameworks after the upgrade if it was using features that now have their own platforms in modern .NET frameworks (windows, iOS, Android etc).",
+      "label": "Project\u0027s target framework(s) needs to be changed",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Overview of porting from .NET Framework to .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET project SDKs",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0003": {
+      "id": "Api.0003",
+      "isFeature": false,
+      "description": "API has a behavioral change in selected .NET version: code and binaries may behave differently at runtime without needing recompilation, but the new behavior might be undesirable and require updates.",
+      "label": "Behavioral change in selected .NET version",
+      "severity": "Potential",
+      "effort": 1
+    },
+    "NuGet.0003": {
+      "id": "NuGet.0003",
+      "isFeature": false,
+      "description": "NuGet package functionality is included with framework reference.\n\nPackage needs to be removed.",
+      "label": "NuGet package functionality is included with framework reference",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262609",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0002": {
+      "id": "Api.0002",
+      "isFeature": false,
+      "description": "API is source incompatible for selected .NET version: requires code changes to compile successfully when targeting a new version, such as removing obsolete APIs or changing method signatures.",
+      "label": "Source incompatible for selected .NET version",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Breaking changes in .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262679",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0001": {
+      "id": "Api.0001",
+      "isFeature": false,
+      "description": "API is binary incompatible for selected .NET version: affects existing binaries, often requiring recompilation, because the API has changed in a way that prevents older binaries from loading or executing.",
+      "label": "Binary incompatible for selected .NET version",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Breaking changes in .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262679",
+          "isCustom": false
+        }
+      ]
+    },
+    "IdentityModel": {
+      "id": "IdentityModel",
+      "isFeature": false,
+      "description": "Windows Identity Foundation (WIF), SAML, and claims-based authentication APIs that have been replaced by modern identity libraries. WIF was the original identity framework for .NET Framework. Migrate to Microsoft.IdentityModel.* packages (modern identity stack).",
+      "label": "IdentityModel \u0026 Claims-based Security",
+      "severity": "Mandatory",
+      "effort": 4,
+      "links": [
+        {
+          "title": "Microsoft.IdentityModel packages",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2341614",
+          "isCustom": false
+        }
+      ]
+    }
+  }
+}
