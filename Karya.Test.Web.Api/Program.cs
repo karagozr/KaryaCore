@@ -40,8 +40,22 @@ builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 
-// OpenAPI with native .NET 10 support
-builder.Services.AddOpenApi();
+// OpenAPI - İki ayrı dokuman: v1 (ERP) ve identity
+var identityAssembly = Karya.Core.Indentity.AssemblyReference.Assembly;
+
+static bool IsFromAssembly(Microsoft.AspNetCore.Mvc.ApiExplorer.ApiDescription api, System.Reflection.Assembly assembly) =>
+    api.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor cad &&
+    cad.ControllerTypeInfo.Assembly == assembly;
+
+builder.Services.AddOpenApi("v1", options =>
+{
+    options.ShouldInclude = api => !IsFromAssembly(api, identityAssembly);
+});
+
+builder.Services.AddOpenApi("identity", options =>
+{
+    options.ShouldInclude = api => IsFromAssembly(api, identityAssembly);
+});
 
 
 
