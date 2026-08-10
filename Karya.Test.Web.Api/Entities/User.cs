@@ -3,7 +3,7 @@ using Karya.Core.Interfaces.Entities;
 
 namespace Karya.Test.Web.Api.Entities;
 
-public class User:BaseEntity<string>,ISoftDelete
+public class User : BaseEntity<string>, ISoftDelete
 {
     public string Password { get; set; }
 

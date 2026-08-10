@@ -2,7 +2,6 @@ using Karya.Core.App;
 using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity;
 using Karya.Core.Indentity.Services;
-using Karya.Core.Indentity.Infrastructure.Migrations;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
@@ -11,7 +10,6 @@ using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 
@@ -27,13 +25,8 @@ builder.Services.AddControllers()
 
 builder.Services.AddCoreAppRegistiration();
 
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer("Persist Security Info=True;Data Source=.;Initial Catalog=DEV_TEST;User ID=sa;Password=1234;Integrated Security=True;TrustServerCertificate=Yes"));
-
-
 // Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
-builder.Services.AddCoreIdentityRegistiration<AppDbContext>();
+builder.Services.AddCoreIdentityRegistiration<AppDbContext>(builder.Configuration);
 builder.Services.AddKaryaSeeder<IdentityDataSeeder>();
 builder.Services.AddKaryaSeeder<LocalizationSeeder>();
 

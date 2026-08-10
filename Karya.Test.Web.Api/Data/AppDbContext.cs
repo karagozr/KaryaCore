@@ -1,4 +1,6 @@
+using Karya.Test.Web.Api.Entities;
 using Karya.Test.Web.Api.Localization;
+using Karya.TestApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Test.Web.Api.Data;
@@ -10,20 +12,17 @@ public class AppDbContext : Karya.Core.Indentity.Infrastructure.AppDbContext
     }
 
     public DbSet<LocalizationResource> LocalizationResources => Set<LocalizationResource>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<InventoryDetail> InventoryDetails => Set<InventoryDetail>();
+    public DbSet<InventoryCategory> InventoryCategories => Set<InventoryCategory>();
+    public DbSet<InventoryMainCategory> InventoryMainCategories => Set<InventoryMainCategory>();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<LocalizationResource>(b =>
-        {
-            b.ToTable("LocalizationResources");
-            b.HasKey(x => x.Id);
-            b.Property(x => x.Code).IsRequired().HasMaxLength(150);
-            b.Property(x => x.LanguageCode).IsRequired().HasMaxLength(10);
-            b.Property(x => x.Value).IsRequired();
-            b.Property(x => x.Scope).HasConversion<byte>();
-            b.HasIndex(x => new { x.Code, x.LanguageCode, x.Scope }).IsUnique();
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

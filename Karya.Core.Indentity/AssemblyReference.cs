@@ -1,7 +1,8 @@
 using Karya.Core.Indentity.Domains.Entities;
-using Karya.Core.Indentity.Infrastructure;
+using Karya.Core.Indentity.Infrastructure.Migrations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Reflection;
 namespace Karya.Core.Indentity;
 
@@ -9,8 +10,11 @@ public static class AssemblyReference
 {
     public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 
-    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services) where TIdentityContext : Infrastructure.AppDbContext
+    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration) where TIdentityContext : Infrastructure.AppDbContext
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<TIdentityContext>(options => options.UseSqlServer(connectionString));
+
         services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<TIdentityContext>();
 
         // Repository/UnitOfWork'ün kullandığı soyut DbContext, Identity context'ine yönlendirilir.
@@ -52,5 +56,30 @@ public static class AssemblyReference
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
+    }
+
+    public static IServiceCollection AddKaryaSeeder<TSeeder>(this IServiceCollection services) where TSeeder : class, IDatabaseSeeder
+    {
+        services.AddScoped<IDatabaseSeeder, TSeeder>();
+
+        return services;
+    }
+
+    public static async Task MigrateKaryaDatabaseAsync<TContext>(this IServiceProvider serviceProvider) where TContext : Infrastructure.AppDbContext
+    {
+        await using var scope = serviceProvider.CreateAsyncScope();
+
+        var dbContext = scope.ServiceProvider
+            .GetRequiredService<TContext>();
+
+        await dbContext.Database.MigrateAsync();
+
+        var seeders = scope.ServiceProvider
+            .GetServices<IDatabaseSeeder>();
+
+        foreach (var seeder in seeders)
+        {
+            await seeder.SeedAsync();
+        }
     }
 }
