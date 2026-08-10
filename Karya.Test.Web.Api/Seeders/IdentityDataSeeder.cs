@@ -1,48 +1,52 @@
-﻿using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Karya.Test.Web.Api.Seeders;
 
-public static class IdentityDataSeeder
+public sealed class IdentityDataSeeder : IDatabaseSeeder
 {
-    public static async Task SeedUsersAsync(IServiceProvider serviceProvider)
-    {
-        var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
+    private readonly UserManager<AppUser> _userManager;
+    private readonly RoleManager<AppRole> _roleManager;
 
-        // 1. Önce Rolleri Kontrol Et
-        string adminRoleName = "Admin";
-        if (!await roleManager.RoleExistsAsync(adminRoleName))
+    public IdentityDataSeeder(
+        UserManager<AppUser> userManager,
+        RoleManager<AppRole> roleManager)
+    {
+        _userManager = userManager;
+        _roleManager = roleManager;
+    }
+
+    public async Task SeedAsync()
+    {
+        const string adminRoleName = "Admin";
+
+        if (!await _roleManager.RoleExistsAsync(adminRoleName))
         {
-            await roleManager.CreateAsync(new AppRole
+            await _roleManager.CreateAsync(new AppRole
             {
                 Id = Guid.NewGuid(),
-                Name = adminRoleName,
+                Name = adminRoleName
             });
         }
 
-        // 2. Örnek Kullanıcıyı Kontrol Et
-        var adminEmail = "admin@mail.com";
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        const string adminEmail = "admin@mail.com";
+        var adminUser = await _userManager.FindByEmailAsync(adminEmail);
 
-        if (adminUser == null)
+        if (adminUser is not null)
+            return;
+
+        var newAdmin = new AppUser
         {
-            var newAdmin = new AppUser
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true,
-                TenantId = "DEFAULT", 
-            };
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true,
+            TenantId = "DEFAULT"
+        };
 
-            // Şifreyi hashleyerek kullanıcıyı oluştur
-            var result = await userManager.CreateAsync(newAdmin, "Admin123*");
+        var result = await _userManager.CreateAsync(newAdmin, "Admin123*");
 
-            if (result.Succeeded)
-            {
-                // Kullanıcıya Admin rolünü ata
-                await userManager.AddToRoleAsync(newAdmin, adminRoleName);
-            }
-        }
+        if (result.Succeeded)
+            await _userManager.AddToRoleAsync(newAdmin, adminRoleName);
     }
 }

@@ -1,7 +1,8 @@
-﻿using Karya.Core.App;
+using Karya.Core.App;
 using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity;
 using Karya.Core.Indentity.Services;
+using Karya.Core.Indentity.Infrastructure.Migrations;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
@@ -33,6 +34,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
 builder.Services.AddCoreIdentityRegistiration<AppDbContext>();
+builder.Services.AddKaryaSeeder<IdentityDataSeeder>();
+builder.Services.AddKaryaSeeder<LocalizationSeeder>();
 
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -108,22 +111,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        // Önce roller ve kullanıcılar
-        await IdentityDataSeeder.SeedUsersAsync(services);
-
-        // Dil/çeviri kayıtları (varsayılan tr/en)
-        await LocalizationSeeder.SeedAsync(services);
-    }
-    catch (Exception ex)
-    {
-        // Hata loglama
-    }
-}
+await app.Services.MigrateKaryaDatabaseAsync<AppDbContext>();
 
 if (app.Environment.IsDevelopment())
 {
