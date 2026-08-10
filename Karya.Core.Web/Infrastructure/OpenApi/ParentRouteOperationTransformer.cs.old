@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Reflection;
 
@@ -69,15 +67,14 @@ public sealed class ParentRouteOperationTransformer : IOpenApiOperationTransform
         }
 
         // 5. Parametreyi güncelle
-        var sample = new OpenApiString(rawJsonTemplate);
-        parentParam.Schema = new OpenApiSchema
+        parentParam.Schema = new()
         {
             Type = "string",
-            Default = sample
+            Default = rawJsonTemplate
         };
         parentParam.Required = true;
-        parentParam.In = ParameterLocation.Path;
-        parentParam.Example = sample;
+        parentParam.In = OpenApiParameterLocation.Path;
+        parentParam.Example = rawJsonTemplate;
         parentParam.Description = "OData Parent Filtre Yapısı.";
 
         return Task.CompletedTask;

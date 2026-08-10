@@ -5,14 +5,11 @@ using Karya.Core.Indentity.Services;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
 using Karya.Core.Web.Identities;
-using Karya.Core.Web.Infrastructure.OpenApi;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -43,27 +40,21 @@ builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 
-// Identity endpoint'lerinin bulunduğu assembly (ayrı OpenAPI dökümanı için).
+// OpenAPI - İki ayrı dokuman: v1 (ERP) ve identity
 var identityAssembly = Karya.Core.Indentity.AssemblyReference.Assembly;
 
-static bool IsFromAssembly(ApiDescription api, System.Reflection.Assembly assembly) =>
-    api.ActionDescriptor is ControllerActionDescriptor cad &&
+static bool IsFromAssembly(Microsoft.AspNetCore.Mvc.ApiExplorer.ApiDescription api, System.Reflection.Assembly assembly) =>
+    api.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor cad &&
     cad.ControllerTypeInfo.Assembly == assembly;
 
-// v1: Identity dışındaki tüm endpoint'ler
 builder.Services.AddOpenApi("v1", options =>
 {
     options.ShouldInclude = api => !IsFromAssembly(api, identityAssembly);
-    options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
-    options.AddOperationTransformer<ParentRouteOperationTransformer>();
 });
 
-// identity: Yalnızca Karya.Core.Identity endpoint'leri
 builder.Services.AddOpenApi("identity", options =>
 {
     options.ShouldInclude = api => IsFromAssembly(api, identityAssembly);
-    options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
-    options.AddOperationTransformer<ParentRouteOperationTransformer>();
 });
 
 
@@ -136,16 +127,14 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    // OpenAPI dökümanları: /openapi/v1.json ve /openapi/identity.json
     app.MapOpenApi();
 
-    // Scalar UI: /scalar
     app.MapScalarApiReference(options =>
     {
         options
             .WithTitle("Karya API")
-            .AddDocument("v1", "ERP API")
-            .AddDocument("identity", "Identity API");
+            .WithTheme(ScalarTheme.Saturn)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
 app.UseCors("AllowViteApp");
