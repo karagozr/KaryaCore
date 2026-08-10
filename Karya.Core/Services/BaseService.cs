@@ -12,9 +12,9 @@ namespace Karya.Core.Services;
 
 public abstract class BaseService : IBaseService
 {
-    public void Dispose()
+    public virtual void Dispose()
     {
-        throw new NotImplementedException();
+        GC.SuppressFinalize(this);
     }
 }
 
@@ -99,9 +99,11 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
 
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
-        this.Dispose();
+        _uow?.Dispose();         
+        base.Dispose();
+        GC.SuppressFinalize(this);
     }
 
 
