@@ -95,9 +95,11 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
 
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
-        this.Dispose();
+        _uow?.Dispose();
+        base.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
 
