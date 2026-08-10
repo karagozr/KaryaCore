@@ -1,6 +1,5 @@
-﻿using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.Infrastructure;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
@@ -10,7 +9,7 @@ public static class AssemblyReference
 {
     public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 
-    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services) where TIdentityContext : IdentityDbContext<AppUser, AppRole, Guid, AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>
+    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services) where TIdentityContext : Infrastructure.AppDbContext
     {
         services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<TIdentityContext>();
 

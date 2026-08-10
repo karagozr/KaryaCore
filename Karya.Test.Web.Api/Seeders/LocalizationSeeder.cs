@@ -1,3 +1,4 @@
+using Karya.Core.Indentity.Infrastructure.Migrations;
 using Karya.Core.Results;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Localization;
@@ -5,17 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Test.Web.Api.Seeders;
 
-/// <summary>
-/// Seeds the default translations (tr/en) for the known message codes.
-/// Runs only when the table is empty, so it is safe to call on every startup.
-/// </summary>
-public static class LocalizationSeeder
+public sealed class LocalizationSeeder : IDatabaseSeeder
 {
-    public static async Task SeedAsync(IServiceProvider serviceProvider)
-    {
-        var db = serviceProvider.GetRequiredService<AppDbContext>();
+    private readonly AppDbContext _db;
 
-        if (await db.LocalizationResources.AnyAsync())
+    public LocalizationSeeder(AppDbContext db)
+    {
+        _db = db;
+    }
+
+    public async Task SeedAsync()
+    {
+        if (await _db.LocalizationResources.AnyAsync())
             return;
 
         var rows = new List<LocalizationResource>();
@@ -43,11 +45,10 @@ public static class LocalizationSeeder
         Add(MessageCodes.DbLoginFailed, "Veritabanı oturum açma başarısız oldu.", "Database login failed.");
         Add(MessageCodes.DbCannotOpen, "Veritabanı açılamadı.", "The database could not be opened.");
 
-        // Client-only UI labels (fetched via GET api/language/{lang}).
         Add("UI_SAVE", "Kaydet", "Save", LocalizationScope.Client);
         Add("UI_CANCEL", "İptal", "Cancel", LocalizationScope.Client);
 
-        await db.LocalizationResources.AddRangeAsync(rows);
-        await db.SaveChangesAsync();
+        await _db.LocalizationResources.AddRangeAsync(rows);
+        await _db.SaveChangesAsync();
     }
 }
