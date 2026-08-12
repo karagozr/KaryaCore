@@ -2,7 +2,7 @@ using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Identity;
 
-namespace Karya.Test.Web.Api.Seeders;
+namespace Karya.Core.Indentity.Seeders;
 
 public sealed class IdentityDataSeeder : IDatabaseSeeder
 {
@@ -41,7 +41,8 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
             UserName = adminEmail,
             Email = adminEmail,
             EmailConfirmed = true,
-            TenantId = "DEFAULT"
+            TenantId = "DEFAULT",
+            IsSystemAdmin = true,
         };
 
         var result = await _userManager.CreateAsync(newAdmin, "Admin123*");

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Karya.TestApi.Entities;
 
-public class Inventory:BaseTenantEntity<string>
+public class Inventory : BaseTenantEntity<string>
 {
     public string Name { get; set; } = null!;
     public string Brand { get; set; } = null!;
@@ -50,7 +50,7 @@ public class InventoryCategory : BaseTenantEntity<string>
     public string Name { get; set; } = null!;
 
     public string? MainCategoryId { get; set; } = null!;
-    
+
     [TenantForeignKeyAttribute($"{nameof(MainCategoryId)}")]
     public InventoryMainCategory? MainCategory { get; set; }
 

@@ -1,7 +1,13 @@
 using Karya.Core.Indentity.Domains.Entities;
-using Karya.Core.Indentity.Infrastructure;
+using Karya.Core.Indentity.Infrastructure.Migrations;
+using Karya.Core.Indentity.Seeders;
+using Karya.Core.Indentity.Services;
+using Karya.Core.Interfaces.Identities;
+using Karya.Core.Web.Identities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using OpenIddict.Validation.AspNetCore;
 using System.Reflection;
 namespace Karya.Core.Indentity;
 
@@ -9,8 +15,11 @@ public static class AssemblyReference
 {
     public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 
-    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services) where TIdentityContext : Infrastructure.AppDbContext
+    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration) where TIdentityContext : Infrastructure.AppDbContext
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<TIdentityContext>(options => options.UseSqlServer(connectionString));
+
         services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<TIdentityContext>();
 
         // Repository/UnitOfWork'ün kullandığı soyut DbContext, Identity context'ine yönlendirilir.
@@ -18,6 +27,12 @@ public static class AssemblyReference
 
         // Yetki servisi (SystemAdmin/TenantAdmin) MediatR AuthorizationBehavior için.
         services.AddScoped<Karya.Core.App.Interfaces.Services.IPermissionService, Services.IdentityPermissionService>();
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<AppAuthService>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<IDatabaseSeeder, IdentityDataSeeder>();
+        services.AddScoped<IDatabaseSeeder, PermissionSeeder>();
 
         // OpenIddict kaydı (App-prefixed entity'ler ile)
         services.AddOpenIddict()
@@ -52,5 +67,37 @@ public static class AssemblyReference
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+        });
+    }
+
+    public static IServiceCollection AddCoreSeeder<TSeeder>(this IServiceCollection services) where TSeeder : class, IDatabaseSeeder
+    {
+        services.AddScoped<IDatabaseSeeder, TSeeder>();
+
+        return services;
+    }
+
+    public static async Task MigrateCoreDatabaseAsync<TContext>(this IServiceProvider serviceProvider) where TContext : Infrastructure.AppDbContext
+    {
+        await using var scope = serviceProvider.CreateAsyncScope();
+
+        var dbContext = scope.ServiceProvider
+            .GetRequiredService<TContext>();
+
+        await dbContext.Database.MigrateAsync();
+
+        var seeders = scope.ServiceProvider
+            .GetServices<IDatabaseSeeder>();
+
+        foreach (var seeder in seeders)
+        {
+            await seeder.SeedAsync();
+        }
     }
 }
