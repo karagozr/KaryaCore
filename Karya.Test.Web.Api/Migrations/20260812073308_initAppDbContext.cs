@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Karya.Test.Web.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initAppDbContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -171,7 +171,7 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AppRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -180,16 +180,16 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_AppRoleId",
+                        column: x => x.AppRoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId1",
-                        column: x => x.RoleId1,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -240,7 +240,7 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -249,16 +249,16 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -293,12 +293,17 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RoleId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    AppRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_AppRoleId",
+                        column: x => x.AppRoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
@@ -306,9 +311,9 @@ namespace Karya.Test.Web.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId1",
-                        column: x => x.RoleId1,
-                        principalTable: "AspNetRoles",
+                        name: "FK_AspNetUserRoles_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
@@ -316,11 +321,6 @@ namespace Karya.Test.Web.Api.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -330,23 +330,23 @@ namespace Karya.Test.Web.Api.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -429,14 +429,14 @@ namespace Karya.Test.Web.Api.Migrations
                 column: "TenantId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_AppRoleId",
+                table: "AspNetRoleClaims",
+                column: "AppRoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId1",
-                table: "AspNetRoleClaims",
-                column: "RoleId1");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -446,14 +446,14 @@ namespace Karya.Test.Web.Api.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_AppUserId",
+                table: "AspNetUserClaims",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId1",
-                table: "AspNetUserClaims",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
@@ -466,19 +466,19 @@ namespace Karya.Test.Web.Api.Migrations
                 column: "UserId1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_AppRoleId",
+                table: "AspNetUserRoles",
+                column: "AppRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_AppUserId",
+                table: "AspNetUserRoles",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId1",
-                table: "AspNetUserRoles",
-                column: "RoleId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId1",
-                table: "AspNetUserRoles",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -493,9 +493,9 @@ namespace Karya.Test.Web.Api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserTokens_UserId1",
+                name: "IX_AspNetUserTokens_AppUserId",
                 table: "AspNetUserTokens",
-                column: "UserId1");
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LocalizationResources_Code_LanguageCode_Scope",

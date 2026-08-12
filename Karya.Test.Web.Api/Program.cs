@@ -1,10 +1,7 @@
 using Karya.Core.App;
-using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity;
 using Karya.Core.Indentity.Services;
-using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Localization;
-using Karya.Core.Web.Identities;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
@@ -27,11 +24,8 @@ builder.Services.AddCoreAppRegistiration();
 
 // Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
 builder.Services.AddCoreIdentityRegistiration<AppDbContext>(builder.Configuration);
-builder.Services.AddKaryaSeeder<IdentityDataSeeder>();
-builder.Services.AddKaryaSeeder<LocalizationSeeder>();
+builder.Services.AddCoreSeeder<LocalizationSeeder>();
 
-builder.Services.AddScoped<IPermissionService, PermissionService>();
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
@@ -43,25 +37,22 @@ static bool IsFromAssembly(Microsoft.AspNetCore.Mvc.ApiExplorer.ApiDescription a
     api.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor cad &&
     cad.ControllerTypeInfo.Assembly == assembly;
 
-builder.Services.AddOpenApi("v1", options =>
-{
-    options.ShouldInclude = api => !IsFromAssembly(api, identityAssembly);
-});
+//builder.Services.AddOpenApi("v1", options =>
+//{
+//    options.ShouldInclude = api => !IsFromAssembly(api, identityAssembly);
+//});
 
-builder.Services.AddOpenApi("identity", options =>
-{
-    options.ShouldInclude = api => IsFromAssembly(api, identityAssembly);
-});
+//builder.Services.AddOpenApi("identity", options =>
+//{
+//    options.ShouldInclude = api => IsFromAssembly(api, identityAssembly);
+//});
+
+builder.Services.AddOpenApi();
 
 
 
 
 //builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
-
-
-
-
-var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 
 
 //builder.Services.AddAuthentication("Bearer")
@@ -82,10 +73,7 @@ var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 //    });
 
 //builder.Services.AddAuthorization();
-//builder.Services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUser, CurrentUser>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+//builder.Services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();t
 
 // Localization (DB-backed message catalog)
 builder.Services.AddMemoryCache();
@@ -104,7 +92,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-await app.Services.MigrateKaryaDatabaseAsync<AppDbContext>();
+await app.Services.MigrateCoreDatabaseAsync<AppDbContext>();
 
 if (app.Environment.IsDevelopment())
 {

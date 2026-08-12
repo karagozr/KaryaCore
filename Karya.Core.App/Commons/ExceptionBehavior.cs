@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using Karya.Core.Results;
+using MediatR;
 using Microsoft.Extensions.Logging;
-using Karya.Core.Results;
 
 
 namespace Karya.Core.App.Commons;
@@ -21,13 +21,18 @@ public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TR
         catch (UnauthorizedAccessException ex)
         {
             logger.LogWarning(ex, "Unauthorized access for {Request}", typeof(TRequest).Name);
-            return (TResponse)BaseResult.ErrorCoded("403", MessageCodes.Unauthorized);
+
+            return BaseResult.ErrorCoded<TResponse>(
+                "403",
+                MessageCodes.Unauthorized);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unhandled exception for {Request}", typeof(TRequest).Name);
-            return (TResponse)BaseResult.ErrorCoded("500", MessageCodes.ServerError); 
 
+            return BaseResult.ErrorCoded<TResponse>(
+                "500",
+                MessageCodes.ServerError);
         }
     }
 }

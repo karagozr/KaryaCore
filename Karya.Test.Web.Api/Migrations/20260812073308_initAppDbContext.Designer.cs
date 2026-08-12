@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Karya.Test.Web.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260810124044_testentities")]
-    partial class testentities
+    [Migration("20260812073308_initAppDbContext")]
+    partial class initAppDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +169,9 @@ namespace Karya.Test.Web.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid?>("AppRoleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
 
@@ -178,14 +181,11 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RoleId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("AppRoleId");
 
-                    b.HasIndex("RoleId1");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
@@ -440,6 +440,9 @@ namespace Karya.Test.Web.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
 
@@ -449,14 +452,11 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -495,19 +495,19 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RoleId1")
+                    b.Property<Guid?>("AppRoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
+                    b.HasIndex("AppRoleId");
+
+                    b.HasIndex("AppUserId");
+
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -554,7 +554,7 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid?>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
@@ -562,41 +562,9 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Karya.Test.Web.Api.Entities.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(0);
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TestUsers", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Test.Web.Api.Localization.LocalizationResource", b =>
@@ -632,125 +600,6 @@ namespace Karya.Test.Web.Api.Migrations
                     b.ToTable("LocalizationResources", (string)null);
                 });
 
-            modelBuilder.Entity("Karya.TestApi.Entities.Inventory", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("MainCategoryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantId")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnOrder(1);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("MainCategoryId");
-
-                    b.ToTable("Inventories", (string)null);
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryCategory", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("MainCategoryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantId")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnOrder(1);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MainCategoryId");
-
-                    b.ToTable("InventoryCategories", (string)null);
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("InventoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("MainCategoryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantId")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnOrder(1);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("InventoryId");
-
-                    b.HasIndex("MainCategoryId");
-
-                    b.ToTable("InventoryDetails", (string)null);
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryMainCategory", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantId")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnOrder(1);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InventoryMainCategories", (string)null);
-                });
-
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppAuthorization", b =>
                 {
                     b.HasOne("Karya.Core.Indentity.Domains.Entities.AppApplication", "Application")
@@ -763,16 +612,14 @@ namespace Karya.Test.Web.Api.Migrations
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppRoleClaim", b =>
                 {
                     b.HasOne("Karya.Core.Indentity.Domains.Entities.AppRole", null)
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("AppRoleId");
+
+                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppRole", "Role")
-                        .WithMany("RoleClaims")
-                        .HasForeignKey("RoleId1");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppRoleGroupRole", b =>
@@ -812,16 +659,14 @@ namespace Karya.Test.Web.Api.Migrations
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserClaim", b =>
                 {
                     b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", null)
+                        .WithMany("Claims")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", "User")
-                        .WithMany("Claims")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserLogin", b =>
@@ -842,28 +687,24 @@ namespace Karya.Test.Web.Api.Migrations
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserRole", b =>
                 {
                     b.HasOne("Karya.Core.Indentity.Domains.Entities.AppRole", null)
+                        .WithMany("UserRoles")
+                        .HasForeignKey("AppRoleId");
+
+                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", null)
+                        .WithMany("UserRoles")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppRole", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1");
 
                     b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserRoleGroup", b =>
@@ -899,69 +740,14 @@ namespace Karya.Test.Web.Api.Migrations
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserToken", b =>
                 {
                     b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", null)
+                        .WithMany("Tokens")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Karya.Core.Indentity.Domains.Entities.AppUser", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.Inventory", b =>
-                {
-                    b.HasOne("Karya.TestApi.Entities.InventoryCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
-                        .WithMany()
-                        .HasForeignKey("MainCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Category");
-
-                    b.Navigation("MainCategory");
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryCategory", b =>
-                {
-                    b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
-                        .WithMany()
-                        .HasForeignKey("MainCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("MainCategory");
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.InventoryDetail", b =>
-                {
-                    b.HasOne("Karya.TestApi.Entities.InventoryCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Karya.TestApi.Entities.Inventory", "Inventory")
-                        .WithMany("InventoryDetails")
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
-                        .WithMany()
-                        .HasForeignKey("MainCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("MainCategory");
                 });
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppApplication", b =>
@@ -1005,11 +791,6 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Navigation("UserRoleGroups");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("Karya.TestApi.Entities.Inventory", b =>
-                {
-                    b.Navigation("InventoryDetails");
                 });
 #pragma warning restore 612, 618
         }

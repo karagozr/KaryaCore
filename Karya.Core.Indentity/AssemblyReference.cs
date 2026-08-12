@@ -1,8 +1,13 @@
 using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.Infrastructure.Migrations;
+using Karya.Core.Indentity.Seeders;
+using Karya.Core.Indentity.Services;
+using Karya.Core.Interfaces.Identities;
+using Karya.Core.Web.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Validation.AspNetCore;
 using System.Reflection;
 namespace Karya.Core.Indentity;
 
@@ -22,6 +27,12 @@ public static class AssemblyReference
 
         // Yetki servisi (SystemAdmin/TenantAdmin) MediatR AuthorizationBehavior için.
         services.AddScoped<Karya.Core.App.Interfaces.Services.IPermissionService, Services.IdentityPermissionService>();
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<AppAuthService>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<IDatabaseSeeder, IdentityDataSeeder>();
+        services.AddScoped<IDatabaseSeeder, PermissionSeeder>();
 
         // OpenIddict kaydı (App-prefixed entity'ler ile)
         services.AddOpenIddict()
@@ -56,16 +67,23 @@ public static class AssemblyReference
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+        });
     }
 
-    public static IServiceCollection AddKaryaSeeder<TSeeder>(this IServiceCollection services) where TSeeder : class, IDatabaseSeeder
+    public static IServiceCollection AddCoreSeeder<TSeeder>(this IServiceCollection services) where TSeeder : class, IDatabaseSeeder
     {
         services.AddScoped<IDatabaseSeeder, TSeeder>();
 
         return services;
     }
 
-    public static async Task MigrateKaryaDatabaseAsync<TContext>(this IServiceProvider serviceProvider) where TContext : Infrastructure.AppDbContext
+    public static async Task MigrateCoreDatabaseAsync<TContext>(this IServiceProvider serviceProvider) where TContext : Infrastructure.AppDbContext
     {
         await using var scope = serviceProvider.CreateAsyncScope();
 
