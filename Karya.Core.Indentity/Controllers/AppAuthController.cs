@@ -1,71 +1,51 @@
-﻿using Karya.Core.Indentity.Domains.Entities;
+﻿using Karya.Core.Indentity.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
-using System.Security.Claims;
 
 namespace Karya.Core.Indentity.Controllers;
 
 [ApiController]
 public class AppAuthController : ControllerBase
 {
-    private readonly UserManager<AppUser> _userManager;
-    private readonly SignInManager<AppUser> _signInManager;
+    private readonly AppAuthService _authService;
 
-    public AppAuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AppAuthController(AppAuthService authService)
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
+        _authService = authService;
     }
 
     [HttpPost("~/connect/token")]
     public async Task<IActionResult> Exchange()
     {
-        var request = HttpContext.GetOpenIddictServerRequest()
-            ?? throw new InvalidOperationException("OpenID Connect request cannot be retrieved.");
+        var request = HttpContext.GetOpenIddictServerRequest();
 
-        if (!request.IsPasswordGrantType())
-            return Forbid(
-                authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: BuildError(OpenIddictConstants.Errors.UnsupportedGrantType,
-                    "Yalnızca password grant type desteklenmektedir."));
+        if (request == null || !request.IsPasswordGrantType())
+            return BadRequest();
 
-        var user = await _userManager.FindByNameAsync(request.Username!);
-
-        if (user is null || !(await _signInManager.CheckPasswordSignInAsync(user, request.Password!, false)).Succeeded)
-            return Forbid(
-                authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: BuildError(OpenIddictConstants.Errors.InvalidGrant,
-                    "Kullanıcı adı veya şifre hatalı."));
-
-        // TenantId doğrulaması (custom parametre olarak gönderilir)
         var tenantId = request.GetParameter("tenantId")?.ToString();
 
-        if (string.IsNullOrWhiteSpace(tenantId) ||
-            !string.Equals(user.TenantId, tenantId, StringComparison.OrdinalIgnoreCase))
-            return Forbid(
-                authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: BuildError(OpenIddictConstants.Errors.InvalidGrant,
-                    "Geçersiz tenant bilgisi."));
+        if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidRequest, "Username and password are required."),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
-        var identity = new ClaimsIdentity(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-        identity.AddClaim(OpenIddictConstants.Claims.Subject, user.Id.ToString());
-        identity.AddClaim(OpenIddictConstants.Claims.Name, user.UserName ?? string.Empty);
-        identity.AddClaim("TenantId", user.TenantId);
+        if (string.IsNullOrWhiteSpace(tenantId))
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidRequest, "TenantId is required."),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
-        // Rol ve grup bilgileri token'a gömülmez; çağrı anında IUserClaimsService
-        // üzerinden veritabanından çözülür.
+        var principal = await _authService.LoginAsync(request.Username, request.Password, tenantId);
 
-        identity.SetDestinations(c => new[] { OpenIddictConstants.Destinations.AccessToken });
+        if (principal == null)
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, "Invalid username, password or tenant."),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
-        return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    private static AuthenticationProperties BuildError(string error, string description)
-        => new(new Dictionary<string, string?>
+    private static AuthenticationProperties BuildError(string error, string description) =>
+        new(new Dictionary<string, string?>
         {
             [OpenIddictServerAspNetCoreConstants.Properties.Error] = error,
             [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = description

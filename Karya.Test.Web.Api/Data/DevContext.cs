@@ -1,21 +1,21 @@
 ﻿using Karya.Core.Common.Attributes.Data;
-using Karya.Test.Web.Api.Entities;
 using Karya.TestApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Karya.Test.Web.Api.Data;
 
-public class DevContext:DbContext
+public class DevContext : DbContext
 {
     const string Connection1 = "Persist Security Info=True;Data Source=.;Initial Catalog=DEV_TEST;User ID=sa;Password=1234;Integrated Security=True;TrustServerCertificate=Yes";
-    const string Connection2 = "Persist Security Info=True;Data Source=OZFTYNBERP01\\SQLEXPRESS;Initial Catalog=DEV_TEST;User ID=sa;Password=Santral123*;Integrated Security=True;TrustServerCertificate=Yes";
+    const string Connection2 = "Persist Security Info=True;Data Source=localhost\\SQLEXPRESS;Initial Catalog=DEV_TEST_PROC;User ID=sa;Password=1234;Integrated Security=True;TrustServerCertificate=Yes";
 
 
     public DbSet<Inventory> Inventories => Set<Inventory>();
     public DbSet<InventoryCategory> InventoryCategories => Set<InventoryCategory>();
+    public DbSet<InventoryDetail> InventoryDetails => Set<InventoryDetail>();
+    public DbSet<InventoryMainCategory> InventoryMainCategories => Set<InventoryMainCategory>();
 
-    public DbSet<User> Users => Set<User>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(Connection2);
@@ -34,7 +34,7 @@ public class DevContext:DbContext
             {
                 var attr = navProp.GetCustomAttribute<TenantForeignKeyAttribute>()!;
                 string categoryIdName = attr.CategoryIdPropertyName;
-                string navigationName = navProp.Name; 
+                string navigationName = navProp.Name;
 
                 modelBuilder.Entity(entityType.ClrType)
                     .HasOne(navProp.PropertyType, navigationName)

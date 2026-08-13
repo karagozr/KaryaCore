@@ -14,10 +14,12 @@ public class IdentityPermissionService : IPermissionService
     public const string TenantAdminRole = "TenantAdmin";
 
     private readonly UserManager<AppUser> _userManager;
+    private readonly RoleManager<AppRole> _roleManager;
 
-    public IdentityPermissionService(UserManager<AppUser> userManager)
+    public IdentityPermissionService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<bool> HasPermissionAsync(string userId, string permission)
@@ -40,6 +42,27 @@ public class IdentityPermissionService : IPermissionService
         if (permission.StartsWith("AppUser.", StringComparison.OrdinalIgnoreCase))
             return await _userManager.IsInRoleAsync(user, TenantAdminRole);
 
+        var roles = await _userManager.GetRolesAsync(user);
+
+        foreach (var roleName in roles)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+
+            if (role is null)
+                continue;
+
+            var claims = await _roleManager.GetClaimsAsync(role);
+
+            var hasPermission = claims.Any(x =>
+                x.Type == "Permission" &&
+                string.Equals(
+                    x.Value,
+                    permission,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (hasPermission)
+                return true;
+        }
         return false;
     }
 }

@@ -1,20 +1,16 @@
-﻿using DevExtreme.AspNet.Data.ResponseModel;
-using Karya.Core.App.Features.Commands;
+﻿using Karya.Core.App.Features.Commands;
 using Karya.Core.Interfaces.DTOs;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Web.Helpers;
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
-using System.Text.Json;
 
 namespace Karya.Core.Web.Abstracts.Controllers;
 
 
 [ApiController]
 [Route("api/[controller]")]
-public abstract class   BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, TInsertDto, TUpdateDto> : BaseController<TEntity,TId>
+public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, TInsertDto, TUpdateDto> : BaseController<TEntity, TId>
     where TId : notnull
     where TSingleDto : class, ISingleDto, new()
     where TSelectDto : class, ISelectDto, new()
@@ -22,7 +18,7 @@ public abstract class   BaseCrudController<TEntity, TId, TSingleDto, TSelectDto,
     where TUpdateDto : class, IUpdateDto, new()
 {
     protected new IBaseService<TEntity, TId> _service;
-    protected BaseCrudController(IMediator mediator, IBaseService<TEntity, TId> service):base(mediator,service)
+    protected BaseCrudController(IMediator mediator, IBaseService<TEntity, TId> service) : base(mediator, service)
     {
         _service = service;
     }
