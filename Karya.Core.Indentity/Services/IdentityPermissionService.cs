@@ -1,25 +1,29 @@
 using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Indentity.Domains.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Indentity.Services;
 
-/// <summary>
-/// Rol/flag tabanlı yetki servisi. SystemAdmin her şeye yetkilidir; TenantAdmin
-/// kullanıcı yönetimi (AppUser.*) yetkilerine sahiptir (tenant kapsamı row-level
-/// olarak repository katmanında uygulanır).
-/// </summary>
 public class IdentityPermissionService : IPermissionService
 {
     public const string TenantAdminRole = "TenantAdmin";
 
     private readonly UserManager<AppUser> _userManager;
-    private readonly RoleManager<AppRole> _roleManager;
+    private readonly AppRoleService _roleService;
+    private readonly AppUserRoleService _userRoleService;
+    private readonly AppUserRoleGroupService _userRoleGroupService;
+    private readonly AppRoleGroupRoleService _roleGroupRoleService;
+    private readonly AppRoleClaimService _roleClaimService;
 
-    public IdentityPermissionService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    public IdentityPermissionService(UserManager<AppUser> userManager, AppRoleService roleService, AppUserRoleService userRoleService, AppUserRoleGroupService userRoleGroupService, AppRoleGroupRoleService roleGroupRoleService, AppRoleClaimService roleClaimService)
     {
         _userManager = userManager;
-        _roleManager = roleManager;
+        _roleService = roleService;
+        _userRoleService = userRoleService;
+        _userRoleGroupService = userRoleGroupService;
+        _roleGroupRoleService = roleGroupRoleService;
+        _roleClaimService = roleClaimService;
     }
 
     public async Task<bool> HasPermissionAsync(string userId, string permission)
@@ -31,38 +35,39 @@ public class IdentityPermissionService : IPermissionService
             return false;
 
         var user = await _userManager.FindByIdAsync(userId);
+
         if (user is null)
             return false;
 
-        // Sistem admini tüm tenant'larda her işlemi yapabilir.
         if (user.IsSystemAdmin)
             return true;
 
-        // Kullanıcı yönetimi işlemleri TenantAdmin rolüne açıktır.
+        var directRoleIds = _userRoleService.Query()
+            .Where(x => x.UserId == user.Id)
+            .Select(x => x.RoleId);
+
+        var roleGroupIds = _userRoleGroupService.Query()
+            .Where(x => x.UserId == user.Id)
+            .Select(x => x.RoleGroupId);
+
+        var groupRoleIds = _roleGroupRoleService.Query()
+            .Where(x => roleGroupIds.Contains(x.RoleGroupId))
+            .Select(x => x.RoleId);
+
+        var roleIds = directRoleIds
+            .Concat(groupRoleIds)
+            .Distinct();
+
         if (permission.StartsWith("AppUser.", StringComparison.OrdinalIgnoreCase))
-            return await _userManager.IsInRoleAsync(user, TenantAdminRole);
-
-        var roles = await _userManager.GetRolesAsync(user);
-
-        foreach (var roleName in roles)
         {
-            var role = await _roleManager.FindByNameAsync(roleName);
-
-            if (role is null)
-                continue;
-
-            var claims = await _roleManager.GetClaimsAsync(role);
-
-            var hasPermission = claims.Any(x =>
-                x.Type == "Permission" &&
-                string.Equals(
-                    x.Value,
-                    permission,
-                    StringComparison.OrdinalIgnoreCase));
-
-            if (hasPermission)
-                return true;
+            return await _roleService.Query()
+                .AnyAsync(x => roleIds.Contains(x.Id) && x.Name == TenantAdminRole);
         }
-        return false;
+
+        return await _roleClaimService.Query()
+            .AnyAsync(x =>
+                roleIds.Contains(x.RoleId) &&
+                x.ClaimType == "Permission" &&
+                x.ClaimValue == permission);
     }
 }

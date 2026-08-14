@@ -18,6 +18,7 @@ public class AppAuthController : ControllerBase
     }
 
     [HttpPost("~/connect/token")]
+    [HttpPost("~/api/auth/login")]
     public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest();

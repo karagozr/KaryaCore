@@ -186,7 +186,8 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
 
                     b.Property<string>("Description")
                         .HasMaxLength(1024)
@@ -198,29 +199,46 @@ namespace Karya.Test.Web.Api.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("TenantId")
+                        .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnOrder(1);
 
                     b.HasKey("Id");
 
                     b.HasIndex("TenantId", "Name")
-                        .IsUnique()
-                        .HasFilter("[TenantId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("AppRoleGroups", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppRoleGroupRole", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
                     b.Property<Guid>("RoleGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RoleGroupId", "RoleId");
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleGroupId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("TenantId", "RoleGroupId", "RoleId")
+                        .IsUnique();
 
                     b.ToTable("AppRoleGroupRoles", (string)null);
                 });
@@ -471,30 +489,60 @@ namespace Karya.Test.Web.Api.Migrations
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserRole", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("TenantId", "UserId", "RoleId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Indentity.Domains.Entities.AppUserRoleGroup", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
 
                     b.Property<Guid>("RoleGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleGroupId");
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnOrder(1);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleGroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("TenantId", "UserId", "RoleGroupId")
+                        .IsUnique();
 
                     b.ToTable("AppUserRoleGroups", (string)null);
                 });

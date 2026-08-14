@@ -1,5 +1,4 @@
-﻿using Karya.Core.Abstracts.Entities;
-using Karya.Core.Interfaces.Entities.Tanent;
+﻿using Karya.Core.Interfaces.Entities.Tanent;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +6,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Karya.Core.Repositories;
 
-public class BaseTenantRepositoryAsync<TEntity, TId, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>,ITenantRepository
+public class BaseTenantRepositoryAsync<TEntity, TId, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>, ITenantRepository
 where TContext : DbContext
-where TEntity : BaseTenantEntity<TId>, new()
+where TEntity : class, IBaseTenantEntity<TId, string>, new()
 where TId : notnull
 {
 
@@ -19,7 +18,11 @@ where TId : notnull
 
     protected override Task BeforeCreate(TEntity entity)
     {
-        entity.TenantId = _currentUser.TenantId;
+        if (string.IsNullOrEmpty(entity.TenantId))
+            entity.TenantId = _currentUser.TenantId;
+        else if (!string.IsNullOrEmpty(_currentUser.TenantId) && entity.TenantId != _currentUser.TenantId)
+            throw new UnauthorizedAccessException("Entity does not belong to the current tenant.");
+
         return base.BeforeCreate(entity);
     }
 
@@ -33,7 +36,7 @@ where TId : notnull
 
     protected override Task BeforeUpdate(TEntity entity, bool checkVersion = false, EntityEntry<TEntity>? entry = null)
     {
-        if((entity as IBaseTenantEntity<TId, string>).TenantId !=null && (entity as IBaseTenantEntity<TId, string>).TenantId != _currentUser.UserId)
+        if ((entity as IBaseTenantEntity<TId, string>).TenantId != null && (entity as IBaseTenantEntity<TId, string>).TenantId != _currentUser.UserId)
             throw new UnauthorizedAccessException("Entity does not belong to the current tenant.");
 
         if ((entity as IBaseTenantEntity<TId, string>).TenantId == null)
@@ -52,11 +55,11 @@ where TId : notnull
             if (entity.TenantId == null)
                 entity.TenantId = _currentUser.TenantId;
         }
-            
+
 
         return base.BeforeUpdate(entities);
     }
-  
+
     public override IQueryable<TEntity> Query(Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool withDeleted = false, CancellationToken ct = default)
     {
         var qry = base.Query(include, withDeleted, ct).Where(e => e.TenantId == _currentUser.TenantId);

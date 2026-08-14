@@ -12,7 +12,7 @@ public class AppRoleRepository : BaseRepositoryAsync<AppRole, Guid, DbContext>
 }
 
 /// <summary>AppRoleGroup için repository.</summary>
-public class AppRoleGroupRepository : BaseRepositoryAsync<AppRoleGroup, Guid, DbContext>
+public class AppRoleGroupRepository : BaseTenantRepositoryAsync<AppRoleGroup, Guid, DbContext>
 {
     public AppRoleGroupRepository(DbContext context, ICurrentUser currentUser) : base(context, currentUser) { }
 }
@@ -33,4 +33,27 @@ public class AppUserClaimRepository : BaseRepositoryAsync<AppUserClaim, int, DbC
 public class AppRoleClaimRepository : BaseRepositoryAsync<AppRoleClaim, int, DbContext>
 {
     public AppRoleClaimRepository(DbContext context, ICurrentUser currentUser) : base(context, currentUser) { }
+}
+
+/// <summary>AppUserRole için repository.</summary>
+public class AppUserRoleRepository : BaseTenantRepositoryAsync<AppUserRole, Guid, DbContext>
+{
+    public AppUserRoleRepository(DbContext context, ICurrentUser currentUser) : base(context, currentUser) { }
+
+    public Task<bool> ExistsAsync(Guid userId, Guid roleId, string tenantId)
+    {
+        return _dbSet.AnyAsync(x => x.UserId == userId && x.RoleId == roleId && x.TenantId == tenantId);
+    }
+}
+
+/// <summary>AppUserRoleGroup için repository.</summary>
+public class AppUserRoleGroupRepository : BaseTenantRepositoryAsync<AppUserRoleGroup, Guid, DbContext>
+{
+    public AppUserRoleGroupRepository(DbContext context, ICurrentUser currentUser) : base(context, currentUser) { }
+}
+
+/// <summary>AppRoleGroupRole için repository.</summary>
+public class AppRoleGroupRoleRepository : BaseTenantRepositoryAsync<AppRoleGroupRole, Guid, DbContext>
+{
+    public AppRoleGroupRoleRepository(DbContext context, ICurrentUser currentUser) : base(context, currentUser) { }
 }

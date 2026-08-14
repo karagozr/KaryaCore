@@ -1,4 +1,4 @@
-using Karya.Core.Interfaces.Entities;
+using Karya.Core.Abstracts.Entities;
 
 namespace Karya.Core.Indentity.Domains.Entities;
 
@@ -7,15 +7,11 @@ namespace Karya.Core.Indentity.Domains.Entities;
 /// A user can belong to multiple role groups, and roles are resolved from
 /// both direct role assignments and role group memberships.
 /// </summary>
-public class AppRoleGroup : IBaseEntity<Guid>
+public class AppRoleGroup : BaseTenantEntity<Guid>
 {
-    public Guid Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
-
-    public string? TenantId { get; set; }
 
     public ICollection<AppRoleGroupRole> RoleGroupRoles { get; set; } = new List<AppRoleGroupRole>();
 

@@ -27,4 +27,24 @@ public static class MessageCodes
     public const string DbDeadlock = "DB_DEADLOCK";
     public const string DbLoginFailed = "DB_LOGIN_FAILED";
     public const string DbCannotOpen = "DB_CANNOT_OPEN";
+
+    public static readonly IReadOnlyDictionary<string, string> English = new Dictionary<string, string>
+    {
+        [Success] = "Operation completed successfully.",
+        [Created] = "Record created successfully.",
+        [Updated] = "Record updated successfully.",
+        [Deleted] = "Record deleted successfully.",
+        [NotFound] = "Value {1} = {2} could not be found in [{0}].",
+        [Required] = "[{0}] is required.",
+        [ValidationError] = "Validation error.",
+        [Unauthorized] = "You are not authorized for this operation.",
+        [ServerError] = "An unexpected server error occurred.",
+        [DbError] = "A database error occurred.",
+        [DbConnectionError] = "Could not connect to the database.",
+        [DbDuplicate] = "A record with the same value already exists.",
+        [DbConstraint] = "The operation could not be completed due to related data.",
+        [DbDeadlock] = "The operation was deadlocked, please try again.",
+        [DbLoginFailed] = "Database login failed.",
+        [DbCannotOpen] = "The database could not be opened."
+    };
 }
