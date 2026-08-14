@@ -20,33 +20,54 @@ public sealed class LocalizationSeeder : IDatabaseSeeder
         if (await _db.LocalizationResources.AnyAsync())
             return;
 
+        var turkish = new Dictionary<string, string>
+        {
+            [MessageCodes.Success] = "İşlem başarılı.",
+            [MessageCodes.Created] = "Kayıt başarıyla oluşturuldu.",
+            [MessageCodes.Updated] = "Kayıt başarıyla güncellendi.",
+            [MessageCodes.Deleted] = "Kayıt başarıyla silindi.",
+            [MessageCodes.NotFound] = "[{0}] içinde {1} = {2} değeri bulunamadı.",
+            [MessageCodes.Required] = "[{0}] alanı zorunludur.",
+            [MessageCodes.ValidationError] = "Doğrulama hatası.",
+            [MessageCodes.Unauthorized] = "Bu işlem için yetkiniz yok.",
+            [MessageCodes.ServerError] = "Beklenmeyen bir sunucu hatası oluştu.",
+            [MessageCodes.DbError] = "Bir veritabanı hatası oluştu.",
+            [MessageCodes.DbConnectionError] = "Veritabanına bağlanılamadı.",
+            [MessageCodes.DbDuplicate] = "Aynı değere sahip bir kayıt zaten mevcut.",
+            [MessageCodes.DbConstraint] = "İlişkili veriler nedeniyle işlem tamamlanamadı.",
+            [MessageCodes.DbDeadlock] = "İşlem kilitlendi, lütfen tekrar deneyin.",
+            [MessageCodes.DbLoginFailed] = "Veritabanı oturum açma başarısız oldu.",
+            [MessageCodes.DbCannotOpen] = "Veritabanı açılamadı."
+        };
+
         var rows = new List<LocalizationResource>();
 
-        void Add(string code, string tr, string en, LocalizationScope scope = LocalizationScope.Server)
+        foreach (var message in MessageCodes.English)
         {
-            rows.Add(new LocalizationResource { Code = code, LanguageCode = "tr", Value = tr, Scope = scope });
-            rows.Add(new LocalizationResource { Code = code, LanguageCode = "en", Value = en, Scope = scope });
+            rows.Add(new LocalizationResource
+            {
+                Code = message.Key,
+                LanguageCode = "en",
+                Value = message.Value,
+                Scope = LocalizationScope.Server
+            });
+
+            if (turkish.TryGetValue(message.Key, out var tr))
+            {
+                rows.Add(new LocalizationResource
+                {
+                    Code = message.Key,
+                    LanguageCode = "tr",
+                    Value = tr,
+                    Scope = LocalizationScope.Server
+                });
+            }
         }
 
-        Add(MessageCodes.Success, "İşlem başarılı.", "Operation completed successfully.");
-        Add(MessageCodes.Created, "Kayıt başarıyla oluşturuldu.", "Record created successfully.");
-        Add(MessageCodes.Updated, "Kayıt başarıyla güncellendi.", "Record updated successfully.");
-        Add(MessageCodes.Deleted, "Kayıt başarıyla silindi.", "Record deleted successfully.");
-        Add(MessageCodes.NotFound, "[{0}] içinde {1} = {2} değeri bulunamadı.", "Value {1} = {2} could not be found in [{0}].");
-        Add(MessageCodes.Required, "[{0}] alanı zorunludur.", "[{0}] is required.");
-        Add(MessageCodes.ValidationError, "Doğrulama hatası.", "Validation error.");
-        Add(MessageCodes.Unauthorized, "Bu işlem için yetkiniz yok.", "You are not authorized for this operation.");
-        Add(MessageCodes.ServerError, "Beklenmeyen bir sunucu hatası oluştu.", "An unexpected server error occurred.");
-        Add(MessageCodes.DbError, "Bir veritabanı hatası oluştu.", "A database error occurred.");
-        Add(MessageCodes.DbConnectionError, "Veritabanına bağlanılamadı.", "Could not connect to the database.");
-        Add(MessageCodes.DbDuplicate, "Aynı değere sahip bir kayıt zaten mevcut.", "A record with the same value already exists.");
-        Add(MessageCodes.DbConstraint, "İlişkili veriler nedeniyle işlem tamamlanamadı.", "The operation could not be completed due to related data.");
-        Add(MessageCodes.DbDeadlock, "İşlem kilitlendi, lütfen tekrar deneyin.", "The operation was deadlocked, please try again.");
-        Add(MessageCodes.DbLoginFailed, "Veritabanı oturum açma başarısız oldu.", "Database login failed.");
-        Add(MessageCodes.DbCannotOpen, "Veritabanı açılamadı.", "The database could not be opened.");
-
-        Add("UI_SAVE", "Kaydet", "Save", LocalizationScope.Client);
-        Add("UI_CANCEL", "İptal", "Cancel", LocalizationScope.Client);
+        rows.Add(new LocalizationResource { Code = "UI_SAVE", LanguageCode = "tr", Value = "Kaydet", Scope = LocalizationScope.Client });
+        rows.Add(new LocalizationResource { Code = "UI_SAVE", LanguageCode = "en", Value = "Save", Scope = LocalizationScope.Client });
+        rows.Add(new LocalizationResource { Code = "UI_CANCEL", LanguageCode = "tr", Value = "İptal", Scope = LocalizationScope.Client });
+        rows.Add(new LocalizationResource { Code = "UI_CANCEL", LanguageCode = "en", Value = "Cancel", Scope = LocalizationScope.Client });
 
         await _db.LocalizationResources.AddRangeAsync(rows);
         await _db.SaveChangesAsync();

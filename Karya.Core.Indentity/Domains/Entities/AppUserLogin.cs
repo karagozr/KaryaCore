@@ -4,5 +4,4 @@ namespace Karya.Core.Indentity.Domains.Entities;
 
 public class AppUserLogin : IdentityUserLogin<Guid>
 {
-    public AppUser? User { get; set; }
 }

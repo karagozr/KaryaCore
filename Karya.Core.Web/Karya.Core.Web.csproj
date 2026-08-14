@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>Karya.Core.Web</PackageId>
-		<Version>1.0.4</Version>
-		<Authors>Ramazan Karagoz</Authors>
-		<Company>Karagoz</Company>
-		<Description>Karya Core Web Layer - ASP.NET Core utilities and OpenAPI support for .NET 10</Description>
-		<PackageTags>karya;core;web;aspnetcore;openapi</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/karagozr/KaryaCore</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/karagozr/KaryaCore</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Karya.Core.Web</PackageId>
+    <Version>1.0.5</Version>
+    <Authors>Ramazan Karagoz</Authors>
+    <Company>Karagoz</Company>
+    <Description>Karya Core Web Layer - ASP.NET Core utilities and OpenAPI support for .NET 10</Description>
+    <PackageTags>karya;core;web;aspnetcore;openapi</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/karagozr/KaryaCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/karagozr/KaryaCore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<Compile Remove="Interfaces\**" />

@@ -1,4 +1,5 @@
 using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.Infrastructure;
 using Karya.Core.Indentity.Infrastructure.Migrations;
 using Karya.Core.Indentity.Seeders;
 using Karya.Core.Indentity.Services;
@@ -7,6 +8,7 @@ using Karya.Core.Web.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
 using System.Reflection;
 namespace Karya.Core.Indentity;
@@ -15,15 +17,22 @@ public static class AssemblyReference
 {
     public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 
-    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration) where TIdentityContext : Infrastructure.AppDbContext
+    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration, string defaultConnectionName) where TIdentityContext : Infrastructure.AppDbContext
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString(defaultConnectionName);
         services.AddDbContext<TIdentityContext>(options => options.UseSqlServer(connectionString));
 
         services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<TIdentityContext>();
 
         // Repository/UnitOfWork'ün kullandığı soyut DbContext, Identity context'ine yönlendirilir.
         services.AddScoped<Microsoft.EntityFrameworkCore.DbContext>(sp => sp.GetRequiredService<TIdentityContext>());
+
+        services.AddScoped<AppUserTenantService>();
+        services.AddScoped<AppRoleService>();
+        services.AddScoped<AppUserRoleService>();
+        services.AddScoped<AppUserRoleGroupService>();
+        services.AddScoped<AppRoleGroupRoleService>();
+        services.AddScoped<AppRoleClaimService>();
 
         // Yetki servisi (SystemAdmin/TenantAdmin) MediatR AuthorizationBehavior için.
         services.AddScoped<Karya.Core.App.Interfaces.Services.IPermissionService, Services.IdentityPermissionService>();
@@ -45,7 +54,7 @@ public static class AssemblyReference
             .AddServer(options =>
             {
                 // Endpoint tanımları
-                options.SetTokenEndpointUris("/connect/token");
+                options.SetTokenEndpointUris("/connect/token", "/api/auth/login");
 
                 // Akış (Flow) izinleri
                 options.AllowPasswordFlow()
@@ -61,6 +70,19 @@ public static class AssemblyReference
 
                 options.UseAspNetCore()
                        .EnableTokenEndpointPassthrough();
+
+                options.RemoveEventHandler(
+                        OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers
+                            .ExtractPostRequest<OpenIddictServerEvents.ExtractTokenRequestContext>.Descriptor);
+
+                options.AddEventHandler<OpenIddictServerEvents.ExtractTokenRequestContext>(builder =>
+                {
+                    builder.UseScopedHandler<ExtractJsonTokenRequestHandler>();
+
+                    builder.SetOrder(
+                        OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers
+                            .ExtractPostRequest<OpenIddictServerEvents.ExtractTokenRequestContext>.Descriptor.Order);
+                });
             })
             .AddValidation(options =>
             {

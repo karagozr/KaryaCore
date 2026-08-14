@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Karya.Core.Interfaces.Entities;
+﻿using Karya.Core.Interfaces.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Karya.Core.Indentity.Domains.Entities;
 
 public class AppUser : IdentityUser<Guid>, IBaseEntity<Guid>
 {
     /// <summary>Kullanıcının aktif/seçili tenant'ı.</summary>
-    public string TenantId { get; set; }
+    public string TenantId { get; set; } = null!;
 
     /// <summary>True ise kullanıcı tüm tenant'lara erişebilen sistem adminidir.</summary>
     public bool IsSystemAdmin { get; set; }
