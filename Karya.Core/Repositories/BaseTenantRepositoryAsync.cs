@@ -1,5 +1,4 @@
-﻿using Karya.Core.Abstracts.Entities;
-using Karya.Core.Interfaces.Entities.Tanent;
+﻿using Karya.Core.Interfaces.Entities.Tanent;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,7 @@ namespace Karya.Core.Repositories;
 
 public class BaseTenantRepositoryAsync<TEntity, TId, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>,ITenantRepository
 where TContext : DbContext
-where TEntity : BaseTenantEntity<TId>, new()
+where TEntity : class,IBaseTenantEntity<TId,string>, new()
 where TId : notnull
 {
 

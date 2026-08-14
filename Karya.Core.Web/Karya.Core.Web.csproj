@@ -34,7 +34,6 @@
 
 	<ItemGroup>
 		<Folder Include="Infrastructure\Swagger\" />
-		<Folder Include="NewFolder\" />
 	</ItemGroup>
 
 	<ItemGroup>

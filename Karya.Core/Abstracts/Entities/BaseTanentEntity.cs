@@ -15,7 +15,7 @@ public abstract class BaseTenantEntity<TId> : BaseEntity<TId>, IBaseTenantEntity
     public string TenantId { get; set; }
 }
 
-public abstract class BaseTanentEntity : BaseTenantEntity<Guid>
+public abstract class BaseTenantEntity : BaseTenantEntity<Guid>
 {
 
 }

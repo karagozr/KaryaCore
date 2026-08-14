@@ -12,5 +12,7 @@ public abstract class BaseEntity<TId> : IBaseEntity<TId>
 
 public abstract class BaseEntity : BaseEntity<Guid>
 {
-    protected BaseEntity() => Id = Guid.NewGuid();
+    [Key, Column(Order = 0)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    override public Guid Id { get; set; }
 }
