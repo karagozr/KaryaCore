@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Karya.Core.Repositories;
 
-public class BaseTenantRepositoryAsync<TEntity, TId, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>, ITenantRepository
+public class BaseTenantRepositoryAsync<TEntity, TId, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>, ITenantRepository<TEntity, TId>
 where TContext : DbContext
 where TEntity : class, IBaseTenantEntity<TId, string>, new()
 where TId : notnull

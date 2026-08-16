@@ -1,6 +1,4 @@
-﻿using Karya.Core.Abstracts.Entities;
-using Karya.Core.Helpers.Generals;
-using Karya.Core.Interfaces.Entities.Tanent;
+﻿using Karya.Core.Interfaces.Entities.Tanent;
 using Karya.Core.Interfaces.Filters;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Interfaces.Repositories;
@@ -10,9 +8,9 @@ using System.Reflection;
 
 namespace Karya.Core.Repositories;
 
-public class BaseTenantDetailRepositoryAsync<TEntity, TId, TParentFilter, TContext> : BaseTenantRepositoryAsync<TEntity, TId, TContext>, IDetailTenantRepository
+public class BaseTenantDetailRepositoryAsync<TEntity, TId, TParentFilter, TContext> : BaseTenantRepositoryAsync<TEntity, TId, TContext>, IDetailTenantRepository<TEntity, TId, TParentFilter>
 where TContext : DbContext
-where TEntity : BaseTenantEntity<TId>, new()
+where TEntity : class, IBaseTenantEntity<TId, string>, new()
 where TId : notnull
 where TParentFilter : IParentFilter
 {

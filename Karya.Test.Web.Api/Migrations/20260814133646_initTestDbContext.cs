@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Karya.Test.Web.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class initAppDbContext : Migration
+    public partial class initTestDbContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

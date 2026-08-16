@@ -15,10 +15,10 @@ public class DbMessageLocalizer : IMessageLocalizer
     private const string DefaultLanguage = "en";
     private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(30);
 
-    private readonly AppDbContext _db;
+    private readonly TestDbContext _db;
     private readonly IMemoryCache _cache;
 
-    public DbMessageLocalizer(AppDbContext db, IMemoryCache cache)
+    public DbMessageLocalizer(TestDbContext db, IMemoryCache cache)
     {
         _db = db;
         _cache = cache;

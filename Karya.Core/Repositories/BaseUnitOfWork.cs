@@ -21,17 +21,17 @@ public abstract class BaseUnitOfWork : IUnitOfWork
     }
 
 
-    public TRepo Repo<TRepo>() where TRepo : class, IRepository
+    public virtual TRepo Repo<TRepo>() where TRepo : class, IRepository
     {
         return (Activator.CreateInstance(typeof(TRepo), _context, _currentUser) as TRepo)!;
     }
 
-    public TRepo Repo<TRepo>(IParentFilter parentFilter) where TRepo : class, IDetailTenantRepository
+    public virtual TRepo Repo<TRepo>(IParentFilter parentFilter) where TRepo : class, IDetailRepository
     {
         return (Activator.CreateInstance(typeof(TRepo), _context, _currentUser, parentFilter) as TRepo)!;
     }
 
-    public BaseResult Complete()
+    public virtual BaseResult Complete()
     {
         try
         {
@@ -45,7 +45,7 @@ public abstract class BaseUnitOfWork : IUnitOfWork
     }
 
 
-    public async Task<BaseResult> CompleteAsync()
+    public virtual async Task<BaseResult> CompleteAsync()
     {
         try
         {

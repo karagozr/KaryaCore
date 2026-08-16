@@ -5,7 +5,7 @@
 namespace Karya.Test.Web.Api.Migrations.Dev
 {
     /// <inheritdoc />
-    public partial class initDevContext : Migration
+    public partial class InitDevContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,8 +39,7 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                         name: "FK_InventoryCategories_InventoryMainCategories_TenantId_MainCategoryId",
                         columns: x => new { x.TenantId, x.MainCategoryId },
                         principalTable: "InventoryMainCategories",
-                        principalColumns: new[] { "TenantId", "Id" },
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumns: new[] { "TenantId", "Id" });
                 });
 
             migrationBuilder.CreateTable(
@@ -62,13 +61,12 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                         columns: x => new { x.TenantId, x.CategoryId },
                         principalTable: "InventoryCategories",
                         principalColumns: new[] { "TenantId", "Id" },
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Inventories_InventoryMainCategories_TenantId_MainCategoryId",
                         columns: x => new { x.TenantId, x.MainCategoryId },
                         principalTable: "InventoryMainCategories",
-                        principalColumns: new[] { "TenantId", "Id" },
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumns: new[] { "TenantId", "Id" });
                 });
 
             migrationBuilder.CreateTable(
@@ -81,35 +79,27 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                     InventoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    MainCategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    InventoryTenantId = table.Column<string>(type: "nvarchar(10)", nullable: true)
+                    MainCategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InventoryDetails", x => new { x.TenantId, x.Id });
                     table.ForeignKey(
-                        name: "FK_InventoryDetails_Inventories_InventoryTenantId_InventoryId",
-                        columns: x => new { x.InventoryTenantId, x.InventoryId },
-                        principalTable: "Inventories",
-                        principalColumns: new[] { "TenantId", "Id" });
-                    table.ForeignKey(
                         name: "FK_InventoryDetails_Inventories_TenantId_InventoryId",
                         columns: x => new { x.TenantId, x.InventoryId },
                         principalTable: "Inventories",
                         principalColumns: new[] { "TenantId", "Id" },
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_InventoryDetails_InventoryCategories_TenantId_CategoryId",
                         columns: x => new { x.TenantId, x.CategoryId },
                         principalTable: "InventoryCategories",
-                        principalColumns: new[] { "TenantId", "Id" },
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumns: new[] { "TenantId", "Id" });
                     table.ForeignKey(
                         name: "FK_InventoryDetails_InventoryMainCategories_TenantId_MainCategoryId",
                         columns: x => new { x.TenantId, x.MainCategoryId },
                         principalTable: "InventoryMainCategories",
-                        principalColumns: new[] { "TenantId", "Id" },
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumns: new[] { "TenantId", "Id" });
                 });
 
             migrationBuilder.CreateIndex(
@@ -126,11 +116,6 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                 name: "IX_InventoryCategories_TenantId_MainCategoryId",
                 table: "InventoryCategories",
                 columns: new[] { "TenantId", "MainCategoryId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InventoryDetails_InventoryTenantId_InventoryId",
-                table: "InventoryDetails",
-                columns: new[] { "InventoryTenantId", "InventoryId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_InventoryDetails_TenantId_CategoryId",

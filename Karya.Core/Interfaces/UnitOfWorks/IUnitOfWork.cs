@@ -9,7 +9,7 @@ public interface IUnitOfWork : IDisposable
 {
     TRepo Repo<TRepo>() where TRepo : class, IRepository;
 
-    TRepo Repo<TRepo>(IParentFilter parentFilter) where TRepo : class, IDetailTenantRepository;
+    TRepo Repo<TRepo>(IParentFilter parentFilter) where TRepo : class, IDetailRepository;
 
     Task<BaseResult> CompleteAsync();
 

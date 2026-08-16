@@ -11,9 +11,9 @@ namespace Karya.Test.Web.Api.Data.Service;
 /// </summary>
 public class UserClaimsService : IUserClaimsService
 {
-    private readonly AppDbContext _db;
+    private readonly TestDbContext _db;
 
-    public UserClaimsService(AppDbContext db)
+    public UserClaimsService(TestDbContext db)
     {
         _db = db;
     }

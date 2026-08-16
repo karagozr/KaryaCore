@@ -4,19 +4,16 @@ using Karya.Test.Web.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace Karya.Test.Web.Api.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20260814133646_initAppDbContext")]
-    partial class initAppDbContext
+    [DbContext(typeof(TestDbContext))]
+    partial class TestDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,8 +216,7 @@ namespace Karya.Test.Web.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(0);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleGroupId")
                         .HasColumnType("uniqueidentifier");
@@ -231,8 +227,7 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<string>("TenantId")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnOrder(1);
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 

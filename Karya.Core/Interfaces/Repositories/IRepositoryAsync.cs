@@ -1,4 +1,7 @@
-﻿using Karya.Core.Interfaces.Entities;
+﻿using Karya.Core.Abstracts.Entities;
+using Karya.Core.Interfaces.Entities;
+using Karya.Core.Interfaces.Entities.Tanent;
+using Karya.Core.Interfaces.Filters;
 using System.Linq.Expressions;
 namespace Karya.Core.Interfaces.Repositories;
 
@@ -8,16 +11,26 @@ public interface IRepository
 
 }
 
-public interface ITenantRepository
+public interface IDetailRepository
 {
 
 }
 
-public interface IDetailTenantRepository
+public interface ITenantRepository<TEntity, TId> : IRepositoryAsync<TEntity, TId>
+where TEntity : class, IBaseTenantEntity<TId, string>, new()
+where TId : notnull
 {
 
 }
-public interface IRepositoryAsync<TEntity,TId> : IRepository, ITenantRepository, IDetailTenantRepository, IQuery<TEntity, TId> where TEntity : IBaseEntity<TId>, new()
+
+public interface IDetailTenantRepository<TEntity, TId, TParentFilter> : IDetailRepository, ITenantRepository<TEntity, TId>
+where TEntity : class, IBaseTenantEntity<TId, string>, new()
+where TId : notnull
+where TParentFilter : IParentFilter
+{
+
+}
+public interface IRepositoryAsync<TEntity,TId> : IRepository, IQuery<TEntity, TId> where TEntity : IBaseEntity<TId>, new()
 {
     Task<TEntity?> GetByIdAsync(TId id, 
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, 

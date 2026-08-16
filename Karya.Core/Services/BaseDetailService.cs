@@ -12,7 +12,7 @@ using Karya.Core.Results;
 namespace Karya.Core.Services;
 
 public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : BaseService, IBaseDetailService<TEntity, TId, TParentFilter>
-    where TRepo : class, IRepositoryAsync<TEntity, TId>
+    where TRepo : class, IRepositoryAsync<TEntity, TId>, IDetailRepository
     where TEntity : class, IBaseEntity<TId>, new()
     where TParentFilter : IParentFilter, new()
 {

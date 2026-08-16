@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Karya.Test.Web.Api.Migrations.Dev
 {
     [DbContext(typeof(DevContext))]
-    [Migration("20260814133759_initDevContext")]
-    partial class initDevContext
+    [Migration("20260815173402_InitDevContext")]
+    partial class InitDevContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,9 +105,6 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("InventoryTenantId")
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<string>("MainCategoryId")
                         .HasColumnType("nvarchar(450)");
 
@@ -116,8 +113,6 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TenantId", "Id");
-
-                    b.HasIndex("InventoryTenantId", "InventoryId");
 
                     b.HasIndex("TenantId", "CategoryId");
 
@@ -153,13 +148,12 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                     b.HasOne("Karya.TestApi.Entities.InventoryCategory", "Category")
                         .WithMany()
                         .HasForeignKey("TenantId", "CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
                         .WithMany()
-                        .HasForeignKey("TenantId", "MainCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TenantId", "MainCategoryId");
 
                     b.Navigation("Category");
 
@@ -170,33 +164,26 @@ namespace Karya.Test.Web.Api.Migrations.Dev
                 {
                     b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
                         .WithMany()
-                        .HasForeignKey("TenantId", "MainCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TenantId", "MainCategoryId");
 
                     b.Navigation("MainCategory");
                 });
 
             modelBuilder.Entity("Karya.TestApi.Entities.InventoryDetail", b =>
                 {
-                    b.HasOne("Karya.TestApi.Entities.Inventory", null)
-                        .WithMany("InventoryDetails")
-                        .HasForeignKey("InventoryTenantId", "InventoryId");
-
                     b.HasOne("Karya.TestApi.Entities.InventoryCategory", "Category")
                         .WithMany()
-                        .HasForeignKey("TenantId", "CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TenantId", "CategoryId");
 
                     b.HasOne("Karya.TestApi.Entities.Inventory", "Inventory")
-                        .WithMany()
+                        .WithMany("InventoryDetails")
                         .HasForeignKey("TenantId", "InventoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Karya.TestApi.Entities.InventoryMainCategory", "MainCategory")
                         .WithMany()
-                        .HasForeignKey("TenantId", "MainCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TenantId", "MainCategoryId");
 
                     b.Navigation("Category");
 

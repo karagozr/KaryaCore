@@ -17,7 +17,8 @@ public static class AssemblyReference
 {
     public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 
-    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration, string defaultConnectionName) where TIdentityContext : Infrastructure.AppDbContext
+    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration, string defaultConnectionName) where TIdentityContext 
+        : DbContext
     {
         var connectionString = configuration.GetConnectionString(defaultConnectionName);
         services.AddDbContext<TIdentityContext>(options => options.UseSqlServer(connectionString));
@@ -25,7 +26,7 @@ public static class AssemblyReference
         services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<TIdentityContext>();
 
         // Repository/UnitOfWork'ün kullandığı soyut DbContext, Identity context'ine yönlendirilir.
-        services.AddScoped<Microsoft.EntityFrameworkCore.DbContext>(sp => sp.GetRequiredService<TIdentityContext>());
+        services.AddScoped<DbContext>(sp => sp.GetRequiredService<TIdentityContext>());
 
         services.AddScoped<AppUserTenantService>();
         services.AddScoped<AppRoleService>();
@@ -105,7 +106,7 @@ public static class AssemblyReference
         return services;
     }
 
-    public static async Task MigrateCoreDatabaseAsync<TContext>(this IServiceProvider serviceProvider) where TContext : Infrastructure.AppDbContext
+    public static async Task MigrateCoreDatabaseAsync<TContext>(this IServiceProvider serviceProvider) where TContext : DbContext
     {
         await using var scope = serviceProvider.CreateAsyncScope();
 

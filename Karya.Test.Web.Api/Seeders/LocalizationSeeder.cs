@@ -8,9 +8,9 @@ namespace Karya.Test.Web.Api.Seeders;
 
 public sealed class LocalizationSeeder : IDatabaseSeeder
 {
-    private readonly AppDbContext _db;
+    private readonly TestDbContext _db;
 
-    public LocalizationSeeder(AppDbContext db)
+    public LocalizationSeeder(TestDbContext db)
     {
         _db = db;
     }

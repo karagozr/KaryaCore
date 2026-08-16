@@ -10,9 +10,9 @@ namespace Karya.Test.Web.Api.Controllers;
 [Route("api/[controller]")]
 public class LanguageController : ControllerBase
 {
-    private readonly AppDbContext _db;
+    private readonly TestDbContext _db;
 
-    public LanguageController(AppDbContext db) => _db = db;
+    public LanguageController(TestDbContext db) => _db = db;
 
     /// <summary>Returns the client-facing language pack (Client + Both) as a code -> text map.</summary>
     [AllowAnonymous]
