@@ -5,6 +5,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Karya.Core.Indentity</PackageId>
+    <Version>1.1.0</Version>
+    <Authors>Ramazan Karagoz</Authors>
+    <Company>Karagoz</Company>
+    <Description>Karya Core Identity Layer - Authentication and Authorization for .NET 10</Description>
+    <PackageTags>karya;core;identity;authentication;authorization;openiddict</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/karagozr/KaryaCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/karagozr/KaryaCore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
