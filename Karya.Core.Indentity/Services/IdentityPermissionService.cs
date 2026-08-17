@@ -60,8 +60,7 @@ public class IdentityPermissionService : IPermissionService
 
         if (permission.StartsWith("AppUser.", StringComparison.OrdinalIgnoreCase))
         {
-            return await _roleService.Query()
-                .AnyAsync(x => roleIds.Contains(x.Id) && x.Name == TenantAdminRole);
+            return await _roleService.Query().AnyAsync(x => roleIds.Contains(x.Id) && x.Name == TenantAdminRole);
         }
 
         return await _roleClaimService.Query()
