@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Karya.Test.Web.Api.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    [Migration("20260815150504_UpdateAppDbContext")]
-    partial class UpdateAppDbContext
+    [Migration("20260817114049_initAppDbContext")]
+    partial class initAppDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -389,6 +389,12 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ErpPersonId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErpUsername")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsSystemAdmin")
                         .HasColumnType("bit");

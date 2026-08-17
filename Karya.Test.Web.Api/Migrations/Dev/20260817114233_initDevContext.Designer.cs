@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Karya.Test.Web.Api.Migrations.Dev
 {
     [DbContext(typeof(DevContext))]
-    [Migration("20260815173402_InitDevContext")]
-    partial class InitDevContext
+    [Migration("20260817114233_initDevContext")]
+    partial class initDevContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

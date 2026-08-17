@@ -17,7 +17,7 @@ public static class AssemblyReference
 {
     public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 
-    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration, string defaultConnectionName) where TIdentityContext 
+    public static void AddCoreIdentityRegistiration<TIdentityContext>(this IServiceCollection services, IConfiguration configuration, string defaultConnectionName) where TIdentityContext
         : DbContext
     {
         var connectionString = configuration.GetConnectionString(defaultConnectionName);
@@ -34,6 +34,8 @@ public static class AssemblyReference
         services.AddScoped<AppUserRoleGroupService>();
         services.AddScoped<AppRoleGroupRoleService>();
         services.AddScoped<AppRoleClaimService>();
+        services.AddScoped<AppUserClaimService>();
+        services.AddScoped<UserProfileService>();
 
         // Yetki servisi (SystemAdmin/TenantAdmin) MediatR AuthorizationBehavior için.
         services.AddScoped<Karya.Core.App.Interfaces.Services.IPermissionService, Services.IdentityPermissionService>();

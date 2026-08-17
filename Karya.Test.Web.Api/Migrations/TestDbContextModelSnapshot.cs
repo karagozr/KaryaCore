@@ -387,6 +387,12 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ErpPersonId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErpUsername")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsSystemAdmin")
                         .HasColumnType("bit");
 
