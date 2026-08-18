@@ -33,7 +33,7 @@ public class IdentityPermissionService : IPermissionService
         _appUserClaimService = appUserClaimService;
     }
 
-    public async Task<bool> HasPermissionAsync(string userId, string permission)
+    public virtual async Task<bool> HasPermissionAsync(string userId, string permission)
     {
         if (string.IsNullOrEmpty(permission))
             return true;

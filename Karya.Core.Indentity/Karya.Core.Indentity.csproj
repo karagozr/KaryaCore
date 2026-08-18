@@ -7,7 +7,7 @@
     <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Karya.Core.Indentity</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>Ramazan Karagoz</Authors>
     <Company>Karagoz</Company>
     <Description>Karya Core Identity Layer - Authentication and Authorization for .NET 10</Description>
