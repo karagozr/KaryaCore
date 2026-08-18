@@ -14,7 +14,7 @@ namespace Karya.Core.Indentity.Controllers;
 /// (AppToken.*) uygulanır. Yalnızca Sistem Admin erişebilir.
 /// </summary>
 [Authorize]
-public class AppTokenController : BaseController
+public abstract class AppTokenController : BaseController
 {
     private readonly DbContext _context;
 

@@ -16,7 +16,7 @@ namespace Karya.Core.Indentity.Controllers;
 /// (AppApplication.*) uygulanır. Yalnızca Sistem Admin erişebilir.
 /// </summary>
 [Authorize]
-public class AppApplicationController : BaseController
+public abstract class AppApplicationController : BaseController
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
     private readonly DbContext _context;

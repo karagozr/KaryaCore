@@ -8,7 +8,7 @@ using OpenIddict.Server.AspNetCore;
 namespace Karya.Core.Indentity.Controllers;
 
 [ApiController]
-public class AppAuthController : ControllerBase
+public abstract class AppAuthController : ControllerBase
 {
     private readonly AppAuthService _authService;
 
