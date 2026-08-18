@@ -14,7 +14,7 @@ namespace Karya.Core.Indentity.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AppUserRoleGroupController : ControllerBase
+public abstract class AppUserRoleGroupController : ControllerBase
 {
     private readonly DbContext _context;
     private readonly ICurrentUser _currentUser;

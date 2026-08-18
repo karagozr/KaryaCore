@@ -11,7 +11,7 @@ namespace Karya.Core.Indentity.Controllers;
 
 /// <summary>Scope yönetimi (CRUD). Yalnızca Sistem Admin erişebilir.</summary>
 [Authorize]
-public class AppScopeController : BaseCrudController<AppScope, Guid, AppScopeSDto, AppScopeLDto, AppScopeADto, AppScopeUDto>
+public abstract class AppScopeController : BaseCrudController<AppScope, Guid, AppScopeSDto, AppScopeLDto, AppScopeADto, AppScopeUDto>
 {
     public AppScopeController(IMediator mediator, DbContext context, ICurrentUser currentUser)
         : base(mediator, new AppScopeService(context, currentUser))

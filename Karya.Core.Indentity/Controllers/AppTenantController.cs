@@ -14,7 +14,7 @@ namespace Karya.Core.Indentity.Controllers;
 /// MediatR AuthorizationBehavior pipeline'ı üzerinden (AppTenant.*) yapılır.
 /// </summary>
 [Authorize]
-public class AppTenantController : BaseCrudController<AppTenant, string, AppTenantSDto, AppTenantLDto, AppTenantADto, AppTenantUDto>
+public abstract class AppTenantController : BaseCrudController<AppTenant, string, AppTenantSDto, AppTenantLDto, AppTenantADto, AppTenantUDto>
 {
     public AppTenantController(IMediator mediator, DbContext context, ICurrentUser currentUser)
         : base(mediator, new AppTenantService(context, currentUser))

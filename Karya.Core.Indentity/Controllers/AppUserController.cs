@@ -16,7 +16,7 @@ namespace Karya.Core.Indentity.Controllers;
 /// kapsamı repository katmanında row-level uygulanır.
 /// </summary>
 [Authorize]
-public class AppUserController : BaseCrudController<AppUser, Guid, AppUserSDto, AppUserLDto, AppUserADto, AppUserUDto>
+public abstract class AppUserController : BaseCrudController<AppUser, Guid, AppUserSDto, AppUserLDto, AppUserADto, AppUserUDto>
 {
     public AppUserController(IMediator mediator, DbContext context, ICurrentUser currentUser, UserManager<AppUser> userManager)
         : base(mediator, new AppUserService(context, currentUser, userManager))

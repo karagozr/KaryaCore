@@ -11,7 +11,7 @@ namespace Karya.Core.Indentity.Controllers;
 
 /// <summary>Rol yönetimi (CRUD). Yalnızca Sistem Admin erişebilir.</summary>
 [Authorize]
-public class AppRoleController : BaseCrudController<AppRole, Guid, AppRoleSDto, AppRoleLDto, AppRoleADto, AppRoleUDto>
+public abstract class AppRoleController : BaseCrudController<AppRole, Guid, AppRoleSDto, AppRoleLDto, AppRoleADto, AppRoleUDto>
 {
     public AppRoleController(IMediator mediator, DbContext context, ICurrentUser currentUser)
         : base(mediator, new AppRoleService(context, currentUser))
