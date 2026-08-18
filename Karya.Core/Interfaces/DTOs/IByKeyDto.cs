@@ -1,5 +1,5 @@
 ﻿namespace Karya.Core.Interfaces.DTOs;
 
-public interface ISingleDto:IBaseDto
+public interface IByKeyDto:IBaseDto
 {
 }

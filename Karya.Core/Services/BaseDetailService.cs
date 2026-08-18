@@ -47,7 +47,7 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
         return BaseResult<LoadResult>.Success("200", null, res);
     }
 
-    public async Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, ISingleDto, new()
+    public async Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, IByKeyDto, new()
     {
         if (key == null)
             return BaseResult<TDto>.ErrorCoded("400", MessageCodes.Required, null, "Id");

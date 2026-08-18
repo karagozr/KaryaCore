@@ -6,7 +6,7 @@ using Karya.Core.Results;
 namespace Karya.Core.App.Features.Commands;
 
 public record ByKeyCommand<TEntity, TId, TDto>(TId Key, IBaseService<TEntity, TId> Service, string Permission = "" ) : 
-IExecutableCrudRequest<BaseResult<TDto>> where TDto : class, ISingleDto, new()
+IExecutableCrudRequest<BaseResult<TDto>> where TDto : class, IByKeyDto, new()
 {
     public Task<BaseResult<TDto>> ExecuteAsync(CancellationToken ct = default)
     {

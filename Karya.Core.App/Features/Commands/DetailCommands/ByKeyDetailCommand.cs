@@ -7,7 +7,7 @@ using Karya.Core.Results;
 namespace Karya.Core.App.Features.Commands.DetailCommands;
 
 public record ByKeyDetailCommand<TEntity, TId, TParentFilter, TDto>(TParentFilter ParentFilter, TId Key,  IBaseDetailService<TEntity, TId, TParentFilter> Service, string Permission = "") :
-IExecutableCrudRequest<BaseResult<TDto>> where TDto : class, ISingleDto, new() where TParentFilter : class, IParentFilter, new()
+IExecutableCrudRequest<BaseResult<TDto>> where TDto : class, IByKeyDto, new() where TParentFilter : class, IParentFilter, new()
 {
     public Task<BaseResult<TDto>> ExecuteAsync(CancellationToken ct = default)
     {

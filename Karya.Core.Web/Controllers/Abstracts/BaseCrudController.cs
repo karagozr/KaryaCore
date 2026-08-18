@@ -12,7 +12,7 @@ namespace Karya.Core.Web.Abstracts.Controllers;
 [Route("api/[controller]")]
 public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, TInsertDto, TUpdateDto> : BaseController<TEntity, TId>
     where TId : notnull
-    where TSingleDto : class, ISingleDto, new()
+    where TSingleDto : class, IByKeyDto, new()
     where TSelectDto : class, ISelectDto, new()
     where TInsertDto : class, IInsertDto, new()
     where TUpdateDto : class, IUpdateDto, new()

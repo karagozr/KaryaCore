@@ -2,7 +2,7 @@ using Karya.Core.Interfaces.DTOs;
 
 namespace Karya.Core.Indentity.DTOs;
 
-public class AppRoleClaimSDto : ISingleDto
+public class AppRoleClaimSDto : IByKeyDto
 {
     public int Id { get; set; }
     public Guid RoleId { get; set; }

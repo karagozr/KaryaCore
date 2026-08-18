@@ -2,7 +2,7 @@
 
 namespace Karya.Test.Web.Api.DTOs;
 
-public class InvSDto : ISingleDto
+public class InvSDto : IByKeyDto
 {
     public string Id { get; set; } = null!;
     public string? Name { get; set; } = null!;
@@ -11,7 +11,7 @@ public class InvSDto : ISingleDto
     public string? MainCategoryId { get; set; } = null!;
 }
 
-public class InvDetailSDto : ISingleDto
+public class InvDetailSDto : IByKeyDto
 {
     public int Id { get; set; } = 0;
     public string InventoryId { get; set; } = null!;
@@ -20,14 +20,14 @@ public class InvDetailSDto : ISingleDto
     public string? MainCategoryId { get; set; } = null!;
 }
 
-public class InvCategorySDto : ISingleDto
+public class InvCategorySDto : IByKeyDto
 {
     public string Id { get; set; } = null!;
     public string? Name { get; set; } = null!;
     public string? MainCategoryId { get; set; } = null!;
 }
 
-public class InvMainCategorySDto : ISingleDto
+public class InvMainCategorySDto : IByKeyDto
 {
     public string Id { get; set; } = null!;
     public string? Name { get; set; } = null!;

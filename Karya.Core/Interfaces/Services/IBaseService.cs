@@ -14,7 +14,7 @@ public interface IBaseService : IDisposable
 public interface IBaseService<TEntity, TId> : IBaseService
 {
     IQueryable<TEntity> Query();
-    Task<BaseResult<TDto>> ByKey<TDto>(TId key) where TDto : class, ISingleDto, new();
+    Task<BaseResult<TDto>> ByKey<TDto>(TId key) where TDto : class, IByKeyDto, new();
 
     Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new();
 

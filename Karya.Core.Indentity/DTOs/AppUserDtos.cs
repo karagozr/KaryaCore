@@ -3,7 +3,7 @@ using Karya.Core.Interfaces.DTOs;
 namespace Karya.Core.Indentity.DTOs;
 
 /// <summary>Tekil kayıt görünümü.</summary>
-public class AppUserSDto : ISingleDto
+public class AppUserSDto : IByKeyDto
 {
     public Guid Id { get; set; }
     public string? UserName { get; set; }

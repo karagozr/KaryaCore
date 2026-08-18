@@ -2,7 +2,7 @@ using Karya.Core.Interfaces.DTOs;
 
 namespace Karya.Core.Indentity.DTOs;
 
-public class AppTenantSDto : ISingleDto
+public class AppTenantSDto : IByKeyDto
 {
     public string Id { get; set; } = null!;
     public string Name { get; set; } = null!;

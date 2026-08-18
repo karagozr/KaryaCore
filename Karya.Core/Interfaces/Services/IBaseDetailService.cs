@@ -11,7 +11,7 @@ public interface IBaseDetailService<TEntity, TId, TParentFilter> : IBaseService
     where TParentFilter : IParentFilter, new()
 {
     IQueryable<TEntity> Query(TParentFilter parentFilter);
-    Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, ISingleDto, new();
+    Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, IByKeyDto, new();
 
     Task<BaseResult<LoadResult>> Select<TDto>(TParentFilter parentFilter, DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new();
 

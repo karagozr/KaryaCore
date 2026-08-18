@@ -15,7 +15,7 @@ namespace Karya.Core.Web.Abstracts.Controllers;
 public abstract class BaseCrudDetailController<TEntity, TId, TParentFilter, TSingleDto, TSelectDto, TInsertDto, TUpdateDto> : BaseController<TEntity,TId>
     where TId : notnull
     where TParentFilter : class, IParentFilter, new()
-    where TSingleDto : class, ISingleDto, new()
+    where TSingleDto : class, IByKeyDto, new()
     where TSelectDto : class, ISelectDto, new()
     where TInsertDto : class, IInsertDto, new()
     where TUpdateDto : class, IUpdateDto, new()

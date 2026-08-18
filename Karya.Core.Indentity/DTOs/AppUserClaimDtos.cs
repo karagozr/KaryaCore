@@ -2,7 +2,7 @@ using Karya.Core.Interfaces.DTOs;
 
 namespace Karya.Core.Indentity.DTOs;
 
-public class AppUserClaimSDto : ISingleDto
+public class AppUserClaimSDto : IByKeyDto
 {
     public int Id { get; set; }
     public Guid UserId { get; set; }
