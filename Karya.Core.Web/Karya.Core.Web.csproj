@@ -7,7 +7,7 @@
     <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Karya.Core.Web</PackageId>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <Authors>Ramazan Karagoz</Authors>
     <Company>Karagoz</Company>
     <Description>Karya Core Web Layer - ASP.NET Core utilities and OpenAPI support for .NET 10</Description>
