@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-
 namespace Karya.Core.App.Commons;
 
 public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TRequest, TResponse>> logger)
@@ -24,7 +23,8 @@ public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TR
 
             return BaseResult.ErrorCoded<TResponse>(
                 "403",
-                MessageCodes.Unauthorized);
+                MessageCodes.Unauthorized,
+                ex);
         }
         catch (Exception ex)
         {
@@ -32,7 +32,8 @@ public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TR
 
             return BaseResult.ErrorCoded<TResponse>(
                 "500",
-                MessageCodes.ServerError);
+                MessageCodes.ServerError,
+                ex);
         }
     }
 }
