@@ -5,7 +5,7 @@
 namespace Karya.Test.Web.Api.Migrations.Dev
 {
     /// <inheritdoc />
-    public partial class initDevContext : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

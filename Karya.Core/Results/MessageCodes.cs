@@ -47,4 +47,31 @@ public static class MessageCodes
         [DbLoginFailed] = "Database login failed.",
         [DbCannotOpen] = "The database could not be opened."
     };
+
+    /// <summary>
+    /// Resolves a message code to a text using the built-in (English) catalog and
+    /// applies the given <paramref name="args"/> to its placeholders. Used as a
+    /// fallback when no <c>IMessageLocalizer</c> is registered so responses never
+    /// come back with an empty message.
+    /// </summary>
+    public static string Resolve(string code, params object[]? args)
+    {
+        if (string.IsNullOrEmpty(code))
+            return string.Empty;
+
+        if (!English.TryGetValue(code, out var text))
+            return code;
+
+        if (args is null || args.Length == 0)
+            return text;
+
+        try
+        {
+            return string.Format(text, args);
+        }
+        catch (FormatException)
+        {
+            return text;
+        }
+    }
 }

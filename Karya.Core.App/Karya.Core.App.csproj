@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Karya.Core.App</PackageId>
-    <Version>1.1.6</Version>
+    <Version>1.1.7</Version>
     <Authors>Ramazan Karagoz</Authors>
     <Company>Karagoz</Company>
     <Description>Karya Core Application Layer - CQRS and MediatR support for .NET 10</Description>

@@ -53,6 +53,24 @@ public record BaseResult
 
         throw new InvalidOperationException($"Unsupported response type: {typeof(TResponse).Name}");
     }
+
+    public static TResponse Error<TResponse>(string code, string? message, Dictionary<string, string>? errors = null) where TResponse : BaseResult
+    {
+        var result = Error(code, message, errors);
+
+        if (typeof(TResponse) == typeof(BaseResult))
+            return (TResponse)result;
+
+        if (typeof(TResponse).IsGenericType && typeof(TResponse).GetGenericTypeDefinition() == typeof(BaseResult<>))
+        {
+            var dataType = typeof(TResponse).GetGenericArguments()[0];
+            var defaultData = dataType.IsValueType ? Activator.CreateInstance(dataType) : null;
+
+            return (TResponse)Activator.CreateInstance(typeof(TResponse), result, defaultData)!;
+        }
+
+        throw new InvalidOperationException($"Unsupported response type: {typeof(TResponse).Name}");
+    }
 }
 
 public record BaseResult<T> : BaseResult
