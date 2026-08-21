@@ -38,7 +38,13 @@ public class GenericParentFilterModelBinder : IModelBinder
                 if (property != null && property.CanWrite)
                 {
                     var underlyingType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-                    var convertedValue = Convert.ChangeType(val, underlyingType);
+                    object? convertedValue;
+
+                    if (underlyingType == typeof(Guid))
+                        convertedValue = Guid.Parse(val);
+                    else
+                        convertedValue = Convert.ChangeType(val, underlyingType);
+
                     property.SetValue(model, convertedValue);
                 }
             }

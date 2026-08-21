@@ -15,6 +15,4 @@ public class AppRoleGroupRole : BaseTenantEntity<Guid>
     public AppRoleGroup? RoleGroup { get; set; }
 
     public AppRole? Role { get; set; }
-    public string TenantId { get; set; }
-    public Guid Id { get; set; }
 }

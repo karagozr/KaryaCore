@@ -30,12 +30,15 @@ public static class AssemblyReference
 
         services.AddScoped<AppUserTenantService>();
         services.AddScoped<AppRoleService>();
+        services.AddScoped<AppRoleGroupService>();
         services.AddScoped<AppUserRoleService>();
         services.AddScoped<AppUserRoleGroupService>();
         services.AddScoped<AppRoleGroupRoleService>();
         services.AddScoped<AppRoleClaimService>();
         services.AddScoped<AppUserClaimService>();
+        services.AddScoped<AppScopeService>();
         services.AddScoped<UserProfileService>();
+        services.AddScoped<AppTenantService>();
 
         // Yetki servisi (SystemAdmin/TenantAdmin) MediatR AuthorizationBehavior için.
         services.AddScoped<Karya.Core.App.Interfaces.Services.IPermissionService, Services.IdentityPermissionService>();
@@ -44,7 +47,6 @@ public static class AssemblyReference
         services.AddScoped<AppAuthService>();
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IDatabaseSeeder, IdentityDataSeeder>();
-        services.AddScoped<IDatabaseSeeder, PermissionSeeder>();
 
         // OpenIddict kaydı (App-prefixed entity'ler ile)
         services.AddOpenIddict()
