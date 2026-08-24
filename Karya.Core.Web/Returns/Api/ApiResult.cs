@@ -39,12 +39,19 @@ public class ApiResult : ActionResult, IActionResult
         var services = context.HttpContext.RequestServices;
         var localizer = services.GetService(typeof(IMessageLocalizer)) as IMessageLocalizer;
         if (localizer == null)
-            return Message;
+            return MessageCodes.Resolve(MessageCode, MessageArgs ?? Array.Empty<object>());
 
         var currentUser = services.GetService(typeof(ICurrentUser)) as ICurrentUser;
         var language = currentUser?.LanguageId ?? "tr";
 
-        return localizer.Get(MessageCode, language, MessageArgs ?? Array.Empty<object>());
+        var localized = localizer.Get(MessageCode, language, MessageArgs ?? Array.Empty<object>());
+
+        // If the localizer could not resolve the code (returns the code itself or empty),
+        // fall back to the built-in catalog so the response never has an empty message.
+        if (string.IsNullOrEmpty(localized) || localized == MessageCode)
+            return MessageCodes.Resolve(MessageCode, MessageArgs ?? Array.Empty<object>());
+
+        return localized;
     }
 
     override public async Task ExecuteResultAsync(ActionContext context)
