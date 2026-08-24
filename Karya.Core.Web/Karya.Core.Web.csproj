@@ -19,8 +19,11 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Infrastructure\Swagger\**" />
 		<Compile Remove="Interfaces\**" />
+		<EmbeddedResource Remove="Infrastructure\Swagger\**" />
 		<EmbeddedResource Remove="Interfaces\**" />
+		<None Remove="Infrastructure\Swagger\**" />
 		<None Remove="Interfaces\**" />
 	</ItemGroup>
 
@@ -30,10 +33,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.11" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
 		<PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Infrastructure\Swagger\" />
 	</ItemGroup>
 
 	<ItemGroup>
