@@ -3,8 +3,10 @@ using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Infrastructure.Migrations;
 using Karya.Core.Indentity.Providers;
 using Karya.Core.Indentity.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Karya.Core.Indentity.Seeders;
 
@@ -17,6 +19,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
     private readonly AppUserRoleGroupService _userRoleGroupService;
     private readonly AppTenantService _tenantService;
     private readonly AppUserTenantService _userTenantService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public IdentityDataSeeder(
         UserManager<AppUser> userManager,
@@ -25,7 +28,8 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         AppRoleGroupRoleService roleGroupRoleService,
         AppUserRoleGroupService userRoleGroupService,
         AppTenantService tenantService,
-        AppUserTenantService userTenantService)
+        AppUserTenantService userTenantService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -34,6 +38,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         _userRoleGroupService = userRoleGroupService;
         _tenantService = tenantService;
         _userTenantService = userTenantService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task SeedAsync()
@@ -43,20 +48,37 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         const string adminEmail = "admin@mail.com";
         const string adminPassword = "Admin123*";
 
-        var roles = new List<AppRole>();
+        await EnsureTenantAsync(tenantId);
 
-        var tenantExists = await _tenantService.Query().AnyAsync(x => x.Id == tenantId);
+        var roles = await EnsureRolesAsync();
+        var adminGroup = await _roleGroupService.EnsureAsync(adminGroupName, tenantId);
+        var adminUser = await EnsureAdminUserAsync(adminEmail, adminPassword, tenantId);
 
-        if (!tenantExists)
+        await RunWithSeederContextAsync(adminUser, tenantId, async () =>
         {
-            await _tenantService.Insert(new AppTenantADto
-            {
-                Id = tenantId,
-                Name = "Default",
-                Description = "Default Tenant",
-                IsActive = true
-            });
-        }
+            await EnsureGroupRolesAsync(adminGroup.Id, roles, tenantId);
+            await _userTenantService.AssignAsync(adminUser.Id, tenantId);
+            await EnsureUserGroupAsync(adminUser.Id, adminGroup.Id, tenantId);
+        });
+    }
+
+    private async Task EnsureTenantAsync(string tenantId)
+    {
+        if (await _tenantService.Query().AnyAsync(x => x.Id == tenantId))
+            return;
+
+        await _tenantService.Insert(new AppTenantADto
+        {
+            Id = tenantId,
+            Name = "Default",
+            Description = "Default Tenant",
+            IsActive = true
+        });
+    }
+
+    private async Task<List<AppRole>> EnsureRolesAsync()
+    {
+        var roles = new List<AppRole>();
 
         foreach (var definition in RoleProvider.GetRoles())
         {
@@ -68,58 +90,98 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
                 {
                     Id = Guid.NewGuid(),
                     Name = definition.Name,
-                    Description = definition.Description,
+                    Description = definition.Description
                 };
 
-                var roleResult = await _roleManager.CreateAsync(role);
+                var result = await _roleManager.CreateAsync(role);
 
-                if (!roleResult.Succeeded)
-                {
-                    var errors = string.Join(", ", roleResult.Errors.Select(x => x.Description));
-                    throw new Exception($"{definition.Name} rolü oluşturulamadı: {errors}");
-                }
+                if (!result.Succeeded)
+                    throw new Exception($"{definition.Name} rolü oluşturulamadı: {GetErrors(result)}");
             }
 
             roles.Add(role);
         }
 
-        var adminGroup = await _roleGroupService.EnsureAsync(adminGroupName, tenantId);
+        return roles;
+    }
 
+    private async Task<AppUser> EnsureAdminUserAsync(string email, string password, string tenantId)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user is not null)
+            return user;
+
+        user = new AppUser
+        {
+            UserName = email,
+            Email = email,
+            EmailConfirmed = true,
+            TenantId = tenantId,
+            IsSystemAdmin = false
+        };
+
+        var result = await _userManager.CreateAsync(user, password);
+
+        if (!result.Succeeded)
+            throw new Exception($"Admin kullanıcısı oluşturulamadı: {GetErrors(result)}");
+
+        return user;
+    }
+
+    private async Task EnsureGroupRolesAsync(Guid groupId, IEnumerable<AppRole> roles, string tenantId)
+    {
         foreach (var role in roles)
         {
-            var exists = await _roleGroupRoleService.ExistsAsync(adminGroup.Id, role.Id, tenantId);
+            if (await _roleGroupRoleService.ExistsAsync(groupId, role.Id, tenantId))
+                continue;
 
-            if (!exists)
-                await _roleGroupRoleService.AssignAsync(adminGroup.Id, role.Id, tenantId);
+            var result = await _roleGroupRoleService.AssignAsync(groupId, role.Id, tenantId);
+
+            if (!result.IsSuccess)
+                throw new Exception($"{role.Name} rolü gruba atanamadı.");
         }
+    }
 
-        var adminUser = await _userManager.FindByEmailAsync(adminEmail);
+    private async Task EnsureUserGroupAsync(Guid userId, Guid groupId, string tenantId)
+    {
+        if (await _userRoleGroupService.ExistsAsync(userId, groupId, tenantId))
+            return;
 
-        if (adminUser is null)
+        var result = await _userRoleGroupService.AssignAsync(userId, groupId, tenantId);
+
+        if (!result.IsSuccess)
+            throw new Exception("Admin kullanıcısı gruba atanamadı.");
+    }
+
+    private async Task RunWithSeederContextAsync(AppUser user, string tenantId, Func<Task> action)
+    {
+        var previousContext = _httpContextAccessor.HttpContext;
+
+        try
         {
-            adminUser = new AppUser
+            _httpContextAccessor.HttpContext = new DefaultHttpContext
             {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true,
-                TenantId = tenantId,
-                IsSystemAdmin = false
+                User = new ClaimsPrincipal(
+                    new ClaimsIdentity(
+                        new[]
+                        {
+                            new Claim("UserId", user.Id.ToString()),
+                            new Claim("TenantId", tenantId)
+                        },
+                        "Seeder"))
             };
 
-            var userResult = await _userManager.CreateAsync(adminUser, adminPassword);
-
-            if (!userResult.Succeeded)
-            {
-                var errors = string.Join(", ", userResult.Errors.Select(x => x.Description));
-                throw new Exception($"Admin kullanıcısı oluşturulamadı: {errors}");
-            }
+            await action();
         }
+        finally
+        {
+            _httpContextAccessor.HttpContext = previousContext;
+        }
+    }
 
-        await _userTenantService.AssignAsync(adminUser.Id, tenantId);
-
-        var userGroupExists = await _userRoleGroupService.ExistsAsync(adminUser.Id, adminGroup.Id, tenantId);
-
-        if (!userGroupExists)
-            await _userRoleGroupService.AssignAsync(adminUser.Id, adminGroup.Id, tenantId);
+    private static string GetErrors(IdentityResult result)
+    {
+        return string.Join(", ", result.Errors.Select(x => x.Description));
     }
 }
