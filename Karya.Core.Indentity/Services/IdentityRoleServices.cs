@@ -4,7 +4,6 @@ using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Infrastructure;
 using Karya.Core.Interfaces.Identities;
-using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
 using Karya.Core.Services;
 using Microsoft.EntityFrameworkCore;
@@ -68,8 +67,6 @@ public class AppUserClaimService : BaseService<AppUserClaimRepository, AppUserCl
 /// <summary>Rol claim yönetimi servisi.</summary>
 public class AppRoleClaimService : BaseService<AppRoleClaimRepository, AppRoleClaim, int>
 {
-    public AppRoleClaimService(IUnitOfWork uow) : base(uow) { }
-
     public AppRoleClaimService(DbContext context, ICurrentUser currentUser)
         : base(new IdentityUnitOfWork(context, currentUser)) { }
 }
