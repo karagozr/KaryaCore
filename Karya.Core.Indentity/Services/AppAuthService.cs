@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Karya.Core.Indentity.Services;
 
-public class AppAuthService
+public class AppAuthService : IAppAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
@@ -33,6 +33,11 @@ public class AppAuthService
 
         if (!hasTenant) return null;
 
+        return CreatePrincipal(user, tenantId);
+    }
+
+    private static ClaimsPrincipal CreatePrincipal(AppUser user, string tenantId)
+    {
         var identity = new ClaimsIdentity(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
         identity.AddClaim(OpenIddictConstants.Claims.Subject, user.Id.ToString());

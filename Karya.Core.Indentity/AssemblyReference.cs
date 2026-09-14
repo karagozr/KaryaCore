@@ -28,6 +28,9 @@ public static class AssemblyReference
         // Repository/UnitOfWork'ün kullandığı soyut DbContext, Identity context'ine yönlendirilir.
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<TIdentityContext>());
 
+        // Kullanıcı doğrulama ve yetkilendirme servisleri
+        services.AddScoped<IAppAuthService, AppAuthService>();
+
         services.AddScoped<AppUserTenantService>();
         services.AddScoped<AppRoleService>();
         services.AddScoped<AppRoleGroupService>();

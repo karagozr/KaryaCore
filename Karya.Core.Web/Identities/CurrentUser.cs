@@ -26,6 +26,11 @@ public class CurrentUser : ICurrentUser
         _accessor.HttpContext?.User.FindFirst("TenantId")?.Value
         ?? string.Empty;
 
+    public string UserName =>
+        _accessor.HttpContext?.User.FindFirst("name")?.Value
+        ?? _accessor.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value
+        ?? string.Empty;
+
     // Language is a non-sensitive UI preference, so it is read per-request:
     // 1) "LanguageId" header  -> allows instant runtime switching (no new token)
     // 2) "lang" token claim   -> user's persisted default preference

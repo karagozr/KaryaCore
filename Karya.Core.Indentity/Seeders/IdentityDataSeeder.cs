@@ -45,6 +45,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
     {
         const string tenantId = "DEFAULT";
         const string adminGroupName = "Admin";
+        const string adminUserName = "admin";
         const string adminEmail = "admin@mail.com";
         const string adminPassword = "Admin123*";
 
@@ -52,7 +53,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
 
         var roles = await EnsureRolesAsync();
         var adminGroup = await _roleGroupService.EnsureAsync(adminGroupName, tenantId);
-        var adminUser = await EnsureAdminUserAsync(adminEmail, adminPassword, tenantId);
+        var adminUser = await EnsureAdminUserAsync(adminUserName, adminEmail, adminPassword, tenantId);
 
         await RunWithSeederContextAsync(adminUser, tenantId, async () =>
         {
@@ -105,7 +106,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         return roles;
     }
 
-    private async Task<AppUser> EnsureAdminUserAsync(string email, string password, string tenantId)
+    private async Task<AppUser> EnsureAdminUserAsync(string userName, string email, string password, string tenantId)
     {
         var user = await _userManager.FindByEmailAsync(email);
 
@@ -114,7 +115,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
 
         user = new AppUser
         {
-            UserName = email,
+            UserName = userName,
             Email = email,
             EmailConfirmed = true,
             TenantId = tenantId,
