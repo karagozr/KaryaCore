@@ -7,7 +7,7 @@ public static class RoleProvider
 {
     private static readonly string[] Actions = ["Read", "Create", "Update", "Delete"];
 
-    public static List<RoleDefinition> GetRoles()
+    public static List<RoleDefinition> GetRoles(IEnumerable<RoleDefinition>? customRoles = null)
     {
         var roles = AppDomain.CurrentDomain.GetAssemblies()
             .Where(x => !x.IsDynamic)
@@ -20,12 +20,16 @@ public static class RoleProvider
                 $"{entityType!.Name}.{action}",
                 $"{entityType.Name} {action}"
             )))
+            .ToList();
+
+        if (customRoles is not null)
+            roles.AddRange(customRoles);
+
+        return roles
             .GroupBy(x => x.Name, StringComparer.OrdinalIgnoreCase)
             .Select(x => x.First())
             .OrderBy(x => x.Name)
             .ToList();
-
-        return roles;
     }
 
     private static Type? GetEntityType(Type type)
