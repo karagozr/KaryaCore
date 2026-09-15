@@ -29,7 +29,9 @@ public static class AssemblyReference
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<TIdentityContext>());
 
         // Kullanıcı doğrulama ve yetkilendirme servisleri
-        //services.AddScoped<IAppAuthService, AppAuthService>();
+        services.AddScoped<IAppAuthService, AppAuthService>();
+        services.AddScoped<IAppUserService, AppUserService>();
+
 
         services.AddScoped<AppUserTenantService>();
         services.AddScoped<AppRoleService>();
@@ -47,7 +49,6 @@ public static class AssemblyReference
         services.AddScoped<Karya.Core.App.Interfaces.Services.IPermissionService, Services.IdentityPermissionService>();
 
         services.AddHttpContextAccessor();
-        //services.AddScoped<AppAuthService>();
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IDatabaseSeeder, IdentityDataSeeder>();
 

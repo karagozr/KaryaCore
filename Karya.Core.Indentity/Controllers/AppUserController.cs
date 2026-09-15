@@ -9,11 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Karya.Core.Indentity.Controllers;
 
-/// <summary>
-/// Kullanıcı yönetimi (CRUD). Yetki kontrolü MediatR AuthorizationBehavior
-/// pipeline'ı üzerinden (AppUser.Read/Create/Update/Delete) yapılır; tenant
-/// kapsamı repository katmanında row-level uygulanır.
-/// </summary>
+
 [Authorize]
 public abstract class AppUserController : BaseCrudController<AppUser, Guid, AppUserSDto, AppUserLDto, AppUserADto, AppUserUDto>
 {
@@ -25,7 +21,6 @@ public abstract class AppUserController : BaseCrudController<AppUser, Guid, AppU
         _appUserService = appUserService;
     }
 
-    //[AllowAnonymous]
     [HttpPost("reset-password")]
     public Task<BaseResult<bool>> ResetPassword(string email, string token, string newPassword)
     {

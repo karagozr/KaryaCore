@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Karya.Core.Indentity.Services;
 
-public abstract class AppAuthService : IAppAuthService
+public class AppAuthService : IAppAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
@@ -21,7 +21,7 @@ public abstract class AppAuthService : IAppAuthService
         _dbContext = dbContext;
     }
 
-    public async Task<ClaimsPrincipal?> LoginAsync(string userName, string password, string tenantId)
+    public virtual async Task<ClaimsPrincipal?> LoginAsync(string userName, string password, string tenantId)
     {
         var user = await _userManager.FindByNameAsync(userName);
         if (user is null) return null;
@@ -51,5 +51,15 @@ public abstract class AppAuthService : IAppAuthService
         return new ClaimsPrincipal(identity);
     }
 
-    public abstract Task<BaseResult<bool>> ForgotPasswordAsync(string email);
+    public virtual async Task<BaseResult<bool>> ForgotPasswordAsync(string email)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Dispose()
+    {
+        _userManager?.Dispose();
+        _dbContext?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

@@ -9,11 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Indentity.Services;
 
-/// <summary>
-/// AppUser CRUD servisi. Standart pipeline'ı kullanır; ekleme/güncellemede
-/// ASP.NET Identity UserManager ile parola hash'leme ve tenant üyeliği yönetir.
-/// </summary>
-public abstract class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAppUserService
+public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAppUserService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly ICurrentUser _currentUser;
@@ -54,7 +50,7 @@ public abstract class AppUserService : BaseService<AppUserRepository, AppUser, G
         return BaseResult.SuccessCoded("201", MessageCodes.Created);
     }
 
-    public async Task<BaseResult<bool>> ResetPasswordAsync(string email, string token, string newPassword)
+    public virtual async Task<BaseResult<bool>> ResetPasswordAsync(string email, string token, string newPassword)
     {
         var user = await _userManager.FindByEmailAsync(email);
 
