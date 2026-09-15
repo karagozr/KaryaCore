@@ -1,7 +1,6 @@
-using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Infrastructure;
-using Karya.Core.Interfaces.DTOs;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Results;
 using Karya.Core.Services;
@@ -14,7 +13,7 @@ namespace Karya.Core.Indentity.Services;
 /// AppUser CRUD servisi. Standart pipeline'ı kullanır; ekleme/güncellemede
 /// ASP.NET Identity UserManager ile parola hash'leme ve tenant üyeliği yönetir.
 /// </summary>
-public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>
+public abstract class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAppUserService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly ICurrentUser _currentUser;
@@ -53,6 +52,20 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>
         }
 
         return BaseResult.SuccessCoded("201", MessageCodes.Created);
+    }
+
+    public async Task<BaseResult<bool>> ResetPasswordAsync(string email, string token, string newPassword)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user is null)
+            return BaseResult<bool>.ErrorCoded("404", MessageCodes.NotFound, false, "AppUser", "Email", email);
+
+        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+        return result.Succeeded
+            ? BaseResult<bool>.SuccessCoded("200", MessageCodes.Success, true)
+            : BaseResult<bool>.Error("400", "Şifre sıfırlanamadı.", false, result.Errors.ToDictionary(e => e.Code, e => e.Description));
     }
 
     public override async Task<BaseResult> Update<TDto>(Guid key, Dictionary<string, object> updateData)

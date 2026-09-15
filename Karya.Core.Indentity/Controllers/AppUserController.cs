@@ -1,12 +1,11 @@
 using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Services;
-using Karya.Core.Interfaces.Identities;
+using Karya.Core.Results;
 using Karya.Core.Web.Abstracts.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Karya.Core.Indentity.Controllers;
 
@@ -18,8 +17,18 @@ namespace Karya.Core.Indentity.Controllers;
 [Authorize]
 public abstract class AppUserController : BaseCrudController<AppUser, Guid, AppUserSDto, AppUserLDto, AppUserADto, AppUserUDto>
 {
-    public AppUserController(IMediator mediator, DbContext context, ICurrentUser currentUser, UserManager<AppUser> userManager)
-        : base(mediator, new AppUserService(context, currentUser, userManager))
+    private readonly IAppUserService _appUserService;
+
+    public AppUserController(IMediator mediator, IAppUserService appUserService)
+        : base(mediator, appUserService)
     {
+        _appUserService = appUserService;
+    }
+
+    //[AllowAnonymous]
+    [HttpPost("reset-password")]
+    public Task<BaseResult<bool>> ResetPassword(string email, string token, string newPassword)
+    {
+        return _appUserService.ResetPasswordAsync(email, token, newPassword);
     }
 }

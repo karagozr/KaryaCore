@@ -1,4 +1,5 @@
 ﻿using Karya.Core.Indentity.Domains.Entities;
+using Karya.Core.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
@@ -7,7 +8,7 @@ using System.Security.Claims;
 
 namespace Karya.Core.Indentity.Services;
 
-public class AppAuthService : IAppAuthService
+public abstract class AppAuthService : IAppAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
@@ -50,13 +51,5 @@ public class AppAuthService : IAppAuthService
         return new ClaimsPrincipal(identity);
     }
 
-    public Task<bool> ForgotPasswordAsync(string email)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
-    {
-        throw new NotImplementedException();
-    }
+    public abstract Task<BaseResult<bool>> ForgotPasswordAsync(string email);
 }

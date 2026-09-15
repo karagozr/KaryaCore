@@ -10,9 +10,9 @@ namespace Karya.Core.Indentity.Controllers;
 [ApiController]
 public class AppAuthController : ControllerBase
 {
-    private readonly AppAuthService _authService;
+    private readonly IAppAuthService _authService;
 
-    public AppAuthController(AppAuthService authService)
+    public AppAuthController(IAppAuthService authService)
     {
         _authService = authService;
     }
@@ -45,18 +45,11 @@ public class AppAuthController : ControllerBase
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    [HttpPost("forgot-password")]
+    [HttpPost("api/auth/forgot-password")]
     public async Task<IActionResult> ForgotPassword(string email)
     {
         await _authService.ForgotPasswordAsync(email);
         return Ok();
-    }
-
-    [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword(string email, string token, string newPassword)
-    {
-        var result = await _authService.ResetPasswordAsync(email, token, newPassword);
-        return result ? Ok() : BadRequest();
     }
 
     private static AuthenticationProperties BuildError(string error, string description) =>
