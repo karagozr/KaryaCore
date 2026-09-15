@@ -20,6 +20,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
     private readonly AppTenantService _tenantService;
     private readonly AppUserTenantService _userTenantService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IEnumerable<ICustomRoleProvider> _customRoleProviders;
 
     public IdentityDataSeeder(
         UserManager<AppUser> userManager,
@@ -29,7 +30,8 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         AppUserRoleGroupService userRoleGroupService,
         AppTenantService tenantService,
         AppUserTenantService userTenantService,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IEnumerable<ICustomRoleProvider> customRoleProviders)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -39,6 +41,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         _tenantService = tenantService;
         _userTenantService = userTenantService;
         _httpContextAccessor = httpContextAccessor;
+        _customRoleProviders = customRoleProviders;
     }
 
     public async Task SeedAsync()
@@ -81,7 +84,11 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
     {
         var roles = new List<AppRole>();
 
-        foreach (var definition in RoleProvider.GetRoles())
+        var customRoles = _customRoleProviders.SelectMany(x => x.GetRoles());
+
+        var definitions = RoleProvider.GetRoles(customRoles);
+
+        foreach (var definition in definitions)
         {
             var role = await _roleManager.FindByNameAsync(definition.Name);
 
@@ -108,7 +115,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
 
     private async Task<AppUser> EnsureAdminUserAsync(string userName, string email, string password, string tenantId)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByNameAsync(userName);
 
         if (user is not null)
             return user;
@@ -119,7 +126,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
             Email = email,
             EmailConfirmed = true,
             TenantId = tenantId,
-            IsSystemAdmin = false
+            IsSystemAdmin = true
         };
 
         var result = await _userManager.CreateAsync(user, password);
