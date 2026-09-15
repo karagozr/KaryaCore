@@ -20,9 +20,8 @@ public abstract class BaseController: ControllerBase
         _mediator = mediator;
     }
 
-    protected BaseController(IMediator mediator, IBaseService service)
+    protected BaseController(IMediator mediator, IBaseService service):this(mediator)
     {
-        _mediator = mediator;
         _service = service;
     }
 
