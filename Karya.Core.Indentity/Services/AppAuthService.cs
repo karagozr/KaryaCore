@@ -49,4 +49,14 @@ public class AppAuthService : IAppAuthService
 
         return new ClaimsPrincipal(identity);
     }
+
+    public Task<bool> ForgotPasswordAsync(string email)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+    {
+        throw new NotImplementedException();
+    }
 }

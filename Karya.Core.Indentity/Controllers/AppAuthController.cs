@@ -45,6 +45,20 @@ public class AppAuthController : ControllerBase
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(string email)
+    {
+        await _authService.ForgotPasswordAsync(email);
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(string email, string token, string newPassword)
+    {
+        var result = await _authService.ResetPasswordAsync(email, token, newPassword);
+        return result ? Ok() : BadRequest();
+    }
+
     private static AuthenticationProperties BuildError(string error, string description) =>
         new(new Dictionary<string, string?>
         {
