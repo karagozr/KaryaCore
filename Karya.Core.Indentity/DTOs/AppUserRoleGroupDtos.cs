@@ -5,4 +5,5 @@ public class AppUserRoleGroupAssignDto
 {
     public Guid UserId { get; set; }
     public Guid RoleGroupId { get; set; }
+    public string TenantId { get; set; } = null!;
 }
