@@ -27,6 +27,17 @@ public class AppUserRoleGroupController : ControllerBase
 
     private DbSet<AppUserRoleGroup> Set => _context.Set<AppUserRoleGroup>();
 
+    /// <summary>Bütün kullanıcıların yetkilerini listeler.</summary>
+    [HttpGet("all")]
+    public async Task<ActionResult> All()
+    {
+        var items = await Set.AsNoTracking()
+            .Select(x => new AppUserRoleGroupAssignDto { UserId = x.UserId, RoleGroupId = x.RoleGroupId, TenantId = x.TenantId })
+            .ToListAsync();
+        return Ok(items);
+    }
+
+
     /// <summary>Bir kullanıcının rol grubu üyeliklerini listeler.</summary>
     [HttpGet("by-user/{userId}")]
     public async Task<ActionResult> ByUser(Guid userId)
