@@ -15,6 +15,12 @@ public class AppUser : IdentityUser<Guid>, IBaseEntity<Guid>
 
     public string? ErpPersonId { get; set; }
 
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
+
+    public string? Site { get; set; }
+
     /// <summary>Kullanıcının erişebildiği tenant üyelikleri (admin için birden çok olabilir).</summary>
     public ICollection<AppUserTenant> TenantMemberships { get; set; } = new List<AppUserTenant>();
 
