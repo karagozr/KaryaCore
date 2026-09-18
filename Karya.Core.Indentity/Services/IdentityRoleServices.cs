@@ -100,31 +100,9 @@ public class AppUserRoleService : BaseService<AppUserRoleRepository, AppUserRole
 /// <summary>Kullanıcıyı rol grubuna atama servisi.</summary>
 public class AppUserRoleGroupService : BaseService<AppUserRoleGroupRepository, AppUserRoleGroup, Guid>
 {
-    public AppUserRoleGroupService(DbContext context, ICurrentUser currentUser)
-        : base(new IdentityUnitOfWork(context, currentUser)) { }
-
-    public Task<bool> ExistsAsync(Guid userId, Guid roleGroupId, string tenantId)
-        => _uow.Repo<AppUserRoleGroupRepository>().ExistsAsync(userId, roleGroupId, tenantId);
-
-    public async Task<BaseResult> AssignAsync(Guid userId, Guid roleGroupId, string tenantId)
-    {
-        if (await ExistsAsync(userId, roleGroupId, tenantId))
-            return BaseResult.Success();
-
-        await _uow.Repo<AppUserRoleGroupRepository>().AddAsync(new AppUserRoleGroup
-        {
-            Id = Guid.NewGuid(),
-            TenantId = tenantId,
-            UserId = userId,
-            RoleGroupId = roleGroupId
-        });
-
-        return await _uow.CompleteAsync();
-    }
+    public AppUserRoleGroupService(DbContext context, ICurrentUser currentUser) : base(new IdentityUnitOfWork(context, currentUser)) { }
 }
 
-/// <summary>Rol grubuna rol/yetki atama servisi.</summary>
-/// <summary>Rol grubu rol yönetimi servisi.</summary>
 public class AppRoleGroupRoleService
     : BaseDetailService<AppRoleGroupRoleRepository, AppRoleGroupRole, Guid, AppRoleGroupRoleParentFilter>
 {
