@@ -33,11 +33,16 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
             PhoneNumber = add.PhoneNumber,
             EmailConfirmed = true,
             IsSystemAdmin = add.IsSystemAdmin,
-            TenantId = _currentUser.TenantId
+            TenantId = add.TenantId,
+            ErpPersonId = add.ErpPersonId,
+            ErpUsername = add.ErpUsername,
+            FirstName = add.FirstName,
+            LastName = add.LastName,
+            Site = add.Site,
         };
 
         // Kullanıcı, oluşturulduğu (aktif) tenant'a üye yapılır.
-        user.TenantMemberships.Add(new AppUserTenant { TenantId = _currentUser.TenantId });
+        user.TenantMemberships.Add(new AppUserTenant { TenantId = add.TenantId });
 
         var result = await _userManager.CreateAsync(user, add.Password);
 
@@ -82,6 +87,21 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
 
         if (updateData.TryGetValue(nameof(AppUserUDto.IsSystemAdmin), out var isAdmin) && isAdmin is not null)
             user.IsSystemAdmin = Convert.ToBoolean(isAdmin);
+
+        if (updateData.TryGetValue(nameof(AppUserUDto.ErpPersonId), out var erpPersonId))
+            user.ErpPersonId = erpPersonId?.ToString();
+
+        if (updateData.TryGetValue(nameof(AppUserUDto.ErpUsername), out var erpUsername))
+            user.ErpUsername = erpUsername?.ToString();
+
+        if (updateData.TryGetValue(nameof(AppUserUDto.FirstName), out var firstName))
+            user.FirstName = firstName?.ToString();
+
+        if (updateData.TryGetValue(nameof(AppUserUDto.LastName), out var lastName))
+            user.LastName = lastName?.ToString();
+
+        if (updateData.TryGetValue(nameof(AppUserUDto.Site), out var site))
+            user.Site = site?.ToString();
 
         var result = await _userManager.UpdateAsync(user);
 

@@ -11,6 +11,11 @@ public class AppUserSDto : IByKeyDto
     public string? PhoneNumber { get; set; }
     public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string? Site { get; set; }
 }
 
 /// <summary>Liste görünümü.</summary>
@@ -21,6 +26,11 @@ public class AppUserLDto : ISelectDto
     public string? Email { get; set; }
     public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string? Site { get; set; }
 }
 
 /// <summary>Kullanıcı ekleme.</summary>
@@ -31,6 +41,12 @@ public class AppUserADto : IInsertDto
     public string? PhoneNumber { get; set; }
     public string Password { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
+    public string TenantId { get; set; } = null!;
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string? Site { get; set; }
 }
 
 /// <summary>Kullanıcı güncelleme.</summary>
@@ -39,4 +55,9 @@ public class AppUserUDto : IUpdateDto
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     public bool IsSystemAdmin { get; set; }
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string? Site { get; set; }
 }

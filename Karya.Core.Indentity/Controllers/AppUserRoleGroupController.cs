@@ -27,13 +27,24 @@ public class AppUserRoleGroupController : ControllerBase
 
     private DbSet<AppUserRoleGroup> Set => _context.Set<AppUserRoleGroup>();
 
+    /// <summary>Bütün kullanıcıların yetkilerini listeler.</summary>
+    [HttpGet("all")]
+    public async Task<ActionResult> All()
+    {
+        var items = await Set.AsNoTracking()
+            .Select(x => new AppUserRoleGroupAssignDto { UserId = x.UserId, RoleGroupId = x.RoleGroupId, TenantId = x.TenantId })
+            .ToListAsync();
+        return Ok(items);
+    }
+
+
     /// <summary>Bir kullanıcının rol grubu üyeliklerini listeler.</summary>
     [HttpGet("by-user/{userId}")]
     public async Task<ActionResult> ByUser(Guid userId)
     {
         var items = await Set.AsNoTracking()
             .Where(x => x.UserId == userId)
-            .Select(x => new AppUserRoleGroupAssignDto { UserId = x.UserId, RoleGroupId = x.RoleGroupId })
+            .Select(x => new AppUserRoleGroupAssignDto { UserId = x.UserId, RoleGroupId = x.RoleGroupId, TenantId = x.TenantId })
             .ToListAsync();
         return Ok(items);
     }
@@ -42,10 +53,10 @@ public class AppUserRoleGroupController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Assign([FromBody] AppUserRoleGroupAssignDto dto)
     {
-        var exists = await Set.AnyAsync(x => x.UserId == dto.UserId && x.RoleGroupId == dto.RoleGroupId);
+        var exists = await Set.AnyAsync(x => x.UserId == dto.UserId && x.RoleGroupId == dto.RoleGroupId && x.TenantId == dto.TenantId);
         if (!exists)
         {
-            Set.Add(new AppUserRoleGroup { UserId = dto.UserId, RoleGroupId = dto.RoleGroupId });
+            Set.Add(new AppUserRoleGroup { UserId = dto.UserId, RoleGroupId = dto.RoleGroupId, TenantId = dto.TenantId });
             await _context.SaveChangesAsync();
         }
         return Ok();
@@ -55,7 +66,7 @@ public class AppUserRoleGroupController : ControllerBase
     [HttpDelete]
     public async Task<ActionResult> Unassign([FromBody] AppUserRoleGroupAssignDto dto)
     {
-        var entity = await Set.FirstOrDefaultAsync(x => x.UserId == dto.UserId && x.RoleGroupId == dto.RoleGroupId);
+        var entity = await Set.FirstOrDefaultAsync(x => x.UserId == dto.UserId && x.RoleGroupId == dto.RoleGroupId && x.TenantId == dto.TenantId);
         if (entity is null)
             return NotFound();
 
