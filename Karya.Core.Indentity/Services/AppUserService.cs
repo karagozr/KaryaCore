@@ -71,37 +71,22 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
 
     public override async Task<BaseResult> Update<TDto>(Guid key, Dictionary<string, object> updateData)
     {
-        if (typeof(TDto) != typeof(AppUserUDto))
-            return await base.Update<TDto>(key, updateData);
+        if (typeof(TDto) != typeof(AppUserUDto)) return await base.Update<TDto>(key, updateData);
 
-        // Tenant scoping repository Query üzerinden uygulanır.
+        var data = new Dictionary<string, object>(updateData, StringComparer.OrdinalIgnoreCase);
+
         var user = await _uow.Repo<AppUserRepository>().GetByIdAsync(key);
-        if (user is null)
-            return BaseResult.ErrorCoded("404", MessageCodes.NotFound, "AppUser", "Id", key.ToString());
+        if (user is null) return BaseResult.ErrorCoded("404", MessageCodes.NotFound, "AppUser", "Id", key.ToString());
 
-        if (updateData.TryGetValue(nameof(AppUserUDto.Email), out var email) && email is not null)
-            user.Email = email.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.Email), out var email) && email is not null) user.Email = email.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.PhoneNumber), out var phone)) user.PhoneNumber = phone?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.IsSystemAdmin), out var isAdmin) && isAdmin is not null) user.IsSystemAdmin = Convert.ToBoolean(isAdmin);
 
-        if (updateData.TryGetValue(nameof(AppUserUDto.PhoneNumber), out var phone))
-            user.PhoneNumber = phone?.ToString();
-
-        if (updateData.TryGetValue(nameof(AppUserUDto.IsSystemAdmin), out var isAdmin) && isAdmin is not null)
-            user.IsSystemAdmin = Convert.ToBoolean(isAdmin);
-
-        if (updateData.TryGetValue(nameof(AppUserUDto.ErpPersonId), out var erpPersonId))
-            user.ErpPersonId = erpPersonId?.ToString();
-
-        if (updateData.TryGetValue(nameof(AppUserUDto.ErpUsername), out var erpUsername))
-            user.ErpUsername = erpUsername?.ToString();
-
-        if (updateData.TryGetValue(nameof(AppUserUDto.FirstName), out var firstName))
-            user.FirstName = firstName?.ToString();
-
-        if (updateData.TryGetValue(nameof(AppUserUDto.LastName), out var lastName))
-            user.LastName = lastName?.ToString();
-
-        if (updateData.TryGetValue(nameof(AppUserUDto.Site), out var site))
-            user.Site = site?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.ErpPersonId), out var erpPersonId)) user.ErpPersonId = erpPersonId?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.ErpUsername), out var erpUsername)) user.ErpUsername = erpUsername?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.FirstName), out var firstName)) user.FirstName = firstName?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.LastName), out var lastName)) user.LastName = lastName?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.Site), out var site)) user.Site = site?.ToString();
 
         var result = await _userManager.UpdateAsync(user);
 
