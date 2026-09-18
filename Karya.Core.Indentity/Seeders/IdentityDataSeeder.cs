@@ -14,9 +14,6 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
-    private readonly AppRoleGroupService _roleGroupService;
-    private readonly AppRoleGroupRoleService _roleGroupRoleService;
-    private readonly AppUserRoleGroupService _userRoleGroupService;
     private readonly AppTenantService _tenantService;
     private readonly AppUserTenantService _userTenantService;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,9 +22,6 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
     public IdentityDataSeeder(
         UserManager<AppUser> userManager,
         RoleManager<AppRole> roleManager,
-        AppRoleGroupService roleGroupService,
-        AppRoleGroupRoleService roleGroupRoleService,
-        AppUserRoleGroupService userRoleGroupService,
         AppTenantService tenantService,
         AppUserTenantService userTenantService,
         IHttpContextAccessor httpContextAccessor,
@@ -35,9 +29,6 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _roleGroupService = roleGroupService;
-        _roleGroupRoleService = roleGroupRoleService;
-        _userRoleGroupService = userRoleGroupService;
         _tenantService = tenantService;
         _userTenantService = userTenantService;
         _httpContextAccessor = httpContextAccessor;
@@ -46,8 +37,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
 
     public async Task SeedAsync()
     {
-        const string tenantId = "DEFAULT";
-        const string adminGroupName = "Admin";
+        const string tenantId = "BASE_TENANT";
         const string adminUserName = "admin";
         const string adminEmail = "admin@mail.com";
         const string adminPassword = "Admin123*";
@@ -55,14 +45,11 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
         await EnsureTenantAsync(tenantId);
 
         var roles = await EnsureRolesAsync();
-        var adminGroup = await _roleGroupService.EnsureAsync(adminGroupName, tenantId);
         var adminUser = await EnsureAdminUserAsync(adminUserName, adminEmail, adminPassword, tenantId);
 
         await RunWithSeederContextAsync(adminUser, tenantId, async () =>
         {
-            await EnsureGroupRolesAsync(adminGroup.Id, roles, tenantId);
             await _userTenantService.AssignAsync(adminUser.Id, tenantId);
-            await EnsureUserGroupAsync(adminUser.Id, adminGroup.Id, tenantId);
         });
     }
 
@@ -106,10 +93,8 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
                 if (!result.Succeeded)
                     throw new Exception($"{definition.Name} rolü oluşturulamadı: {GetErrors(result)}");
             }
-
             roles.Add(role);
         }
-
         return roles;
     }
 
@@ -135,31 +120,6 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
             throw new Exception($"Admin kullanıcısı oluşturulamadı: {GetErrors(result)}");
 
         return user;
-    }
-
-    private async Task EnsureGroupRolesAsync(Guid groupId, IEnumerable<AppRole> roles, string tenantId)
-    {
-        foreach (var role in roles)
-        {
-            if (await _roleGroupRoleService.ExistsAsync(groupId, role.Id, tenantId))
-                continue;
-
-            var result = await _roleGroupRoleService.AssignAsync(groupId, role.Id, tenantId);
-
-            if (!result.IsSuccess)
-                throw new Exception($"{role.Name} rolü gruba atanamadı.");
-        }
-    }
-
-    private async Task EnsureUserGroupAsync(Guid userId, Guid groupId, string tenantId)
-    {
-        if (await _userRoleGroupService.ExistsAsync(userId, groupId, tenantId))
-            return;
-
-        var result = await _userRoleGroupService.AssignAsync(userId, groupId, tenantId);
-
-        if (!result.IsSuccess)
-            throw new Exception("Admin kullanıcısı gruba atanamadı.");
     }
 
     private async Task RunWithSeederContextAsync(AppUser user, string tenantId, Func<Task> action)

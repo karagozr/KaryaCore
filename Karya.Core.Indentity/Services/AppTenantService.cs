@@ -12,8 +12,5 @@ namespace Karya.Core.Indentity.Services;
 /// </summary>
 public class AppTenantService : BaseService<AppTenantRepository, AppTenant, string>
 {
-    public AppTenantService(DbContext context, ICurrentUser currentUser)
-        : base(new IdentityUnitOfWork(context, currentUser))
-    {
-    }
+    public AppTenantService(DbContext context, ICurrentUser currentUser) : base(new IdentityUnitOfWork(context, currentUser)) { }
 }
