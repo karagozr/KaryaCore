@@ -26,8 +26,8 @@ builder.Services.AddCoreAppRegistiration();
 builder.Services.AddCoreIdentityRegistiration<TestDbContext>(builder.Configuration, "AppConnection");
 builder.Services.AddCoreSeeder<LocalizationSeeder>();
 
-builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
-builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
+//builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
+//builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 
 // OpenAPI - İki ayrı dokuman: v1 (ERP) ve identity
@@ -92,7 +92,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-await app.Services.MigrateCoreDatabaseAsync<TestDbContext>();
+//await app.Services.MigrateCoreDatabaseAsync<TestDbContext>();
 
 if (app.Environment.IsDevelopment())
 {

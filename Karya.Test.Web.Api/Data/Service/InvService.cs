@@ -16,6 +16,7 @@ public class InvService : BaseService<InventoryRepository, Inventory, string>
     {
     }
 
+
     public override async Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions)
     {
         var query = _uow.Repo<InventoryRepository>().Query(x=>x.Include(i=>i.Category)).Select(x => new InvLDto
@@ -59,5 +60,6 @@ public class InvDetailService(ICurrentUser currentUser) : BaseDetailService<Inve
         return BaseResult<LoadResult>.Success("200", null, res);
     }
 }
+
 
 

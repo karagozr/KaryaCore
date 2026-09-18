@@ -47,7 +47,7 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
         return BaseResult<LoadResult>.Success("200", null, res);
     }
 
-    public async Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, IByKeyDto, new()
+    public async virtual Task<BaseResult<TDto>> ByKey<TDto>(TParentFilter parentFilter, TId key) where TDto : class, IByKeyDto, new()
     {
         if (key == null)
             return BaseResult<TDto>.ErrorCoded("400", MessageCodes.Required, null, "Id");
@@ -74,7 +74,7 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
 
     }
 
-    public async Task<BaseResult> Update<TDto>(TParentFilter parentFilter, TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new()
+    public async virtual Task<BaseResult> Update<TDto>(TParentFilter parentFilter, TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new()
     {
         var dto = updateData.ToObject<TDto>();
         var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
@@ -86,7 +86,7 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
         return new BaseResult<TDto>(result, data: dto);
     }
 
-    public async Task<BaseResult> Delete(TParentFilter parentFilter, TId key)
+    public async virtual Task<BaseResult> Delete(TParentFilter parentFilter, TId key)
     {
         await _uow.Repo<TRepo>(parentFilter).DeleteAsync(key);
         var result = await _uow.CompleteAsync();
