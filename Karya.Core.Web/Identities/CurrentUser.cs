@@ -31,6 +31,10 @@ public class CurrentUser : ICurrentUser
         ?? _accessor.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value
         ?? string.Empty;
 
+    public string Site =>
+        _accessor.HttpContext?.User.FindFirst("Site")?.Value
+        ?? string.Empty;
+
     // Language is a non-sensitive UI preference, so it is read per-request:
     // 1) "LanguageId" header  -> allows instant runtime switching (no new token)
     // 2) "lang" token claim   -> user's persisted default preference
