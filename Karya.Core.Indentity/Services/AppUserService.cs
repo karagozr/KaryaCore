@@ -38,6 +38,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
             ErpUsername = add.ErpUsername,
             FirstName = add.FirstName,
             LastName = add.LastName,
+            IsActive = add.IsActive
         };
 
         // Kullanıcı, oluşturulduğu (aktif) tenant'a üye yapılır.
@@ -85,6 +86,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         if (data.TryGetValue(nameof(AppUserUDto.ErpUsername), out var erpUsername)) user.ErpUsername = erpUsername?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.FirstName), out var firstName)) user.FirstName = firstName?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.LastName), out var lastName)) user.LastName = lastName?.ToString();
+        if (data.TryGetValue(nameof(AppUserUDto.IsActive), out var isActive)) user.IsActive = Convert.ToBoolean(isActive);
 
         var result = await _userManager.UpdateAsync(user);
 

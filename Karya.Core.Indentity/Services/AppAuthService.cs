@@ -26,6 +26,8 @@ public class AppAuthService : IAppAuthService
         var user = await _userManager.FindByNameAsync(userName);
         if (user is null) return null;
 
+        if (!user.IsActive) throw new Exception("User is not active");
+
         var passwordResult = await _signInManager.CheckPasswordSignInAsync(user, password, false);
         if (!passwordResult.Succeeded) return null;
 

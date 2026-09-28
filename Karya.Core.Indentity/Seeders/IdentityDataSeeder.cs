@@ -111,7 +111,8 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
             Email = email,
             EmailConfirmed = true,
             TenantId = tenantId,
-            IsSystemAdmin = true
+            IsSystemAdmin = true,
+            IsActive = true,
         };
 
         var result = await _userManager.CreateAsync(user, password);
