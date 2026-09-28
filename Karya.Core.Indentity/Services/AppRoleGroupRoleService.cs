@@ -25,6 +25,7 @@ public class AppRoleGroupRoleService : BaseDetailService<AppRoleGroupRoleReposit
                     RoleGroupId = x.RoleGroupId,
                     RoleId = x.RoleId,
                     RoleName = x.Role != null ? x.Role.Name : null,
+                    TenantId = x.TenantId
                 });
 
             var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);

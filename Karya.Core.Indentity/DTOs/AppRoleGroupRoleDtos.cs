@@ -7,6 +7,7 @@ public class AppRoleGroupRoleSDto : IByKeyDto
     public Guid Id { get; set; }
     public Guid RoleGroupId { get; set; }
     public Guid RoleId { get; set; }
+    public string? TenantId { get; set; }
 }
 
 public class AppRoleGroupRoleLDto : ISelectDto
@@ -15,14 +16,17 @@ public class AppRoleGroupRoleLDto : ISelectDto
     public Guid RoleGroupId { get; set; }
     public Guid RoleId { get; set; }
     public string? RoleName { get; set; }
+    public string? TenantId { get; set; }
 }
 
 public class AppRoleGroupRoleADto : IInsertDto
 {
     public Guid RoleId { get; set; }
+    public string? TenantId { get; set; }
 }
 
 public class AppRoleGroupRoleUDto : IUpdateDto
 {
     public Guid? RoleId { get; set; }
+    public string? TenantId { get; set; }
 }

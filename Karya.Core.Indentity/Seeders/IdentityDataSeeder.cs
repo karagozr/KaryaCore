@@ -37,7 +37,7 @@ public sealed class IdentityDataSeeder : IDatabaseSeeder
 
     public async Task SeedAsync()
     {
-        const string tenantId = "BASE_TENANT";
+        const string tenantId = "BASE";
         const string adminUserName = "admin";
         const string adminEmail = "admin@mail.com";
         const string adminPassword = "Admin123*";

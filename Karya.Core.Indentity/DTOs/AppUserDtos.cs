@@ -15,7 +15,6 @@ public class AppUserSDto : IByKeyDto
     public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
-    public string? Site { get; set; }
 }
 
 /// <summary>Liste görünümü.</summary>
@@ -30,7 +29,6 @@ public class AppUserLDto : ISelectDto
     public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
-    public string? Site { get; set; }
 }
 
 /// <summary>Kullanıcı ekleme.</summary>
@@ -46,7 +44,6 @@ public class AppUserADto : IInsertDto
     public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
-    public string? Site { get; set; }
 }
 
 /// <summary>Kullanıcı güncelleme.</summary>
@@ -59,5 +56,4 @@ public class AppUserUDto : IUpdateDto
     public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
-    public string? Site { get; set; }
 }

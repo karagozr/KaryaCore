@@ -6,5 +6,4 @@ public interface ICurrentUser
     string TenantId { get; }
     string LanguageId { get; }
     string UserName { get; }
-    string Site { get; }
 }
