@@ -24,6 +24,7 @@ public class AppUserLDto : ISelectDto
     public Guid Id { get; set; }
     public string? UserName { get; set; }
     public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
     public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
     public string? ErpPersonId { get; set; }

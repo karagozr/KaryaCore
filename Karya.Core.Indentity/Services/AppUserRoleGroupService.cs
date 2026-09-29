@@ -24,7 +24,8 @@ public class AppUserRoleGroupService : BaseService<AppUserRoleGroupRepository, A
                 RoleGroupId = x.RoleGroupId,
                 RoleGroupName = x.RoleGroup.Name,
                 UserId = x.UserId,
-                UserName = x.User.UserName
+                UserName = x.User.UserName,
+                TenantId = x.TenantId,
             });
 
         var result = await DataSourceLoader.LoadAsync(query, filterDataOptions);
