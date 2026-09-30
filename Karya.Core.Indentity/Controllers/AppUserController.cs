@@ -1,7 +1,6 @@
 using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Services;
-using Karya.Core.Results;
 using Karya.Core.Web.Abstracts.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -21,9 +20,10 @@ public abstract class AppUserController : BaseCrudController<AppUser, Guid, AppU
         _appUserService = appUserService;
     }
 
-    [HttpPost("reset-password")]
-    public Task<BaseResult<bool>> ResetPassword(string email, string token, string newPassword)
+    [HttpPost("update-password")]
+    public virtual async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
     {
-        return _appUserService.ResetPasswordAsync(email, token, newPassword);
+        var result = await _appUserService.ChangePasswordAsync(dto.CurrentPassword, dto.NewPassword);
+        return ApiActionResult(result);
     }
 }

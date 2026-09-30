@@ -6,6 +6,6 @@ namespace Karya.Core.Indentity.Services
 {
     public interface IAppUserService : IBaseService<AppUser, Guid>
     {
-        Task<BaseResult<bool>> ResetPasswordAsync(string email, string token, string newPassword);
+        Task<BaseResult<bool>> ChangePasswordAsync(string currentPassword, string newPassword);
     }
 }

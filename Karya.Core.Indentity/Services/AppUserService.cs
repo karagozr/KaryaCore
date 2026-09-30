@@ -55,18 +55,23 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         return BaseResult.SuccessCoded("201", MessageCodes.Created);
     }
 
-    public virtual async Task<BaseResult<bool>> ResetPasswordAsync(string email, string token, string newPassword)
+    public virtual async Task<BaseResult<bool>> ChangePasswordAsync(string currentPassword, string newPassword)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByNameAsync(_currentUser.UserName);
 
         if (user is null)
-            return BaseResult<bool>.ErrorCoded("404", MessageCodes.NotFound, false, "AppUser", "Email", email);
+            return BaseResult<bool>.ErrorCoded("404", MessageCodes.NotFound, false, "AppUser");
 
-        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
 
         return result.Succeeded
             ? BaseResult<bool>.SuccessCoded("200", MessageCodes.Success, true)
-            : BaseResult<bool>.Error("400", "Şifre sıfırlanamadı.", false, result.Errors.ToDictionary(e => e.Code, e => e.Description));
+            : BaseResult<bool>.Error(
+                "400",
+                "Şifre değiştirilemedi.",
+                false,
+                result.Errors.ToDictionary(e => e.Code, e => e.Description)
+            );
     }
 
     public override async Task<BaseResult> Update<TDto>(Guid key, Dictionary<string, object> updateData)
