@@ -56,13 +56,6 @@ where TParentFilter : IParentFilter
 
     protected override Task BeforeUpdate(TEntity entity, bool checkVersion = false, EntityEntry<TEntity>? entry = null)
     {
-        foreach (var item in _parentFilter.GetType().GetProperties())
-        {
-            if (entity.GetType().GetProperty(item.Name)?.GetValue(entity) != null)
-                throw new UnauthorizedAccessException("Cannot change the parent field value.");
-        }
-        
-
         return base.BeforeUpdate(entity, checkVersion, entry);
     }
 

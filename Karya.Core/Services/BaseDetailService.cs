@@ -11,7 +11,7 @@ using Karya.Core.Results;
 
 namespace Karya.Core.Services;
 
-public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : BaseService, IBaseDetailService<TEntity, TId, TParentFilter>
+public abstract class BaseDetailService<TRepo, TEntity, TId, TParentFilter> : BaseService, IBaseDetailService<TEntity, TId, TParentFilter>
     where TRepo : class, IRepositoryAsync<TEntity, TId>, IDetailRepository
     where TEntity : class, IBaseEntity<TId>, new()
     where TParentFilter : IParentFilter, new()
@@ -61,7 +61,7 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
 
     }
 
-   
+
 
     public virtual async Task<BaseResult> Insert<TDto>(TParentFilter parentFilter, TDto dto) where TDto : class, IInsertDto, new()
     {
@@ -76,6 +76,13 @@ public abstract class BaseDetailService<TRepo, TEntity, TId,TParentFilter> : Bas
 
     public async virtual Task<BaseResult> Update<TDto>(TParentFilter parentFilter, TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new()
     {
+        var parentFields = parentFilter.GetType().GetProperties()
+            .Select(x => x.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        if (updateData.Keys.Any(parentFields.Contains))
+            throw new UnauthorizedAccessException("Cannot change the parent field value.");
+
         var dto = updateData.ToObject<TDto>();
         var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
         entity.Id = key;
