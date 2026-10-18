@@ -1,5 +1,5 @@
-using System.Security.Claims;
-using Karya.Core.Indentity.Services;
+﻿using System.Security.Claims;
+using Karya.Core.Identity.Application.Services;
 using Karya.Test.Web.Api.Data;
 using Microsoft.EntityFrameworkCore;
 

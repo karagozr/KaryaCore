@@ -1,4 +1,4 @@
-using Karya.Core.Indentity.Infrastructure;
+﻿using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Test.Web.Api.Data.Configurations;
 using Karya.Test.Web.Api.Localization;
 using Microsoft.EntityFrameworkCore;

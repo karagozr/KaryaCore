@@ -1,12 +1,12 @@
-using Karya.Core.App;
-using Karya.Core.Indentity;
-using Karya.Core.Indentity.Services;
+﻿using Karya.Core.App;
+using Karya.Core.Identity.Extensions;
 using Karya.Core.Interfaces.Localization;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Data.Service;
 using Karya.Test.Web.Api.Localization;
 using Karya.Test.Web.Api.Seeders;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 
@@ -15,23 +15,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 var service = builder.Services;
 
-builder.Services.AddControllers()
-    .AddApplicationPart(Karya.Core.Indentity.AssemblyReference.Assembly);
+builder.Services.AddControllers();
 
 
 
 builder.Services.AddCoreAppRegistiration();
 
 // Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
-builder.Services.AddCoreIdentityRegistiration<TestDbContext>(builder.Configuration, "AppConnection");
-builder.Services.AddCoreSeeder<LocalizationSeeder>();
+builder.Services.AddKaryaIdentity<TestDbContext>(builder.Configuration, o =>
+{
+    o.UseDbContext(b => b.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection")));
+});
+builder.Services.AddKaryaSeeder<LocalizationSeeder>();
 
 //builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 //builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
 builder.Services.AddEndpointsApiExplorer();
 
 // OpenAPI - İki ayrı dokuman: v1 (ERP) ve identity
-var identityAssembly = Karya.Core.Indentity.AssemblyReference.Assembly;
+var identityAssembly = Karya.Core.Identity.AssemblyReference.Assembly;
 
 static bool IsFromAssembly(Microsoft.AspNetCore.Mvc.ApiExplorer.ApiDescription api, System.Reflection.Assembly assembly) =>
     api.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor cad &&
@@ -109,8 +111,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowViteApp");
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseKaryaIdentity();
 app.MapControllers();
 app.Run();
 

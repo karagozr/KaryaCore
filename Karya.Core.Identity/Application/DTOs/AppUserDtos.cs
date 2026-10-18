@@ -1,0 +1,64 @@
+﻿using Karya.Core.Interfaces.DTOs;
+
+namespace Karya.Core.Identity.Application.DTOs;
+
+/// <summary>Tekil kayıt görünümü.</summary>
+public class AppUserSDto : IByKeyDto
+{
+    public Guid Id { get; set; }
+    public string? UserName { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string TenantId { get; set; } = null!;
+    public bool IsSystemAdmin { get; set; }
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public bool IsActive { get; set; }
+}
+
+/// <summary>Liste görünümü.</summary>
+public class AppUserLDto : ISelectDto
+{
+    public Guid Id { get; set; }
+    public string? UserName { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string TenantId { get; set; } = null!;
+    public bool IsSystemAdmin { get; set; }
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public bool IsActive { get; set; }
+}
+
+/// <summary>Kullanıcı ekleme.</summary>
+public class AppUserADto : IInsertDto
+{
+    public string UserName { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string? PhoneNumber { get; set; }
+    public string Password { get; set; } = null!;
+    public bool IsSystemAdmin { get; set; }
+    public string TenantId { get; set; } = null!;
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public bool IsActive { get; set; } = true;
+}
+
+/// <summary>Kullanıcı güncelleme.</summary>
+public class AppUserUDto : IUpdateDto
+{
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public bool IsSystemAdmin { get; set; }
+    public string? ErpPersonId { get; set; }
+    public string? ErpUsername { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public bool IsActive { get; set; }
+}

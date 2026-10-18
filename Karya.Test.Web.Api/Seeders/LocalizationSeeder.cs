@@ -1,4 +1,4 @@
-using Karya.Core.Indentity.Infrastructure.Migrations;
+﻿using Karya.Core.Identity.Application.Seeders;
 using Karya.Core.Results;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Localization;

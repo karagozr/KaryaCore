@@ -1,5 +1,5 @@
-using System.Security.Claims;
-using Karya.Core.Indentity.Services;
+﻿using System.Security.Claims;
+using Karya.Core.Identity.Application.Services;
 using Microsoft.AspNetCore.Authentication;
 using OpenIddict.Abstractions;
 

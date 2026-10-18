@@ -1,0 +1,32 @@
+﻿using Karya.Core.Interfaces.DTOs;
+
+namespace Karya.Core.Identity.Application.DTOs;
+
+public class AppUserClaimSDto : IByKeyDto
+{
+    public int Id { get; set; }
+    public Guid UserId { get; set; }
+    public string? ClaimType { get; set; }
+    public string? ClaimValue { get; set; }
+}
+
+public class AppUserClaimLDto : ISelectDto
+{
+    public int Id { get; set; }
+    public Guid UserId { get; set; }
+    public string? ClaimType { get; set; }
+    public string? ClaimValue { get; set; }
+}
+
+public class AppUserClaimADto : IInsertDto
+{
+    public Guid UserId { get; set; }
+    public string ClaimType { get; set; } = null!;
+    public string? ClaimValue { get; set; }
+}
+
+public class AppUserClaimUDto : IUpdateDto
+{
+    public string ClaimType { get; set; } = null!;
+    public string? ClaimValue { get; set; }
+}
