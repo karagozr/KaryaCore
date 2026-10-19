@@ -25,6 +25,10 @@ builder.Services.AddCoreAppRegistiration();
 builder.Services.AddKaryaIdentity<TestDbContext>(builder.Configuration, o =>
 {
     o.UseDbContext(b => b.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection")));
+
+    // Geliştirme ortamında HTTP üzerinden login'e izin ver.
+    if (builder.Environment.IsDevelopment())
+        o.Token.DisableTransportSecurityRequirement = true;
 });
 builder.Services.AddKaryaSeeder<LocalizationSeeder>();
 

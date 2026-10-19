@@ -20,23 +20,13 @@ namespace Karya.Core.Identity.Extensions;
 
 public static class KaryaIdentityServiceCollectionExtensions
 {
-    /// <summary>
-    /// Karya Identity'yi varsayılan <see cref="AppUser"/> / <see cref="AppRole"/> entity'leri ile ekler.
-    /// </summary>
-    public static IServiceCollection AddKaryaIdentity<TContext>(
-        this IServiceCollection services,
-        IConfiguration configuration,
-        Action<KaryaIdentityOptions>? configure = null)
+    /// Karya Identity'yi varsayılan AppUser / AppRole entity'leri ile ekler.
+    public static IServiceCollection AddKaryaIdentity<TContext>( this IServiceCollection services,IConfiguration configuration, Action<KaryaIdentityOptions>? configure = null)
         where TContext : AppDbContext
         => services.AddKaryaIdentity<TContext, AppUser, AppRole>(configuration, configure);
 
-    /// <summary>
-    /// Karya Identity'yi genişletilmiş kullanıcı/rol entity'leri ile ekler.
-    /// </summary>
-    public static IServiceCollection AddKaryaIdentity<TContext, TUser, TRole>(
-        this IServiceCollection services,
-        IConfiguration configuration,
-        Action<KaryaIdentityOptions>? configure = null)
+    /// Karya Identity için genişletilmiş kullanıcı/rol entity'leri eklenir.
+    public static IServiceCollection AddKaryaIdentity<TContext, TUser, TRole>( this IServiceCollection services,IConfiguration configuration, Action<KaryaIdentityOptions>? configure = null)
         where TContext : AppDbContext
         where TUser : AppUser, new()
         where TRole : AppRole, new()
@@ -73,7 +63,7 @@ public static class KaryaIdentityServiceCollectionExtensions
         return services;
     }
 
-    /// <summary>Ek bir veritabanı seeder'ı kaydeder.</summary>
+    /// Ek bir veritabanı seeder'ı kaydeder
     public static IServiceCollection AddKaryaSeeder<TSeeder>(this IServiceCollection services) where TSeeder : class, IDatabaseSeeder
     {
         services.AddScoped<IDatabaseSeeder, TSeeder>();
@@ -167,8 +157,11 @@ public static class KaryaIdentityServiceCollectionExtensions
                 if (token.DisableAccessTokenEncryption)
                     o.DisableAccessTokenEncryption();
 
-                o.UseAspNetCore()
+                var aspNetCore = o.UseAspNetCore()
                  .EnableTokenEndpointPassthrough();
+
+                if (token.DisableTransportSecurityRequirement)
+                    aspNetCore.DisableTransportSecurityRequirement();
 
                 if (token.EnableJsonTokenRequests)
                 {
@@ -224,5 +217,5 @@ public static class KaryaIdentityServiceCollectionExtensions
     }
 }
 
-/// <summary>Kayıtlı Identity context tipini taşır (migration/seed için).</summary>
+/// Kayıtlı Identity context tipini taşır (migration/seed için).
 public sealed record KaryaIdentityContextDescriptor(Type ContextType);

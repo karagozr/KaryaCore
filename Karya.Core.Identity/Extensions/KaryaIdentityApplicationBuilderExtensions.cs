@@ -8,10 +8,7 @@ namespace Karya.Core.Identity.Extensions;
 
 public static class KaryaIdentityApplicationBuilderExtensions
 {
-    /// <summary>
-    /// Authentication/Authorization middleware'lerini ekler. Ayarlara göre başlangıçta
-    /// migration uygular ve seeder'ları çalıştırır.
-    /// </summary>
+
     public static IApplicationBuilder UseKaryaIdentity(this IApplicationBuilder app)
     {
         var options = app.ApplicationServices.GetRequiredService<IOptions<KaryaIdentityOptions>>().Value;
@@ -32,7 +29,6 @@ public static class KaryaIdentityApplicationBuilderExtensions
         return app;
     }
 
-    /// <summary>Identity context migration'larını uygular ve kayıtlı seeder'ları çalıştırır.</summary>
     public static async Task MigrateKaryaIdentityAsync(this IServiceProvider serviceProvider, bool applyMigrations = true, bool runSeeders = true)
     {
         var descriptor = serviceProvider.GetRequiredService<KaryaIdentityContextDescriptor>();
