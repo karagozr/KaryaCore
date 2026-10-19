@@ -33,7 +33,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
             PhoneNumber = add.PhoneNumber,
             EmailConfirmed = true,
             IsSystemAdmin = add.IsSystemAdmin,
-            TenantId = add.TenantId,
+            TenantId = _currentUser.TenantId,
             ErpPersonId = add.ErpPersonId,
             ErpUsername = add.ErpUsername,
             FirstName = add.FirstName,
@@ -42,7 +42,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         };
 
         // Kullanıcı, oluşturulduğu (aktif) tenant'a üye yapılır.
-        user.TenantMemberships.Add(new AppUserTenant { TenantId = add.TenantId });
+        user.TenantMemberships.Add(new AppUserTenant { TenantId = _currentUser.TenantId });
 
         var result = await _userManager.CreateAsync(user, add.Password);
 
