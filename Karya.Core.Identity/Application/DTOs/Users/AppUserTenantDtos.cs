@@ -1,6 +1,6 @@
-ï»¿namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Users;
 
-/// <summary>KullanÄ±cÄ±ya tenant Ã¼yeliÄŸi atama/kaldÄ±rma isteÄŸi.</summary>
+/// <summary>Kullanıcıya tenant üyeliği atama/kaldırma isteği.</summary>
 public class AppUserTenantAssignDto
 {
     public Guid UserId { get; set; }

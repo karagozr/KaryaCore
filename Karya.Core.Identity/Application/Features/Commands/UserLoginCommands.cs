@@ -1,17 +1,16 @@
-ï»¿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.App.Interfaces.Commands;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
 using Karya.Core.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Identity.Application.Features.Commands;
 
 /// <summary>
-/// KullanÄ±cÄ± harici giriÅŸ (external login) iÅŸlemleri iÃ§in MediatR command'larÄ±.
+/// Kullanýcý harici giriþ (external login) iþlemleri için MediatR command'larý.
 /// Composite key (LoginProvider + ProviderKey) korunur; listeleme ve silme desteklenir.
-/// Yetki kontrolÃ¼ <c>Permission</c> Ã¼zerinden pipeline'da uygulanÄ±r.
+/// Yetki kontrolü <c>Permission</c> üzerinden pipeline'da uygulanýr.
 /// </summary>
 public record SelectUserLoginsCommand(
     DataSourceLoadOptionsBase LoadOptions,
@@ -47,7 +46,7 @@ public record DeleteUserLoginCommand(
         var entity = await Context.Set<AppUserLogin>()
             .FirstOrDefaultAsync(l => l.LoginProvider == LoginProvider && l.ProviderKey == ProviderKey, ct);
         if (entity is null)
-            return BaseResult.Error("404", "KayÄ±t bulunamadÄ±.");
+            return BaseResult.Error("404", "Kayýt bulunamadý.");
 
         Context.Remove(entity);
         await Context.SaveChangesAsync(ct);

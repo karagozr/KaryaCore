@@ -32,10 +32,12 @@ public class ExceptionBehavior<TRequest, TResponse>(ILogger<ExceptionBehavior<TR
 
             var details = BuildExceptionDetails(ex);
 
-            return BaseResult.Error<TResponse>(
+            var res = BaseResult.Error<TResponse>(
                 "500",
                 details.Message,
                 details.Errors);
+
+            return res;
         }
     }
 

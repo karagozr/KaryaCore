@@ -1,6 +1,6 @@
-ï»¿namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Users;
 
-/// <summary>KullanÄ±cÄ± token (IdentityUserToken) listeleme gÃ¶rÃ¼nÃ¼mÃ¼. DeÄŸer gÃ¼venlik gereÄŸi dahil edilmez.</summary>
+/// <summary>Kullanıcı token (IdentityUserToken) listeleme görünümü. Değer güvenlik gereği dahil edilmez.</summary>
 public class AppUserTokenLDto
 {
     public Guid UserId { get; set; }

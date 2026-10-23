@@ -1,5 +1,4 @@
-ï»¿using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
+using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Interfaces.Identities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Karya.Core.Identity.Controllers;
 
 /// <summary>
-/// KullanÄ±cÄ±-tenant Ã¼yelikleri. Composite key (UserId+TenantId) korunur; atama/kaldÄ±rma
-/// ve kullanÄ±cÄ±ya gÃ¶re listeleme saÄŸlanÄ±r. YalnÄ±zca Sistem Admin eriÅŸebilir.
+/// Kullanıcı-tenant üyelikleri. Composite key (UserId+TenantId) korunur; atama/kaldırma
+/// ve kullanıcıya göre listeleme sağlanır. Yalnızca Sistem Admin erişebilir.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -27,7 +26,7 @@ public class AppUserTenantController : ControllerBase
 
     private DbSet<AppUserTenant> Set => _context.Set<AppUserTenant>();
 
-    /// <summary>Bir kullanÄ±cÄ±nÄ±n tenant Ã¼yeliklerini listeler.</summary>
+    /// <summary>Bir kullanıcının tenant üyeliklerini listeler.</summary>
     [HttpGet("by-user/{userId}")]
     public async Task<ActionResult> ByUser(Guid userId)
     {
@@ -38,7 +37,7 @@ public class AppUserTenantController : ControllerBase
         return Ok(items);
     }
 
-    /// <summary>KullanÄ±cÄ±ya tenant Ã¼yeliÄŸi ekler (zaten varsa yok sayar).</summary>
+    /// <summary>Kullanıcıya tenant üyeliği ekler (zaten varsa yok sayar).</summary>
     [HttpPost]
     public async Task<ActionResult> Assign([FromBody] AppUserTenantAssignDto dto)
     {
@@ -51,7 +50,7 @@ public class AppUserTenantController : ControllerBase
         return Ok();
     }
 
-    /// <summary>KullanÄ±cÄ±dan tenant Ã¼yeliÄŸini kaldÄ±rÄ±r.</summary>
+    /// <summary>Kullanıcıdan tenant üyeliğini kaldırır.</summary>
     [HttpDelete]
     public async Task<ActionResult> Unassign([FromBody] AppUserTenantAssignDto dto)
     {

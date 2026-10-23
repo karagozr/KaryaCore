@@ -1,4 +1,3 @@
-﻿using Karya.Core.Identity.Application.DTOs;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using OpenIddict.Abstractions;

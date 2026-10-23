@@ -1,4 +1,3 @@
-ï»¿using Karya.Core.Identity.Application.DTOs;
 using Karya.Core.Identity.Application.Features.Commands;
 using Karya.Core.Web.Abstracts.Controllers;
 using Karya.Core.Web.Helpers;
@@ -11,9 +10,9 @@ using OpenIddict.Abstractions;
 namespace Karya.Core.Identity.Controllers;
 
 /// <summary>
-/// OpenIddict uygulama (client) yÃ¶netimi. TÃ¼m iÅŸlemler MediatR command'larÄ±
-/// Ã¼zerinden yÃ¼rÃ¼tÃ¼lÃ¼r; yetki kontrolÃ¼ AuthorizationBehavior pipeline'Ä±nda
-/// (AppApplication.*) uygulanÄ±r. YalnÄ±zca Sistem Admin eriÅŸebilir.
+/// OpenIddict uygulama (client) yönetimi. Tüm iþlemler MediatR command'larý
+/// üzerinden yürütülür; yetki kontrolü AuthorizationBehavior pipeline'ýnda
+/// (AppApplication.*) uygulanýr. Yalnýzca Sistem Admin eriþebilir.
 /// </summary>
 [Authorize]
 public class AppApplicationController : BaseController
@@ -28,7 +27,7 @@ public class AppApplicationController : BaseController
         _context = context;
     }
 
-    /// <summary>TÃ¼m uygulamalarÄ± listeler (DataSourceLoadOptions destekli).</summary>
+    /// <summary>Tüm uygulamalarý listeler (DataSourceLoadOptions destekli).</summary>
     [HttpGet]
     public async Task<ActionResult> Select(DataSourceLoadOptions options)
     {
@@ -37,7 +36,7 @@ public class AppApplicationController : BaseController
         return ApiActionResult(result);
     }
 
-    /// <summary>ClientId'ye gÃ¶re uygulama getirir.</summary>
+    /// <summary>ClientId'ye göre uygulama getirir.</summary>
     [HttpGet("{clientId}")]
     public async Task<ActionResult> ByClientId(string clientId)
     {
@@ -46,7 +45,7 @@ public class AppApplicationController : BaseController
         return ApiActionResult(result);
     }
 
-    /// <summary>Yeni uygulama (client) oluÅŸturur.</summary>
+    /// <summary>Yeni uygulama (client) oluþturur.</summary>
     [HttpPost]
     public async Task<ActionResult> Insert([FromBody] AppApplicationADto dto)
     {
@@ -55,7 +54,7 @@ public class AppApplicationController : BaseController
         return ApiActionResult(result);
     }
 
-    /// <summary>ClientId'ye gÃ¶re uygulamayÄ± siler.</summary>
+    /// <summary>ClientId'ye göre uygulamayý siler.</summary>
     [HttpDelete("{clientId}")]
     public async Task<ActionResult> Delete(string clientId)
     {

@@ -1,7 +1,6 @@
-﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
 using Karya.Core.Identity.Infrastructure;
 using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Core.Identity.Infrastructure.Persistence.Repositories;

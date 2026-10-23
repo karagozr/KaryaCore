@@ -1,5 +1,4 @@
-ï»¿using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
+using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Identity.Infrastructure;
 using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Core.Identity.Infrastructure.Persistence.Repositories;
@@ -45,7 +44,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
 
         OnUserCreating(user, add);
 
-        // KullanÄ±cÄ±, oluÅŸturulduÄŸu (aktif) tenant'a Ã¼ye yapÄ±lÄ±r.
+        // Kullanıcı, oluşturulduğu (aktif) tenant'a üye yapılır.
         user.TenantMemberships.Add(new AppUserTenant { TenantId = add.TenantId });
 
         var result = await _userManager.CreateAsync(user, add.Password);
@@ -53,13 +52,13 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         if (!result.Succeeded)
         {
             var errors = result.Errors.ToDictionary(e => e.Code, e => e.Description);
-            return BaseResult.Error("400", "KullanÄ±cÄ± oluÅŸturulamadÄ±.", errors);
+            return BaseResult.Error("400", "Kullanıcı oluşturulamadı.", errors);
         }
 
         return BaseResult.SuccessCoded("201", MessageCodes.Created);
     }
 
-    /// <summary>GeniÅŸletilmiÅŸ kullanÄ±cÄ± alanlarÄ±nÄ± doldurmak iÃ§in override edilebilir.</summary>
+    /// <summary>Genişletilmiş kullanıcı alanlarını doldurmak için override edilebilir.</summary>
     protected virtual void OnUserCreating(AppUser user, AppUserADto dto)
     {
     }
@@ -77,7 +76,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
             ? BaseResult<bool>.SuccessCoded("200", MessageCodes.Success, true)
             : BaseResult<bool>.Error(
                 "400",
-                "Åifre deÄŸiÅŸtirilemedi.",
+                "Şifre değiştirilemedi.",
                 false,
                 result.Errors.ToDictionary(e => e.Code, e => e.Description)
             );
@@ -107,7 +106,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         if (!result.Succeeded)
         {
             var errors = result.Errors.ToDictionary(e => e.Code, e => e.Description);
-            return BaseResult.Error("400", "KullanÄ±cÄ± gÃ¼ncellenemedi.", errors);
+            return BaseResult.Error("400", "Kullanıcı güncellenemedi.", errors);
         }
 
         return BaseResult.SuccessCoded("200", MessageCodes.Success);

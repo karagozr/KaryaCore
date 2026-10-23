@@ -1,6 +1,6 @@
-ï»¿namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Auth;
 
-/// <summary>OpenIddict uygulama (client) gÃ¶rÃ¼nÃ¼mÃ¼.</summary>
+/// <summary>OpenIddict uygulama (client) görünümü.</summary>
 public class AppApplicationLDto
 {
     public string? Id { get; set; }
@@ -9,7 +9,7 @@ public class AppApplicationLDto
     public string? ClientType { get; set; }
 }
 
-/// <summary>OpenIddict uygulama (client) oluÅŸturma isteÄŸi.</summary>
+/// <summary>OpenIddict uygulama (client) oluþturma isteði.</summary>
 public class AppApplicationADto
 {
     public string ClientId { get; set; } = null!;

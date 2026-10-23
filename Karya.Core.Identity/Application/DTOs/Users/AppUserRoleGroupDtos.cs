@@ -1,8 +1,8 @@
-ï»¿using Karya.Core.Interfaces.DTOs;
+using Karya.Core.Interfaces.DTOs;
 
-namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Users;
 
-/// <summary>KullanÄ±cÄ±yÄ± rol grubuna atama/kaldÄ±rma isteÄŸi.</summary>
+/// <summary>Kullanýcýyý rol grubuna atama/kaldýrma isteði.</summary>
 public class AppUserRoleGroupSDto : IByKeyDto
 {
     public Guid Id { get; set; }

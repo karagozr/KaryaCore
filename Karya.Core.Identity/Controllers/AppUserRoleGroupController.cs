@@ -1,5 +1,4 @@
-﻿using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
+using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Identity.Application.Services;
 using Karya.Core.Web.Abstracts.Controllers;
 using MediatR;

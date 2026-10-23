@@ -1,6 +1,6 @@
-ï»¿namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Auth;
 
-/// <summary>OpenIddict authorization (yetkilendirme) listeleme gÃ¶rÃ¼nÃ¼mÃ¼.</summary>
+/// <summary>OpenIddict authorization (yetkilendirme) listeleme görünümü.</summary>
 public class AppAuthorizationLDto
 {
     public Guid Id { get; set; }

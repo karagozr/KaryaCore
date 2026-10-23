@@ -1,4 +1,4 @@
-﻿namespace Karya.Core.Identity.Application.DTOs
+namespace Karya.Core.Identity.Application.DTOs.Users
 {
     public class ChangePasswordDto
     {

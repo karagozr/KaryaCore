@@ -1,8 +1,7 @@
-ï»¿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.App.Interfaces.Commands;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
 using Karya.Core.Results;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
@@ -10,9 +9,9 @@ using OpenIddict.Abstractions;
 namespace Karya.Core.Identity.Application.Features.Commands;
 
 /// <summary>
-/// OpenIddict uygulama (client) iÅŸlemleri iÃ§in MediatR command'larÄ±.
-/// Yetki kontrolÃ¼ <c>Permission</c> Ã¼zerinden AuthorizationBehavior pipeline'Ä±nda
-/// uygulanÄ±r; OpenIddict manager her command'a parametre olarak geÃ§irilir.
+/// OpenIddict uygulama (client) iþlemleri için MediatR command'larý.
+/// Yetki kontrolü <c>Permission</c> üzerinden AuthorizationBehavior pipeline'ýnda
+/// uygulanýr; OpenIddict manager her command'a parametre olarak geçirilir.
 /// </summary>
 public record SelectApplicationsCommand(
     DataSourceLoadOptionsBase LoadOptions,
@@ -46,7 +45,7 @@ public record ByClientIdApplicationCommand(
     {
         var app = await Manager.FindByClientIdAsync(ClientId, ct);
         if (app is null)
-            return BaseResult<AppApplicationLDto>.Error("404", $"'{ClientId}' bulunamadÄ±.", null);
+            return BaseResult<AppApplicationLDto>.Error("404", $"'{ClientId}' bulunamadý.", null);
 
         var dto = new AppApplicationLDto
         {
@@ -100,7 +99,7 @@ public record DeleteApplicationCommand(
     {
         var app = await Manager.FindByClientIdAsync(ClientId, ct);
         if (app is null)
-            return BaseResult.Error("404", $"'{ClientId}' bulunamadÄ±.");
+            return BaseResult.Error("404", $"'{ClientId}' bulunamadý.");
 
         await Manager.DeleteAsync(app, ct);
         return BaseResult.Success("200", null);

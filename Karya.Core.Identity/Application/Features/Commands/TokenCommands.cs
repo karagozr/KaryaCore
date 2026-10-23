@@ -1,8 +1,7 @@
-﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.App.Interfaces.Commands;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
 using Karya.Core.Results;
 using Microsoft.EntityFrameworkCore;
 

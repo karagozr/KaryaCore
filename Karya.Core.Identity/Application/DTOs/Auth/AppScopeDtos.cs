@@ -1,6 +1,6 @@
-﻿using Karya.Core.Interfaces.DTOs;
+using Karya.Core.Interfaces.DTOs;
 
-namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Auth;
 
 public class AppScopeSDto : IByKeyDto
 {

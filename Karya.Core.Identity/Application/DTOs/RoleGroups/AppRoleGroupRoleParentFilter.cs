@@ -1,6 +1,6 @@
-﻿using Karya.Core.Interfaces.Filters;
+using Karya.Core.Interfaces.Filters;
 
-namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.RoleGroups;
 
 public class AppRoleGroupRoleParentFilter : IParentFilter
 {

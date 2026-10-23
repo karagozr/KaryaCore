@@ -1,5 +1,4 @@
-ï»¿using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
+using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Interfaces.Identities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Karya.Core.Identity.Controllers;
 
 /// <summary>
-/// KullanÄ±cÄ±-rol atamalarÄ±. Composite key (UserId+RoleId) korunur; atama/kaldÄ±rma
-/// ve kullanÄ±cÄ±ya gÃ¶re listeleme saÄŸlanÄ±r. YalnÄ±zca Sistem Admin eriÅŸebilir.
+/// Kullanıcı-rol atamaları. Composite key (UserId+RoleId) korunur; atama/kaldırma
+/// ve kullanıcıya göre listeleme sağlanır. Yalnızca Sistem Admin erişebilir.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -27,7 +26,7 @@ public class AppUserRoleController : ControllerBase
 
     private DbSet<AppUserRole> Set => _context.Set<AppUserRole>();
 
-    /// <summary>Bir kullanÄ±cÄ±nÄ±n rol atamalarÄ±nÄ± listeler.</summary>
+    /// <summary>Bir kullanıcının rol atamalarını listeler.</summary>
     [HttpGet("by-user/{userId}")]
     public async Task<ActionResult> ByUser(Guid userId)
     {
@@ -38,7 +37,7 @@ public class AppUserRoleController : ControllerBase
         return Ok(items);
     }
 
-    /// <summary>KullanÄ±cÄ±ya rol atar (zaten varsa yok sayar).</summary>
+    /// <summary>Kullanıcıya rol atar (zaten varsa yok sayar).</summary>
     [HttpPost]
     public async Task<ActionResult> Assign([FromBody] AppUserRoleAssignDto dto)
     {
@@ -51,7 +50,7 @@ public class AppUserRoleController : ControllerBase
         return Ok();
     }
 
-    /// <summary>KullanÄ±cÄ±dan rolÃ¼ kaldÄ±rÄ±r.</summary>
+    /// <summary>Kullanıcıdan rolü kaldırır.</summary>
     [HttpDelete]
     public async Task<ActionResult> Unassign([FromBody] AppUserRoleAssignDto dto)
     {

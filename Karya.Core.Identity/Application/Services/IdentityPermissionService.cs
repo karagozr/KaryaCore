@@ -1,6 +1,5 @@
-﻿using Karya.Core.App.Interfaces.Services;
+using Karya.Core.App.Interfaces.Services;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

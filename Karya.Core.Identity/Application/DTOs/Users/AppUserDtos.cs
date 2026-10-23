@@ -1,8 +1,8 @@
-ï»¿using Karya.Core.Interfaces.DTOs;
+using Karya.Core.Interfaces.DTOs;
 
-namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Users;
 
-/// <summary>Tekil kayÄ±t gÃ¶rÃ¼nÃ¼mÃ¼.</summary>
+/// <summary>Tekil kayýt görünümü.</summary>
 public class AppUserSDto : IByKeyDto
 {
     public Guid Id { get; set; }
@@ -18,7 +18,7 @@ public class AppUserSDto : IByKeyDto
     public bool IsActive { get; set; }
 }
 
-/// <summary>Liste gÃ¶rÃ¼nÃ¼mÃ¼.</summary>
+/// <summary>Liste görünümü.</summary>
 public class AppUserLDto : ISelectDto
 {
     public Guid Id { get; set; }
@@ -34,7 +34,7 @@ public class AppUserLDto : ISelectDto
     public bool IsActive { get; set; }
 }
 
-/// <summary>KullanÄ±cÄ± ekleme.</summary>
+/// <summary>Kullanýcý ekleme.</summary>
 public class AppUserADto : IInsertDto
 {
     public string UserName { get; set; } = null!;
@@ -50,7 +50,7 @@ public class AppUserADto : IInsertDto
     public bool IsActive { get; set; } = true;
 }
 
-/// <summary>KullanÄ±cÄ± gÃ¼ncelleme.</summary>
+/// <summary>Kullanýcý güncelleme.</summary>
 public class AppUserUDto : IUpdateDto
 {
     public string? Email { get; set; }

@@ -1,7 +1,6 @@
-ï»¿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Application.DTOs;
 using Karya.Core.Identity.Infrastructure;
 using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Core.Identity.Infrastructure.Persistence.Repositories;
@@ -12,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Identity.Application.Services;
 
-/// <summary>KullanÄ±cÄ±yÄ± rol grubuna atama servisi.</summary>
+/// <summary>Kullanýcýyý rol grubuna atama servisi.</summary>
 public class AppUserRoleGroupService : BaseService<AppUserRoleGroupRepository, AppUserRoleGroup, Guid>
 {
     public AppUserRoleGroupService(IdentityUnitOfWork uow) : base(uow) { }

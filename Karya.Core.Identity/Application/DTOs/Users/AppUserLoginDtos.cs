@@ -1,6 +1,6 @@
-ï»¿namespace Karya.Core.Identity.Application.DTOs;
+namespace Karya.Core.Identity.Application.DTOs.Users;
 
-/// <summary>KullanÄ±cÄ± harici giriÅŸ (external login) listeleme gÃ¶rÃ¼nÃ¼mÃ¼.</summary>
+/// <summary>Kullanıcı harici giriş (external login) listeleme görünümü.</summary>
 public class AppUserLoginLDto
 {
     public string LoginProvider { get; set; } = null!;
