@@ -22,7 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddCoreAppRegistiration();
 
 // Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
-builder.Services.AddKaryaIdentity<TestDbContext>(builder.Configuration, o =>
+builder.Services.AddKaryaIdentity<DevSysContext>(builder.Configuration, o =>
 {
     o.UseDbContext(b => b.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection")));
 
@@ -98,7 +98,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-//await app.Services.MigrateCoreDatabaseAsync<TestDbContext>();
+//await app.Services.MigrateCoreDatabaseAsync<DevSysContext>();
 
 if (app.Environment.IsDevelopment())
 {

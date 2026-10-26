@@ -39,6 +39,24 @@ public class AppAuthService : IAppAuthService
         return CreatePrincipal(user, tenantId);
     }
 
+    public virtual async Task<ClaimsPrincipal?> RefreshAsync(ClaimsPrincipal refreshPrincipal)
+    {
+        var userId = refreshPrincipal.GetClaim(OpenIddictConstants.Claims.Subject);
+        var tenantId = refreshPrincipal.GetClaim("TenantId");
+
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(tenantId)) return null;
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null || !user.IsActive) return null;
+
+        var hasTenant = await _dbContext.Set<AppUserTenant>()
+            .AnyAsync(x => x.UserId == user.Id && x.TenantId == tenantId);
+
+        if (!hasTenant) return null;
+
+        return CreatePrincipal(user, tenantId);
+    }
+
     private static ClaimsPrincipal CreatePrincipal(AppUser user, string tenantId)
     {
         var identity = new ClaimsIdentity(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
@@ -50,7 +68,10 @@ public class AppAuthService : IAppAuthService
 
         identity.SetDestinations(_ => new[] { OpenIddictConstants.Destinations.AccessToken });
 
-        return new ClaimsPrincipal(identity);
+        var principal = new ClaimsPrincipal(identity);
+        principal.SetScopes(OpenIddictConstants.Scopes.OfflineAccess);
+
+        return principal;
     }
 
     public virtual async Task<BaseResult<bool>> ForgotPasswordAsync(string email)

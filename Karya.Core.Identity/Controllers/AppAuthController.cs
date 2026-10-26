@@ -23,7 +23,13 @@ public class AppAuthController : ControllerBase
     {
         var request = HttpContext.GetOpenIddictServerRequest();
 
-        if (request == null || !request.IsPasswordGrantType())
+        if (request == null)
+            return BadRequest();
+
+        if (request.IsRefreshTokenGrantType())
+            return await RefreshAsync();
+
+        if (!request.IsPasswordGrantType())
             return BadRequest();
 
         var tenantId = request.GetParameter("tenantId")?.ToString();
@@ -40,6 +46,19 @@ public class AppAuthController : ControllerBase
 
         if (principal == null)
             return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, "Invalid username, password or tenant."),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+
+        return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+    }
+
+    private async Task<IActionResult> RefreshAsync()
+    {
+        var result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+
+        var principal = result.Principal is null ? null : await _authService.RefreshAsync(result.Principal);
+
+        if (principal == null)
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, "The refresh token is no longer valid."),
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

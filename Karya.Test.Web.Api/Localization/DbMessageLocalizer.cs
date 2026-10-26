@@ -1,4 +1,4 @@
-using Karya.Core.Interfaces.Localization;
+﻿using Karya.Core.Interfaces.Localization;
 using Karya.Test.Web.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,10 +15,10 @@ public class DbMessageLocalizer : IMessageLocalizer
     private const string DefaultLanguage = "en";
     private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(30);
 
-    private readonly TestDbContext _db;
+    private readonly DevSysContext _db;
     private readonly IMemoryCache _cache;
 
-    public DbMessageLocalizer(TestDbContext db, IMemoryCache cache)
+    public DbMessageLocalizer(DevSysContext db, IMemoryCache cache)
     {
         _db = db;
         _cache = cache;

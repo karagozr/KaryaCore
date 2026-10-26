@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Karya.Test.Web.Api.Migrations.Dev
 {
-    [DbContext(typeof(DevContext))]
+    [DbContext(typeof(DevAppContext))]
     partial class DevContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

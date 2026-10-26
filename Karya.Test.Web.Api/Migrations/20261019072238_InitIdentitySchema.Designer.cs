@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Karya.Test.Web.Api.Migrations
 {
-    [DbContext(typeof(TestDbContext))]
+    [DbContext(typeof(DevSysContext))]
     [Migration("20261019072238_InitIdentitySchema")]
     partial class InitIdentitySchema
     {
