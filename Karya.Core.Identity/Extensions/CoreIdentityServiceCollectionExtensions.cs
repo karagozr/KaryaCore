@@ -18,33 +18,33 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace Karya.Core.Identity.Extensions;
 
-public static class KaryaIdentityServiceCollectionExtensions
+public static class CoreIdentityServiceCollectionExtensions
 {
     /// Karya Identity'yi varsayılan AppUser / AppRole entity'leri ile ekler.
-    public static IServiceCollection AddKaryaIdentity<TContext>( this IServiceCollection services,IConfiguration configuration, Action<KaryaIdentityOptions>? configure = null)
+    public static IServiceCollection AddKaryaIdentity<TContext>( this IServiceCollection services,IConfiguration configuration, Action<CoreIdentityOptions>? configure = null)
         where TContext : AppDbContext
         => services.AddKaryaIdentity<TContext, AppUser, AppRole>(configuration, configure);
 
     /// Karya Identity için genişletilmiş kullanıcı/rol entity'leri eklenir.
-    public static IServiceCollection AddKaryaIdentity<TContext, TUser, TRole>( this IServiceCollection services,IConfiguration configuration, Action<KaryaIdentityOptions>? configure = null)
+    public static IServiceCollection AddKaryaIdentity<TContext, TUser, TRole>( this IServiceCollection services,IConfiguration configuration, Action<CoreIdentityOptions>? configure = null)
         where TContext : AppDbContext
         where TUser : AppUser, new()
         where TRole : AppRole, new()
     {
-        void Configure(KaryaIdentityOptions o)
+        void Configure(CoreIdentityOptions o)
         {
-            configuration.GetSection(KaryaIdentityOptions.SectionName).Bind(o);
+            configuration.GetSection(CoreIdentityOptions.SectionName).Bind(o);
             configure?.Invoke(o);
         }
 
-        var options = new KaryaIdentityOptions();
+        var options = new CoreIdentityOptions();
         Configure(options);
 
         if (options.ConfigureDbContext is null)
             throw new InvalidOperationException(
-                $"{nameof(KaryaIdentityOptions)}.{nameof(KaryaIdentityOptions.UseDbContext)} ile bir veritabanı sağlayıcısı belirtilmelidir (ör. o.UseDbContext(b => b.UseSqlServer(...))).");
+                $"{nameof(CoreIdentityOptions)}.{nameof(CoreIdentityOptions.UseDbContext)} ile bir veritabanı sağlayıcısı belirtilmelidir (ör. o.UseDbContext(b => b.UseSqlServer(...))).");
 
-        services.AddOptions<KaryaIdentityOptions>().Configure(Configure);
+        services.AddOptions<CoreIdentityOptions>().Configure(Configure);
         services.AddSingleton(new KaryaIdentityContextDescriptor(typeof(TContext)));
 
         services.AddDbContext<TContext>(options.ConfigureDbContext);
@@ -70,7 +70,7 @@ public static class KaryaIdentityServiceCollectionExtensions
         return services;
     }
 
-    private static void AddKaryaAspNetIdentity<TContext, TUser, TRole>(this IServiceCollection services, KaryaIdentityOptions options)
+    private static void AddKaryaAspNetIdentity<TContext, TUser, TRole>(this IServiceCollection services, CoreIdentityOptions options)
         where TContext : AppDbContext
         where TUser : AppUser
         where TRole : AppRole
@@ -116,6 +116,7 @@ public static class KaryaIdentityServiceCollectionExtensions
         services.TryAddScoped<AppScopeService>();
         services.TryAddScoped<AppTenantService>();
         services.TryAddScoped<UserProfileService>();
+        services.TryAddScoped<IAppProfileService, AppProfileService>();
 
         services.TryAddEnumerable(ServiceDescriptor.Scoped<IDatabaseSeeder, IdentityDataSeeder>());
     }
@@ -182,7 +183,7 @@ public static class KaryaIdentityServiceCollectionExtensions
             });
     }
 
-    private static void AddKaryaAuthentication(this IServiceCollection services, KaryaIdentityOptions options)
+    private static void AddKaryaAuthentication(this IServiceCollection services, CoreIdentityOptions options)
     {
         var authentication = services.AddAuthentication();
 
@@ -213,6 +214,9 @@ public static class KaryaIdentityServiceCollectionExtensions
 
             if (!enabled)
                 existing.ForEach(p => manager.ApplicationParts.Remove(p));
+
+            if (enabled && !manager.FeatureProviders.OfType<CoreIdentityControllerFeatureProvider>().Any())
+                manager.FeatureProviders.Add(new CoreIdentityControllerFeatureProvider());
         });
     }
 }

@@ -1,4 +1,4 @@
-using Karya.Core.Identity.Domains.Entities;
+ï»¿using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Interfaces.Identities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Karya.Core.Identity.Controllers;
 
 /// <summary>
-/// Kullanýcý-rol atamalarý. Composite key (UserId+RoleId) korunur; atama/kaldýrma
-/// ve kullanýcýya göre listeleme saðlanýr. Yalnýzca Sistem Admin eriþebilir.
+/// Kullanï¿½cï¿½-rol atamalarï¿½. Composite key (UserId+RoleId) korunur; atama/kaldï¿½rma
+/// ve kullanï¿½cï¿½ya gï¿½re listeleme saï¿½lanï¿½r. Yalnï¿½zca Sistem Admin eriï¿½ebilir.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AppUserRoleController : ControllerBase
+public abstract class AppUserRoleController : ControllerBase
 {
     private readonly DbContext _context;
     private readonly ICurrentUser _currentUser;
@@ -26,7 +26,7 @@ public class AppUserRoleController : ControllerBase
 
     private DbSet<AppUserRole> Set => _context.Set<AppUserRole>();
 
-    /// <summary>Bir kullanýcýnýn rol atamalarýný listeler.</summary>
+    /// <summary>Bir kullanï¿½cï¿½nï¿½n rol atamalarï¿½nï¿½ listeler.</summary>
     [HttpGet("by-user/{userId}")]
     public async Task<ActionResult> ByUser(Guid userId)
     {
@@ -37,7 +37,7 @@ public class AppUserRoleController : ControllerBase
         return Ok(items);
     }
 
-    /// <summary>Kullanýcýya rol atar (zaten varsa yok sayar).</summary>
+    /// <summary>Kullanï¿½cï¿½ya rol atar (zaten varsa yok sayar).</summary>
     [HttpPost]
     public async Task<ActionResult> Assign([FromBody] AppUserRoleAssignDto dto)
     {
@@ -50,7 +50,7 @@ public class AppUserRoleController : ControllerBase
         return Ok();
     }
 
-    /// <summary>Kullanýcýdan rolü kaldýrýr.</summary>
+    /// <summary>Kullanï¿½cï¿½dan rolï¿½ kaldï¿½rï¿½r.</summary>
     [HttpDelete]
     public async Task<ActionResult> Unassign([FromBody] AppUserRoleAssignDto dto)
     {

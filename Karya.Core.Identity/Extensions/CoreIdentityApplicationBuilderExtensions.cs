@@ -1,4 +1,4 @@
-using Karya.Core.Identity.Application.Seeders;
+﻿using Karya.Core.Identity.Application.Seeders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,12 +6,12 @@ using Microsoft.Extensions.Options;
 
 namespace Karya.Core.Identity.Extensions;
 
-public static class KaryaIdentityApplicationBuilderExtensions
+public static class CoreIdentityApplicationBuilderExtensions
 {
 
     public static IApplicationBuilder UseKaryaIdentity(this IApplicationBuilder app)
     {
-        var options = app.ApplicationServices.GetRequiredService<IOptions<KaryaIdentityOptions>>().Value;
+        var options = app.ApplicationServices.GetRequiredService<IOptions<CoreIdentityOptions>>().Value;
 
         if (options.ApplyMigrationsOnStartup || options.RunSeedersOnStartup)
         {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Karya.Core.Identity.Extensions;
 
-public class KaryaIdentityOptions
+public class CoreIdentityOptions
 {
     public const string SectionName = "KaryaIdentity";
 
@@ -31,17 +31,19 @@ public class KaryaIdentityOptions
 
     public KaryaSeedOptions Seed { get; } = new();
 
+    public UserProfileOptions Profile { get; } = new();
+
     internal List<Action<IServiceCollection>> ServiceOverrides { get; } = [];
 
     /// DbContext sağlayıcısını belirler.
-    public KaryaIdentityOptions UseDbContext(Action<DbContextOptionsBuilder> configure)
+    public CoreIdentityOptions UseDbContext(Action<DbContextOptionsBuilder> configure)
     {
         ConfigureDbContext = (_, builder) => configure(builder);
         return this;
     }
 
     /// Kütüphanenin varsayılan servis implementasyonunu değiştirir.
-    public KaryaIdentityOptions ReplaceService<TService, TImplementation>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
+    public CoreIdentityOptions ReplaceService<TService, TImplementation>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TService : class
         where TImplementation : class, TService
     {
@@ -50,7 +52,7 @@ public class KaryaIdentityOptions
     }
 
     /// Servislere ek kayıt yapar (kütüphane kayıtlarından sonra çalışır).
-    public KaryaIdentityOptions ConfigureServices(Action<IServiceCollection> configure)
+    public CoreIdentityOptions ConfigureServices(Action<IServiceCollection> configure)
     {
         ServiceOverrides.Add(configure);
         return this;
@@ -85,6 +87,12 @@ public class KaryaTokenOptions
 
     /// OpenIddict server için ek yapılandırma.
     public Action<OpenIddictServerBuilder>? ConfigureServer { get; set; }
+}
+
+public class UserProfileOptions
+{
+    /// Kullanıcının profil üzerinden okuyup güncelleyebileceği claim tipleri.
+    public List<string> ClaimTypes { get; set; } = ["theme", "language"];
 }
 
 public class KaryaSeedOptions

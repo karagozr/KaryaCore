@@ -1,4 +1,4 @@
-using Karya.Core.Identity.Domains.Entities;
+ï»¿using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Identity.Application.Seeders;
 using Karya.Core.Identity.Application.Services;
 using Karya.Core.Identity.Extensions;
@@ -29,7 +29,7 @@ public class IdentityDataSeeder : IDatabaseSeeder
         IHttpContextAccessor httpContextAccessor,
         IEnumerable<ICustomRoleProvider> customRoleProviders,
         IIdentityEntityFactory entityFactory,
-        IOptions<KaryaIdentityOptions> options)
+        IOptions<CoreIdentityOptions> options)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -95,7 +95,7 @@ public class IdentityDataSeeder : IDatabaseSeeder
                 var result = await _roleManager.CreateAsync(role);
 
                 if (!result.Succeeded)
-                    throw new Exception($"{definition.Name} rolü oluþturulamadý: {GetErrors(result)}");
+                    throw new Exception($"{definition.Name} rolï¿½ oluï¿½turulamadï¿½: {GetErrors(result)}");
             }
             roles.Add(role);
         }
@@ -120,7 +120,7 @@ public class IdentityDataSeeder : IDatabaseSeeder
         var result = await _userManager.CreateAsync(user, password);
 
         if (!result.Succeeded)
-            throw new Exception($"Admin kullanýcýsý oluþturulamadý: {GetErrors(result)}");
+            throw new Exception($"Admin kullanï¿½cï¿½sï¿½ oluï¿½turulamadï¿½: {GetErrors(result)}");
 
         return user;
     }
