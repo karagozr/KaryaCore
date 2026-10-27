@@ -1,13 +1,10 @@
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Infrastructure;
 using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Core.Identity.Infrastructure.Persistence.Repositories;
-using Karya.Core.Interfaces.Identities;
 using Karya.Core.Results;
 using Karya.Core.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Identity.Application.Services;
 
@@ -26,7 +23,7 @@ public class AppUserRoleGroupService : BaseService<AppUserRoleGroupRepository, A
                 RoleGroupName = x.RoleGroup != null ? x.RoleGroup.Name : string.Empty,
                 UserId = x.UserId,
                 UserName = x.User != null ? x.User.UserName ?? string.Empty : string.Empty,
-                TenantId = x.TenantId,
+                //TenantId = x.TenantId,
             });
 
         var result = await DataSourceLoader.LoadAsync(query, filterDataOptions);
