@@ -20,7 +20,7 @@ public abstract class AppUserController : BaseCrudController<AppUser, Guid, AppU
     }
 
     [HttpPost("update-password")]
-    public virtual async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    public virtual async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
     {
         var result = await _appUserService.ChangePasswordAsync(dto.CurrentPassword, dto.NewPassword);
         return ApiActionResult(result);

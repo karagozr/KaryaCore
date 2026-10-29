@@ -92,7 +92,7 @@ public class KaryaTokenOptions
 public class UserProfileOptions
 {
     /// Kullanıcının profil üzerinden okuyup güncelleyebileceği claim tipleri.
-    public List<string> ClaimTypes { get; set; } = ["theme", "language"];
+    public List<string> ClaimTypes { get; set; } = ["theme", "language", "main-page-dashboard"];
 }
 
 public class KaryaSeedOptions
