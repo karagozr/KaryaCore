@@ -17,7 +17,7 @@ public class DevAppContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
-            optionsBuilder.UseSqlServer(Connection3);
+            optionsBuilder.UseSqlServer(Connection2);
     }
 }
 
