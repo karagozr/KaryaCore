@@ -9,7 +9,7 @@ public class AppUserSDto : IByKeyDto
     public string? UserName { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
-    public string TenantId { get; set; } = null!;
+    //public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
     public string? ErpPersonId { get; set; }
     public string? ErpUsername { get; set; }
@@ -25,7 +25,7 @@ public class AppUserLDto : ISelectDto
     public string? UserName { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
-    public string TenantId { get; set; } = null!;
+    //public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
     public string? ErpPersonId { get; set; }
     public string? ErpUsername { get; set; }
@@ -42,7 +42,7 @@ public class AppUserADto : IInsertDto
     public string? PhoneNumber { get; set; }
     public string Password { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
-    public string TenantId { get; set; } = null!;
+    //public string TenantId { get; set; } = null!;
     public string? ErpPersonId { get; set; }
     public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;

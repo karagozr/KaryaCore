@@ -31,7 +31,7 @@ public abstract class AppUserRoleController : ControllerBase
     public async Task<ActionResult> ByUser(Guid userId)
     {
         var items = await Set.AsNoTracking()
-            .Where(x => x.UserId == userId)
+            .Where(x => x.UserId == userId && x.TenantId == _currentUser.TenantId)
             .Select(x => new AppUserRoleAssignDto { UserId = x.UserId, RoleId = x.RoleId })
             .ToListAsync();
         return Ok(items);
@@ -41,10 +41,10 @@ public abstract class AppUserRoleController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Assign([FromBody] AppUserRoleAssignDto dto)
     {
-        var exists = await Set.AnyAsync(x => x.UserId == dto.UserId && x.RoleId == dto.RoleId);
+        var exists = await Set.AnyAsync(x => x.UserId == dto.UserId && x.RoleId == dto.RoleId && x.TenantId == _currentUser.TenantId);
         if (!exists)
         {
-            Set.Add(new AppUserRole { UserId = dto.UserId, RoleId = dto.RoleId });
+            Set.Add(new AppUserRole { UserId = dto.UserId, RoleId = dto.RoleId, TenantId = _currentUser.TenantId });
             await _context.SaveChangesAsync();
         }
         return Ok();
@@ -54,7 +54,7 @@ public abstract class AppUserRoleController : ControllerBase
     [HttpDelete]
     public async Task<ActionResult> Unassign([FromBody] AppUserRoleAssignDto dto)
     {
-        var entity = await Set.FirstOrDefaultAsync(x => x.UserId == dto.UserId && x.RoleId == dto.RoleId);
+        var entity = await Set.FirstOrDefaultAsync(x => x.UserId == dto.UserId && x.RoleId == dto.RoleId && x.TenantId == _currentUser.TenantId);
         if (entity is null)
             return NotFound();
 
