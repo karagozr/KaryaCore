@@ -1,12 +1,10 @@
 using Karya.Core.Identity.Domains.Entities;
-using Karya.Core.Identity.Infrastructure;
 using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Core.Identity.Infrastructure.Persistence.Repositories;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Results;
 using Karya.Core.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Core.Identity.Application.Services;
 
@@ -35,7 +33,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         user.PhoneNumber = add.PhoneNumber;
         user.EmailConfirmed = true;
         user.IsSystemAdmin = add.IsSystemAdmin;
-        user.TenantId = add.TenantId;
+        user.TenantId = _currentUser.TenantId;
         user.ErpPersonId = add.ErpPersonId;
         user.ErpUsername = add.ErpUsername;
         user.FirstName = add.FirstName;
@@ -45,7 +43,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         OnUserCreating(user, add);
 
         // Kullanýcý, oluþturulduðu (aktif) tenant'a üye yapýlýr.
-        user.TenantMemberships.Add(new AppUserTenant { TenantId = add.TenantId });
+        user.TenantMemberships.Add(new AppUserTenant { TenantId = _currentUser.TenantId });
 
         var result = await _userManager.CreateAsync(user, add.Password);
 

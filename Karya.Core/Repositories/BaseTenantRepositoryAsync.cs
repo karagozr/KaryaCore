@@ -36,10 +36,10 @@ where TId : notnull
 
     protected override Task BeforeUpdate(TEntity entity, bool checkVersion = false, EntityEntry<TEntity>? entry = null)
     {
-        if ((entity as IBaseTenantEntity<TId, string>).TenantId != null && (entity as IBaseTenantEntity<TId, string>).TenantId != _currentUser.UserId)
+        if (!string.IsNullOrEmpty(entity.TenantId) && entity.TenantId != _currentUser.TenantId)
             throw new UnauthorizedAccessException("Entity does not belong to the current tenant.");
 
-        if ((entity as IBaseTenantEntity<TId, string>).TenantId == null)
+        if (string.IsNullOrEmpty(entity.TenantId))
             entity.TenantId = _currentUser.TenantId;
 
         return base.BeforeUpdate(entity, checkVersion, entry);
@@ -47,15 +47,14 @@ where TId : notnull
 
     protected override Task BeforeUpdate(IEnumerable<TEntity> entities)
     {
-        foreach (IBaseTenantEntity<TId, string> entity in entities)
+        foreach (var entity in entities)
         {
-            if (entity.TenantId != null && entity.TenantId != _currentUser.UserId)
+            if (!string.IsNullOrEmpty(entity.TenantId) && entity.TenantId != _currentUser.TenantId)
                 throw new UnauthorizedAccessException("Entity does not belong to the current tenant.");
 
-            if (entity.TenantId == null)
+            if (string.IsNullOrEmpty(entity.TenantId))
                 entity.TenantId = _currentUser.TenantId;
         }
-
 
         return base.BeforeUpdate(entities);
     }
@@ -65,6 +64,16 @@ where TId : notnull
         var qry = base.Query(include, withDeleted, ct).Where(e => e.TenantId == _currentUser.TenantId);
 
         return include == null ? qry : include(qry);
+    }
+
+    public override async Task UpdateAsync(TEntity entity, string[] columns, CancellationToken ct = default)
+    {
+        if (!string.IsNullOrEmpty(entity.TenantId) && entity.TenantId != _currentUser.TenantId)
+            throw new UnauthorizedAccessException("Entity does not belong to the current tenant.");
+
+        entity.TenantId = _currentUser.TenantId;
+
+        await base.UpdateAsync(entity, columns, ct);
     }
 
 }
