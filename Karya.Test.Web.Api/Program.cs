@@ -1,4 +1,5 @@
 ﻿using Karya.Core.App;
+using Karya.Core.Identity.Application.Seeders;
 using Karya.Core.Identity.Extensions;
 using Karya.Core.Interfaces.Localization;
 using Karya.Test.Web.Api.Data;
@@ -24,13 +25,14 @@ builder.Services.AddCoreAppRegistiration();
 // Identity + OpenIddict kayıtları Karya.Core.Identity içinde toplandı.
 builder.Services.AddKaryaIdentity<DevSysContext>(builder.Configuration, o =>
 {
+    o.ApplyMigrationsOnStartup = true;
+    o.RunSeedersOnStartup = true;
     o.UseDbContext(b => b.UseSqlServer(builder.Configuration.GetConnectionString("AppConnection")));
-
     // Geliştirme ortamında HTTP üzerinden login'e izin ver.
     if (builder.Environment.IsDevelopment())
         o.Token.DisableTransportSecurityRequirement = true;
 });
-builder.Services.AddKaryaSeeder<LocalizationSeeder>();
+builder.Services.AddKaryaSeeder<IdentityDataSeeder>();
 
 //builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 //builder.Services.AddTransient<IClaimsTransformation, AppClaimsTransformer>();
@@ -99,7 +101,6 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 //await app.Services.MigrateCoreDatabaseAsync<DevSysContext>();
-
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
