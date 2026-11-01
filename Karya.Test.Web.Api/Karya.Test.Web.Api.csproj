@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\Karya.Core.Indentity\Karya.Core.Indentity.csproj" />
+	<ProjectReference Include="..\Karya.Core.Identity\Karya.Core.Identity.csproj" />
     <ProjectReference Include="..\Karya.Core.Web\Karya.Core.Web.csproj" />
     <ProjectReference Include="..\Karya.Core\Karya.Core.csproj" />
   </ItemGroup>

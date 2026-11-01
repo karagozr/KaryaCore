@@ -1,13 +1,13 @@
-using Karya.Core.Indentity.Infrastructure;
+﻿using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Test.Web.Api.Data.Configurations;
 using Karya.Test.Web.Api.Localization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Karya.Test.Web.Api.Data;
 
-public class TestDbContext : AppDbContext
+public class DevSysContext : AppDbContext
 {
-    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
+    public DevSysContext(DbContextOptions<DevSysContext> options) : base(options)
     {
     }
 

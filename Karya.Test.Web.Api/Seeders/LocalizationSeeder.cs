@@ -1,4 +1,4 @@
-using Karya.Core.Indentity.Infrastructure.Migrations;
+﻿using Karya.Core.Identity.Application.Seeders;
 using Karya.Core.Results;
 using Karya.Test.Web.Api.Data;
 using Karya.Test.Web.Api.Localization;
@@ -8,9 +8,9 @@ namespace Karya.Test.Web.Api.Seeders;
 
 public sealed class LocalizationSeeder : IDatabaseSeeder
 {
-    private readonly TestDbContext _db;
+    private readonly DevSysContext _db;
 
-    public LocalizationSeeder(TestDbContext db)
+    public LocalizationSeeder(DevSysContext db)
     {
         _db = db;
     }
