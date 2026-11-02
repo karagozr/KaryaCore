@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Karya.Core.Repositories;
 
-public class BaseDetailRepositoryAsync<TEntity, TId, TParentFilter, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>, IDetailRepository<TEntity, TId, TParentFilter>
+public class BaseDetailRepositoryAsync<TEntity, TId, TParentFilter, TContext> : BaseRepositoryAsync<TEntity, TId, TContext>, IDetailRepositoryAsync<TEntity, TId, TParentFilter>
 where TContext : DbContext
 where TEntity : class, IBaseEntity<TId>, new()
 where TId : notnull
