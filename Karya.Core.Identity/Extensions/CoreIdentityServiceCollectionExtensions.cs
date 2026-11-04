@@ -21,12 +21,12 @@ namespace Karya.Core.Identity.Extensions;
 public static class CoreIdentityServiceCollectionExtensions
 {
     /// Karya Identity'yi varsayılan AppUser / AppRole entity'leri ile ekler.
-    public static IServiceCollection AddKaryaIdentity<TContext>( this IServiceCollection services,IConfiguration configuration, Action<CoreIdentityOptions>? configure = null)
+    public static IServiceCollection AddKaryaIdentity<TContext>(this IServiceCollection services, IConfiguration configuration, Action<CoreIdentityOptions>? configure = null)
         where TContext : AppDbContext
         => services.AddKaryaIdentity<TContext, AppUser, AppRole>(configuration, configure);
 
     /// Karya Identity için genişletilmiş kullanıcı/rol entity'leri eklenir.
-    public static IServiceCollection AddKaryaIdentity<TContext, TUser, TRole>( this IServiceCollection services,IConfiguration configuration, Action<CoreIdentityOptions>? configure = null)
+    public static IServiceCollection AddKaryaIdentity<TContext, TUser, TRole>(this IServiceCollection services, IConfiguration configuration, Action<CoreIdentityOptions>? configure = null)
         where TContext : AppDbContext
         where TUser : AppUser, new()
         where TRole : AppRole, new()
@@ -115,7 +115,6 @@ public static class CoreIdentityServiceCollectionExtensions
         services.TryAddScoped<AppUserClaimService>();
         services.TryAddScoped<AppScopeService>();
         services.TryAddScoped<AppTenantService>();
-        services.TryAddScoped<UserProfileService>();
         services.TryAddScoped<IAppProfileService, AppProfileService>();
 
         services.TryAddEnumerable(ServiceDescriptor.Scoped<IDatabaseSeeder, IdentityDataSeeder>());

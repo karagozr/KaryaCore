@@ -42,7 +42,6 @@ public static class AssemblyReference
         services.AddScoped<AppRoleClaimService>();
         services.AddScoped<AppUserClaimService>();
         services.AddScoped<AppScopeService>();
-        services.AddScoped<UserProfileService>();
         services.AddScoped<AppTenantService>();
 
         // Yetki servisi (SystemAdmin/TenantAdmin) MediatR AuthorizationBehavior için.
