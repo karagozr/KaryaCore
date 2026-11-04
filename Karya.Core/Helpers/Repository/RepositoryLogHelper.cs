@@ -5,23 +5,23 @@ namespace Karya.Core.Helpers.Repository;
 public static class RepositoryLogHelper
 {
    
-    public static void AtCreate(IVersionable entity, string userId)
+    public static void AtCreate(IVersionable entity, string user)
     {
         entity.CreatedAt = DateTimeOffset.UtcNow;
-        entity.CreatedBy = userId;
+        entity.CreatedBy = user;
         entity.Version = DateTimeOffset.UtcNow.ToString("yyyyMMddHHmmss");
     }
 
-    public static void AtUpdate(IVersionable entity, string userId)
+    public static void AtUpdate(IVersionable entity, string user)
     {
         entity.UpdatedAt = DateTimeOffset.UtcNow;
-        entity.UpdatedBy = userId;
+        entity.UpdatedBy = user;
         entity.Version = DateTimeOffset.UtcNow.ToString("yyyyMMddHHmmss");
     }
-    public static void AtDelete(ISoftDelete entity, string userId)
+    public static void AtDelete(ISoftDelete entity, string user)
     {
         entity.IsDeleted = true;
-        entity.DeletedBy = userId;
+        entity.DeletedBy = user;
         entity.DeletedAt = DateTimeOffset.UtcNow;
     }
 
