@@ -125,7 +125,7 @@ where TId : notnull
         {
             await query.ExecuteUpdateAsync(x => x
             .SetProperty(p => ((ISoftDelete)p).IsDeleted, _ => true)
-            .SetProperty(p => ((ISoftDelete)p).DeletedBy, _ => _currentUser.UserId)
+            .SetProperty(p => ((ISoftDelete)p).DeletedBy, _ => _currentUser.UserName)
             .SetProperty(p => ((ISoftDelete)p).DeletedAt, _ => DateTime.UtcNow), ct);
         }
         else

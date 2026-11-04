@@ -35,7 +35,7 @@ where TEntity : class, IBaseEntity<TId>, new()
     protected virtual async Task BeforeCreate(TEntity entity)
     {
         if (entity is IVersionable)
-            RepositoryLogHelper.AtCreate((IVersionable)entity, _currentUser.UserId);
+            RepositoryLogHelper.AtCreate((IVersionable)entity, _currentUser.UserName);
     }
 
     protected virtual async Task BeforeCreate(IEnumerable<TEntity> entities)
@@ -44,7 +44,7 @@ where TEntity : class, IBaseEntity<TId>, new()
         {
             foreach (var entity in entities)
             {
-                RepositoryLogHelper.AtCreate((IVersionable)entity, _currentUser.UserId);
+                RepositoryLogHelper.AtCreate((IVersionable)entity, _currentUser.UserName);
             }
         }
     }
@@ -59,7 +59,7 @@ where TEntity : class, IBaseEntity<TId>, new()
                 RepositoryLogHelper.VersionControl(oldEntity as IVersionable, entity as IVersionable);
             }
 
-            RepositoryLogHelper.AtUpdate((IVersionable)entity, _currentUser.UserId);
+            RepositoryLogHelper.AtUpdate((IVersionable)entity, _currentUser.UserName);
 
             if (entry != null)
             {
@@ -80,7 +80,7 @@ where TEntity : class, IBaseEntity<TId>, new()
             {
                 var oldEntity = oldEntities.FirstOrDefault(x => x.Id!.Equals(entity.Id));
                 RepositoryLogHelper.VersionControl(oldEntity as IVersionable, entity as IVersionable);
-                RepositoryLogHelper.AtUpdate((IVersionable)entity, _currentUser.UserId);
+                RepositoryLogHelper.AtUpdate((IVersionable)entity, _currentUser.UserName);
             }
         }
     }
@@ -95,7 +95,7 @@ where TEntity : class, IBaseEntity<TId>, new()
             if (((ISoftDelete)entity).IsDeleted == true)
                 throw new Exception("Entity not found. The entity may have been deleted by another process.");
 
-            RepositoryLogHelper.AtDelete((ISoftDelete)entity, _currentUser.UserId);
+            RepositoryLogHelper.AtDelete((ISoftDelete)entity, _currentUser.UserName);
         }
     }
 
