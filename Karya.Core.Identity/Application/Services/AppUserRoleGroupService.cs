@@ -22,8 +22,7 @@ public class AppUserRoleGroupService : BaseService<AppUserRoleGroupRepository, A
                 RoleGroupId = x.RoleGroupId,
                 RoleGroupName = x.RoleGroup != null ? x.RoleGroup.Name : string.Empty,
                 UserId = x.UserId,
-                UserName = x.User != null ? x.User.UserName ?? string.Empty : string.Empty,
-                //TenantId = x.TenantId,
+                UserName = x.User != null ? x.User.UserName ?? string.Empty : string.Empty
             });
 
         var result = await DataSourceLoader.LoadAsync(query, filterDataOptions);

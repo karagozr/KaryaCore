@@ -7,7 +7,7 @@ namespace Karya.Core.Identity.Domains.Entities;
 /// A user can belong to multiple role groups, and roles are resolved from
 /// both direct role assignments and role group memberships.
 /// </summary>
-public class AppRoleGroup : BaseEntity
+public class AppRoleGroup : BaseEntity<Guid>
 {
     public string Name { get; set; } = null!;
 

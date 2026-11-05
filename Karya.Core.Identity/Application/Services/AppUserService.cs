@@ -32,10 +32,8 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         user.Email = add.Email;
         user.PhoneNumber = add.PhoneNumber;
         user.EmailConfirmed = true;
-        user.IsSystemAdmin = add.IsSystemAdmin;
+        user.IsSystemAdmin = false;
         user.TenantId = _currentUser.TenantId;
-        user.ErpPersonId = add.ErpPersonId;
-        user.ErpUsername = add.ErpUsername;
         user.FirstName = add.FirstName;
         user.LastName = add.LastName;
         user.IsActive = add.IsActive;
@@ -91,10 +89,8 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
 
         if (data.TryGetValue(nameof(AppUserUDto.Email), out var email) && email is not null) user.Email = email.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.PhoneNumber), out var phone)) user.PhoneNumber = phone?.ToString();
-        if (data.TryGetValue(nameof(AppUserUDto.IsSystemAdmin), out var isAdmin) && isAdmin is not null) user.IsSystemAdmin = Convert.ToBoolean(isAdmin);
+        //if (data.TryGetValue(nameof(AppUserUDto.IsSystemAdmin), out var isAdmin) && isAdmin is not null) user.IsSystemAdmin = Convert.ToBoolean(isAdmin);
 
-        if (data.TryGetValue(nameof(AppUserUDto.ErpPersonId), out var erpPersonId)) user.ErpPersonId = erpPersonId?.ToString();
-        if (data.TryGetValue(nameof(AppUserUDto.ErpUsername), out var erpUsername)) user.ErpUsername = erpUsername?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.FirstName), out var firstName)) user.FirstName = firstName?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.LastName), out var lastName)) user.LastName = lastName?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.IsActive), out var isActive)) user.IsActive = Convert.ToBoolean(isActive);

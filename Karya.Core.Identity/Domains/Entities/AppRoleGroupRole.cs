@@ -5,9 +5,8 @@ namespace Karya.Core.Identity.Domains.Entities;
 /// <summary>
 /// Join entity mapping the many-to-many relationship between role groups and roles.
 /// </summary>
-public class AppRoleGroupRole : BaseEntity
+public class AppRoleGroupRole : BaseEntity<Guid>
 {
-
     public Guid RoleGroupId { get; set; }
 
     public Guid RoleId { get; set; }

@@ -63,7 +63,7 @@ public class AppProfileService : IAppProfileService
             return BaseResult<AppProfileDto>.Error("404", "User not found.", null);
 
         var allowed = AllowedClaimTypes;
-        
+
 
         var existing = await UserManager.GetClaimsAsync(user);
 
@@ -109,12 +109,12 @@ public class AppProfileService : IAppProfileService
     {
         var allowed = AllowedClaimTypes;
         var claims = await UserManager.GetClaimsAsync(user);
-       
+
         return new AppProfileDto
         {
             User = new AppBasicProfileUserDto
             {
-                FirstName= user.FirstName,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 Id = user.Id,
                 Username = user.UserName,
@@ -146,8 +146,6 @@ public class AppProfileService : IAppProfileService
             TenantId = string.IsNullOrWhiteSpace(CurrentUser.TenantId) ? user.TenantId : CurrentUser.TenantId,
             TenantName = (await GetCurrentTenantAsync(user))?.Name,
             IsSystemAdmin = user.IsSystemAdmin,
-            ErpPersonId = user.ErpPersonId,
-            ErpUsername = user.ErpUsername,
             FirstName = user.FirstName,
             LastName = user.LastName,
             IsActive = user.IsActive

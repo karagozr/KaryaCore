@@ -11,18 +11,11 @@ public class AppUser : IdentityUser<Guid>, IBaseEntity<Guid>
     /// <summary>True ise kullanıcı tüm tenant'lara erişebilen sistem adminidir.</summary>
     public bool IsSystemAdmin { get; set; }
 
-    public string? ErpUsername { get; set; }
-
-    public string? ErpPersonId { get; set; }
-
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
 
     public bool IsActive { get; set; }
-
-    public string? Theme { get; set; }
-    public string? Language { get; set; }
 
     /// <summary>Kullanıcının erişebildiği tenant üyelikleri (admin için birden çok olabilir).</summary>
     public ICollection<AppUserTenant> TenantMemberships { get; set; } = new List<AppUserTenant>();

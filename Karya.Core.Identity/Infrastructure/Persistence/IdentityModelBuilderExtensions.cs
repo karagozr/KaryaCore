@@ -15,22 +15,24 @@ public static class IdentityModelBuilderExtensions
         // Replace default OpenIddict entities with the App-prefixed ones.
         modelBuilder.UseOpenIddict<AppApplication, AppAuthorization, AppScope, AppToken, Guid>();
 
+        
+        modelBuilder.Entity<AppUser>().ToTable("AppUsers");
+        modelBuilder.Entity<AppRole>().ToTable("AppRoles");
+
         modelBuilder.Entity<AppRoleGroup>(b =>
         {
             b.ToTable("AppRoleGroups");
             b.HasKey(x => x.Id);
             b.Property(x => x.Name).IsRequired().HasMaxLength(256);
             b.Property(x => x.Description).HasMaxLength(1024);
-            b.Property(x => x.TenantId).IsRequired().HasMaxLength(256);
-            b.HasIndex(x => new { x.TenantId, x.Name }).IsUnique();
+            b.HasIndex(x => x.Name).IsUnique();
         });
 
         modelBuilder.Entity<AppRoleGroupRole>(b =>
         {
             b.ToTable("AppRoleGroupRoles");
             b.HasKey(x => x.Id);
-            b.Property(x => x.TenantId).IsRequired().HasMaxLength(256);
-            b.HasIndex(x => new { x.TenantId, x.RoleGroupId, x.RoleId }).IsUnique();
+            b.HasIndex(x => new { x.RoleGroupId, x.RoleId }).IsUnique();
 
             b.HasOne(x => x.RoleGroup)
                 .WithMany(g => g.RoleGroupRoles)
@@ -47,8 +49,7 @@ public static class IdentityModelBuilderExtensions
         {
             b.ToTable("AppUserRoleGroups");
             b.HasKey(x => x.Id);
-            b.Property(x => x.TenantId).IsRequired().HasMaxLength(256);
-            b.HasIndex(x => new { x.TenantId, x.UserId, x.RoleGroupId }).IsUnique();
+            b.HasIndex(x => new { x.UserId, x.RoleGroupId }).IsUnique();
 
             b.HasOne(x => x.User)
                 .WithMany(u => u.UserRoleGroups)
@@ -86,6 +87,7 @@ public static class IdentityModelBuilderExtensions
 
         modelBuilder.Entity<AppUserClaim>(b =>
         {
+            b.ToTable("AppUserClaims");
             b.HasOne<AppUser>()
                 .WithMany(x => x.Claims)
                 .HasForeignKey(x => x.UserId)
@@ -95,10 +97,9 @@ public static class IdentityModelBuilderExtensions
 
         modelBuilder.Entity<AppUserRole>(b =>
         {
-            b.ToTable("AspNetUserRoles");
+            b.ToTable("AppUserRoles");
             b.HasKey(x => x.Id);
-            b.Property(x => x.TenantId).IsRequired().HasMaxLength(256);
-            b.HasIndex(x => new { x.TenantId, x.UserId, x.RoleId }).IsUnique();
+            b.HasIndex(x => new { x.UserId, x.RoleId }).IsUnique();
 
             b.HasOne<AppUser>()
                 .WithMany(x => x.UserRoles)
@@ -115,6 +116,7 @@ public static class IdentityModelBuilderExtensions
 
         modelBuilder.Entity<AppUserLogin>(b =>
         {
+            b.ToTable("AppUserLogins");
             b.HasOne<AppUser>()
                 .WithMany(x => x.Logins)
                 .HasForeignKey(x => x.UserId)
@@ -124,6 +126,7 @@ public static class IdentityModelBuilderExtensions
 
         modelBuilder.Entity<AppUserToken>(b =>
         {
+            b.ToTable("AppUserTokens");
             b.HasOne<AppUser>()
                 .WithMany(x => x.Tokens)
                 .HasForeignKey(x => x.UserId)
@@ -133,6 +136,7 @@ public static class IdentityModelBuilderExtensions
 
         modelBuilder.Entity<AppRoleClaim>(b =>
         {
+            b.ToTable("AppRoleClaims");
             b.HasOne<AppRole>()
                 .WithMany(x => x.RoleClaims)
                 .HasForeignKey(x => x.RoleId)
