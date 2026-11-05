@@ -63,7 +63,7 @@ public class KaryaTokenOptions
 {
     public string[] TokenEndpoints { get; set; } = ["/connect/token", "/api/auth/login"];
 
-    public TimeSpan? AccessTokenLifetime { get; set; } = TimeSpan.FromMinutes(1);
+    public TimeSpan? AccessTokenLifetime { get; set; } = TimeSpan.FromMinutes(15);
 
     public TimeSpan RefreshTokenLifetime { get; set; } = TimeSpan.FromDays(30);
 

@@ -6,7 +6,7 @@ namespace Karya.Core.Identity.Domains.Entities;
 /// Join entity mapping the many-to-many relationship between users and role groups.
 /// A user can be a member of multiple role groups.
 /// </summary>
-public class AppUserRoleGroup : BaseTenantEntity<Guid>
+public class AppUserRoleGroup : BaseEntity
 {
     public Guid UserId { get; set; }
 
