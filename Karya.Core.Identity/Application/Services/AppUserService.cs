@@ -99,6 +99,8 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         if (data.TryGetValue(nameof(AppUserUDto.LastName), out var lastName)) user.LastName = lastName?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.IsActive), out var isActive)) user.IsActive = Convert.ToBoolean(isActive);
 
+        OnUserUpdating(user, data);
+
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
