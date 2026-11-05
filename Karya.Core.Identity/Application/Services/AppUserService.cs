@@ -59,6 +59,10 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
     {
     }
 
+    protected virtual void OnUserUpdating(AppUser user, Dictionary<string, object> updateData)
+    {
+    }
+
     public virtual async Task<BaseResult<bool>> ChangePasswordAsync(string currentPassword, string newPassword)
     {
         var user = await _userManager.FindByNameAsync(_currentUser.UserName);

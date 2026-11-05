@@ -53,6 +53,15 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         return BaseResult.SuccessCoded("201", MessageCodes.Created);
     }
 
+    /// <summary>Genişletilmiş kullanıcı alanlarını doldurmak için override edilebilir.</summary>
+    protected virtual void OnUserCreating(AppUser user, AppUserADto dto)
+    {
+    }
+
+    protected virtual void OnUserUpdating(AppUser user, Dictionary<string, object> updateData)
+    {
+    }
+
     public virtual async Task<BaseResult<bool>> ChangePasswordAsync(string currentPassword, string newPassword)
     {
         var user = await _userManager.FindByNameAsync(_currentUser.UserName);
