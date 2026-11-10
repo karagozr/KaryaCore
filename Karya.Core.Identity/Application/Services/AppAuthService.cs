@@ -31,10 +31,16 @@ public class AppAuthService : IAppAuthService
         var passwordResult = await _signInManager.CheckPasswordSignInAsync(user, password, false);
         if (!passwordResult.Succeeded) return null;
 
-        var hasTenant = await _dbContext.Set<AppUserTenant>()
-            .AnyAsync(x => x.UserId == user.Id && x.TenantId == tenantId);
+        if (!string.Equals(user.TenantId, tenantId, StringComparison.Ordinal))
+        {
+            var hasTenant = await _dbContext.Set<AppUserTenant>().AnyAsync(x => x.UserId == user.Id && x.TenantId == tenantId);
 
-        if (!hasTenant) return null;
+            if (!hasTenant) return null;
+
+            //user.TenantId = tenantId;
+            //var updateResult = await _userManager.UpdateAsync(user);
+            //if (!updateResult.Succeeded) return null;
+        }
 
         return CreatePrincipal(user, tenantId);
     }
