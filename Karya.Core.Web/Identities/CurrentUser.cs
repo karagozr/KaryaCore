@@ -48,4 +48,10 @@ public class CurrentUser : ICurrentUser
             return DefaultLanguage;
         }
     }
+
+    public bool IsSystemAdmin =>
+    bool.TryParse(
+        _accessor.HttpContext?.User.FindFirst("IsSystemAdmin")?.Value,
+        out var isAdmin
+    ) && isAdmin;
 }
