@@ -6,4 +6,5 @@ public interface ICurrentUser
     string TenantId { get; }
     string LanguageId { get; }
     string UserName { get; }
+    bool IsSystemAdmin { get; }
 }

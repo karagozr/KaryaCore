@@ -71,6 +71,7 @@ public class AppAuthService : IAppAuthService
         identity.AddClaim("UserId", user.Id.ToString());
         identity.AddClaim("TenantId", tenantId);
         identity.AddClaim("UserName", user.UserName ?? user.Id.ToString());
+        identity.AddClaim("IsSystemAdmin", user.IsSystemAdmin.ToString());
         identity.AddClaim(OpenIddictConstants.Claims.Name, user.UserName ?? string.Empty);
 
         identity.SetDestinations(_ => new[] { OpenIddictConstants.Destinations.AccessToken });
