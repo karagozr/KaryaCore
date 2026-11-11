@@ -23,8 +23,6 @@ public class InvCategoryService(ICurrentUser currentUser)
             MainCategoryName = x.MainCategory.Name
         });
 
-        var list = await query.ToListAsync();
-
         var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
 
         return BaseResult<LoadResult>.Success("200", null, res);

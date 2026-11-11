@@ -44,13 +44,29 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
 
         var query = _uow.Repo<TRepo>().Query();
 
-        
+
         if(filterDataOptions.Select == null || filterDataOptions.Select.Length == 0)
             filterDataOptions.Select = typeof(TDto).GetProperties().Select(p => (p.Name).FirstCharToLowerCase()).ToArray();
 
         var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
 
         return BaseResult<LoadResult>.Success("200",null, res);
+    }
+
+    public async virtual Task<BaseResult<LoadResult>> Lookup<TDto>(DataSourceLoadOptionsBase filterDataOptions, System.Linq.Expressions.Expression<Func<TEntity, bool>>? predicate = null) where TDto : class, ISelectDto, new()
+    {
+
+        var query = _uow.Repo<TRepo>().Query();
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        if (filterDataOptions.Select == null || filterDataOptions.Select.Length == 0)
+            filterDataOptions.Select = typeof(TDto).GetProperties().Select(p => (p.Name).FirstCharToLowerCase()).ToArray();
+
+        var res = await DataSourceLoader.LoadAsync(query, filterDataOptions);
+
+        return BaseResult<LoadResult>.Success("200", null, res);
     }
 
     public virtual async Task<BaseResult<TDto>> ByKey<TDto>(TId key) where TDto : class, IByKeyDto, new()
