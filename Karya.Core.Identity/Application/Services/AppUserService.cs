@@ -5,6 +5,7 @@ using Karya.Core.Interfaces.Identities;
 using Karya.Core.Results;
 using Karya.Core.Services;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace Karya.Core.Identity.Application.Services;
 
@@ -97,7 +98,7 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
 
         if (data.TryGetValue(nameof(AppUserUDto.FirstName), out var firstName)) user.FirstName = firstName?.ToString();
         if (data.TryGetValue(nameof(AppUserUDto.LastName), out var lastName)) user.LastName = lastName?.ToString();
-        if (data.TryGetValue(nameof(AppUserUDto.IsActive), out var isActive)) user.IsActive = Convert.ToBoolean(isActive);
+        if (data.TryGetValue(nameof(AppUserUDto.IsActive), out var isActive)) user.IsActive = isActive is JsonElement json ? json.GetBoolean() : Convert.ToBoolean(isActive);
 
         OnUserUpdating(user, data);
 
