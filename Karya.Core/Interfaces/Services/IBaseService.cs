@@ -19,7 +19,7 @@ public interface IBaseService<TEntity, TId> : IBaseService
 
     Task<BaseResult<LoadResult>> Select<TDto>(DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new();
 
-    Task<BaseResult<LoadResult>> Lookup<TDto>(DataSourceLoadOptionsBase filterDataOptions, Expression<Func<TEntity, bool>>? predicate = null) where TDto : class, ISelectDto, new();
+    Task<BaseResult<LoadResult>> Lookup<TDto>(DataSourceLoadOptionsBase filterDataOptions, Expression<Func<TEntity, bool>>? predicate = null) where TDto : class, ILookupDto, new();
 
     Task<BaseResult> Insert<TDto>(TDto dto) where TDto : class, IInsertDto, new();
 

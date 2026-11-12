@@ -15,9 +15,19 @@ namespace Karya.Test.Web.Api.Controllers;
 
 public class InvController : BaseCrudController<Inventory, string, InvSDto, InvLDto, InvADto, InvUDto>
 {
-    public InvController(IMediator mediator,ICurrentUser currentUser) : base( mediator, new InvService(currentUser)) { }
-
+    private readonly InvCategoryService _invCategoryService;
+    public InvController(IMediator mediator,ICurrentUser currentUser, InvCategoryService invCategoryService) : base( mediator, new InvService(currentUser)) { 
     
+        _invCategoryService = invCategoryService;
+    }
+
+
+    [HttpGet("Lookup-InvCategory")]
+    public async Task<ActionResult> LookupInvCategory(DataSourceLoadOptions options)
+    {
+        return await LookupResult<InventoryCategory, int, InvCategoryLookupDto>((IBaseService<InventoryCategory, int>)_invCategoryService, options, "Inv.Read");
+    }
+
 }
 
 public class InvParentFilter : IParentFilter

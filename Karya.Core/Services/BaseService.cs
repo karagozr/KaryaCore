@@ -7,6 +7,7 @@ using Karya.Core.Interfaces.Repositories;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
+using System.Linq.Expressions;
 
 namespace Karya.Core.Services;
 
@@ -53,13 +54,12 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
         return BaseResult<LoadResult>.Success("200",null, res);
     }
 
-    public async virtual Task<BaseResult<LoadResult>> Lookup<TDto>(DataSourceLoadOptionsBase filterDataOptions, System.Linq.Expressions.Expression<Func<TEntity, bool>>? predicate = null) where TDto : class, ISelectDto, new()
+    public async virtual Task<BaseResult<LoadResult>> Lookup<TDto>(DataSourceLoadOptionsBase filterDataOptions, Expression<Func<TEntity, bool>>? predicate = null) where TDto : class, ILookupDto, new()
     {
 
         var query = _uow.Repo<TRepo>().Query();
 
-        if (predicate != null)
-            query = query.Where(predicate);
+        if (predicate != null) query = query.Where(predicate);
 
         if (filterDataOptions.Select == null || filterDataOptions.Select.Length == 0)
             filterDataOptions.Select = typeof(TDto).GetProperties().Select(p => (p.Name).FirstCharToLowerCase()).ToArray();

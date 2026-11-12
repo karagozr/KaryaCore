@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq.Expressions;
 
 namespace Karya.Core.Web.Abstracts.Controllers;
 
@@ -33,18 +34,16 @@ public abstract class BaseController: ControllerBase
     protected ApiResult<TData> ApiActionResult<TData>(BaseResult<TData> result) => new(result);
     protected ApiResult ApiActionResult(BaseResult result) => new(result);
 
-    protected async Task<ActionResult> LookupResult<TLookupEntity, TLookupEntityId, TForeignSelectDto>(
+    protected async Task<ActionResult> LookupResult<TLookupEntity, TLookupEntityId, TLookupDto>(
+        IBaseService<TLookupEntity, TLookupEntityId> lookupService,
         DataSourceLoadOptions options,
         string permission,
-        System.Linq.Expressions.Expression<Func<TLookupEntity, bool>>? predicate = null)
+        Expression<Func<TLookupEntity, bool>>? predicate = null)
         where TLookupEntityId : notnull
-        where TForeignSelectDto : class, ISelectDto, new()
+        where TLookupDto : class, ILookupDto, new()
     {
-        var lookupService = HttpContext.RequestServices
-            .GetRequiredService<IBaseService<TLookupEntity, TLookupEntityId>>();
-
         var result = await _mediator.Send(
-            new LookupCommand<TLookupEntity, TLookupEntityId, TForeignSelectDto>(options, lookupService, permission, predicate));
+            new LookupCommand<TLookupEntity, TLookupEntityId, TLookupDto>(options, lookupService, permission, predicate));
 
         return ApiActionResult(result);
     }

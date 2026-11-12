@@ -38,3 +38,11 @@ public class InvMainCategoryLDto : ISelectDto
     public string? Id { get; set; }
     public string? Name { get; set; }
 }
+
+public class InvCategoryLookupDto : ILookupDto
+{
+    public string? Id { get; set; }
+    public string? Name { get; set; }
+    public string? MainCategoryName { get; set; } = null!;
+    public string? MainCategoryId { get; set; } = null!;
+}

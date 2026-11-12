@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 namespace Karya.Core.App.Features.Commands;
 
 public record LookupCommand<TEntity, TId, TDto>(DataSourceLoadOptionsBase LoadOptions, IBaseService<TEntity, TId> Service, string Permission = "", Expression<Func<TEntity, bool>>? Predicate = null)
-    : IExecutableCrudRequest<BaseResult<LoadResult>> where TDto : class, ISelectDto, new()
+    : IExecutableCrudRequest<BaseResult<LoadResult>> where TDto : class, ILookupDto, new()
 {
     public async Task<BaseResult<LoadResult>> ExecuteAsync(CancellationToken ct = default)
     {
