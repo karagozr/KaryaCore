@@ -7,6 +7,7 @@ public class AppRoleGroupSDto : IByKeyDto
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    public bool IsSystemRoleGroup { get; set; }
 }
 
 public class AppRoleGroupLDto : ISelectDto
@@ -14,6 +15,7 @@ public class AppRoleGroupLDto : ISelectDto
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    public bool IsSystemRoleGroup { get; set; }
 }
 
 public class AppRoleGroupADto : IInsertDto

@@ -12,6 +12,7 @@ public class AppRoleGroup : BaseEntity<Guid>
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
+    public bool IsSystemRoleGroup { get; set; } = false;
 
     public ICollection<AppRoleGroupRole> RoleGroupRoles { get; set; } = new List<AppRoleGroupRole>();
 
