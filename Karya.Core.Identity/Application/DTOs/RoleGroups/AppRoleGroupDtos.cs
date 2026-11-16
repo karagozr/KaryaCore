@@ -22,10 +22,12 @@ public class AppRoleGroupADto : IInsertDto
 {
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    public bool IsSystemRoleGroup { get; set; }
 }
 
 public class AppRoleGroupUDto : IUpdateDto
 {
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    public bool IsSystemRoleGroup { get; set; }
 }
