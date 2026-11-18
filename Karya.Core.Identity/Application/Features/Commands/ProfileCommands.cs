@@ -28,6 +28,15 @@ public record GetProfileCommand(
         => Service.GetAsync();
 }
 
+public record GetProfileTenantsCommand(
+    IAppProfileService Service,
+    string Permission = ""
+) : IExecutableCrudRequest<BaseResult<AppProfileTenantListDto>>
+{
+    public Task<BaseResult<AppProfileTenantListDto>> ExecuteAsync(CancellationToken ct = default)
+        => Service.GetTenantsAsync();
+}
+
 public record UpdateProfileCommand(
     Dictionary<string, object> UpdateData,
     IAppProfileService Service,

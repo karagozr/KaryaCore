@@ -33,6 +33,13 @@ public abstract class AppProfileController : BaseController
         return ApiActionResult(result);
     }
 
+    [HttpGet("tenants")]
+    public virtual async Task<IActionResult> GetTenants()
+    {
+        var result = await _mediator.Send(new GetProfileTenantsCommand(ProfileService));
+        return ApiActionResult(result);
+    }
+
     [HttpPut]
     public virtual async Task<IActionResult> Update([FromBody] Dictionary<string, object> updateData)
     {

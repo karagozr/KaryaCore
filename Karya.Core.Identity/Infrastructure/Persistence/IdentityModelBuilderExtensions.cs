@@ -65,12 +65,19 @@ public static class IdentityModelBuilderExtensions
         modelBuilder.Entity<AppUserTenant>(b =>
         {
             b.ToTable("AppUserTenants");
-            b.HasKey(x => new { x.UserId, x.TenantId });
+            b.HasKey(x => x.Id);
             b.Property(x => x.TenantId).IsRequired().HasMaxLength(256);
+
+            b.HasIndex(x => new { x.UserId, x.TenantId }).IsUnique();
 
             b.HasOne(x => x.User)
                 .WithMany(u => u.TenantMemberships)
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(x => x.Tenant)
+                .WithMany(t => t.UserTenants)
+                .HasForeignKey(x => x.TenantId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             b.HasIndex(x => x.TenantId);

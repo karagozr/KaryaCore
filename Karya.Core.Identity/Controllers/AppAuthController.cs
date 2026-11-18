@@ -1,15 +1,19 @@
 ﻿using Karya.Core.Identity.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using System.Security.Claims;
 
 namespace Karya.Core.Identity.Controllers;
 
 [ApiController]
 public abstract class AppAuthController : ControllerBase
 {
+    public sealed record ChangeTenantRequest(string TenantId);
+
     private readonly IAppAuthService _authService;
 
     public AppAuthController(IAppAuthService authService)
@@ -42,24 +46,41 @@ public abstract class AppAuthController : ControllerBase
             return Forbid(BuildError(OpenIddictConstants.Errors.InvalidRequest, "TenantId is required."),
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
-        var principal = await _authService.LoginAsync(request.Username, request.Password, tenantId);
-
-        if (principal == null)
-            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, "Invalid username, password or tenant."),
+        ClaimsPrincipal principal;
+        try
+        {
+            principal = await _authService.LoginAsync(request.Username, request.Password, tenantId)
+                ?? throw new UnauthorizedAccessException("Invalid username, password or tenant.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, ex.Message),
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
+
 
     private async Task<IActionResult> RefreshAsync()
     {
         var result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
-        var principal = result.Principal is null ? null : await _authService.RefreshAsync(result.Principal);
-
-        if (principal == null)
+        if (result.Principal is null)
             return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, "The refresh token is no longer valid."),
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+
+        ClaimsPrincipal principal;
+        try
+        {
+            principal = await _authService.RefreshAsync(result.Principal)
+                ?? throw new UnauthorizedAccessException("The refresh token is no longer valid.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, ex.Message),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
@@ -69,6 +90,32 @@ public abstract class AppAuthController : ControllerBase
     {
         await _authService.ForgotPasswordAsync(email);
         return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("~/api/auth/change-tenant")]
+    public async Task<IActionResult> ChangeTenant([FromBody] ChangeTenantRequest request)
+    {
+        if (request is null || string.IsNullOrWhiteSpace(request.TenantId))
+            return BadRequest(new { error = "invalid_request", error_description = "TenantId is required." });
+
+        ClaimsPrincipal principal;
+        try
+        {
+            principal = await _authService.ChangeTenantAsync(User, request.TenantId)
+                ?? throw new UnauthorizedAccessException("Invalid session or tenant access.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = "invalid_request", error_description = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, ex.Message),
+                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
+        return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
     private static AuthenticationProperties BuildError(string error, string description) =>

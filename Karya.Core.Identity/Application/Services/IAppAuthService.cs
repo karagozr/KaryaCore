@@ -10,6 +10,8 @@ namespace Karya.Core.Identity.Application.Services
 
         Task<ClaimsPrincipal?> RefreshAsync(ClaimsPrincipal refreshPrincipal);
 
+        Task<ClaimsPrincipal?> ChangeTenantAsync(ClaimsPrincipal principal, string tenantId);
+
         Task<BaseResult<bool>> ForgotPasswordAsync(string email);
     }
 }

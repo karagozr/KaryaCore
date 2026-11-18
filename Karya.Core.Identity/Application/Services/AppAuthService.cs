@@ -24,18 +24,21 @@ public class AppAuthService : IAppAuthService
     public virtual async Task<ClaimsPrincipal?> LoginAsync(string userName, string password, string tenantId)
     {
         var user = await _userManager.FindByNameAsync(userName);
-        if (user is null) return null;
+        if (user is null)
+            throw new UnauthorizedAccessException("Invalid username, password or tenant.");
 
         if (!user.IsActive) throw new Exception("User is not active");
 
         var passwordResult = await _signInManager.CheckPasswordSignInAsync(user, password, false);
-        if (!passwordResult.Succeeded) return null;
+        if (!passwordResult.Succeeded)
+            throw new UnauthorizedAccessException("Invalid username, password or tenant.");
 
         if (!string.Equals(user.TenantId, tenantId, StringComparison.Ordinal))
         {
             var hasTenant = await _dbContext.Set<AppUserTenant>().AnyAsync(x => x.UserId == user.Id && x.TenantId == tenantId);
 
-            if (!hasTenant) return null;
+            if (!hasTenant)
+                throw new UnauthorizedAccessException("Invalid username, password or tenant.");
 
             //user.TenantId = tenantId;
             //var updateResult = await _userManager.UpdateAsync(user);
@@ -45,20 +48,48 @@ public class AppAuthService : IAppAuthService
         return CreatePrincipal(user, tenantId);
     }
 
+    public virtual async Task<ClaimsPrincipal?> ChangeTenantAsync(ClaimsPrincipal principal, string tenantId)
+    {
+        if (principal?.Identity?.IsAuthenticated != true)
+            throw new UnauthorizedAccessException("Active session is required.");
+
+        if (string.IsNullOrWhiteSpace(tenantId))
+            throw new ArgumentException("TenantId is required.", nameof(tenantId));
+
+        var userId = principal.GetClaim(OpenIddictConstants.Claims.Subject) ?? principal.GetClaim("UserId");
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new UnauthorizedAccessException("Invalid active session.");
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null || !user.IsActive)
+            throw new UnauthorizedAccessException("User not found or inactive.");
+
+        var hasTenant = await _dbContext.Set<AppUserTenant>()
+            .AnyAsync(x => x.UserId == user.Id && x.TenantId == tenantId);
+
+        if (!hasTenant)
+            throw new UnauthorizedAccessException("User is not assigned to the requested tenant.");
+
+        return CreatePrincipal(user, tenantId);
+    }
+
     public virtual async Task<ClaimsPrincipal?> RefreshAsync(ClaimsPrincipal refreshPrincipal)
     {
         var userId = refreshPrincipal.GetClaim(OpenIddictConstants.Claims.Subject);
         var tenantId = refreshPrincipal.GetClaim("TenantId");
 
-        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(tenantId)) return null;
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(tenantId))
+            throw new UnauthorizedAccessException("The refresh token is no longer valid.");
 
         var user = await _userManager.FindByIdAsync(userId);
-        if (user is null || !user.IsActive) return null;
+        if (user is null || !user.IsActive)
+            throw new UnauthorizedAccessException("The refresh token is no longer valid.");
 
         var hasTenant = await _dbContext.Set<AppUserTenant>()
             .AnyAsync(x => x.UserId == user.Id && x.TenantId == tenantId);
 
-        if (!hasTenant) return null;
+        if (!hasTenant)
+            throw new UnauthorizedAccessException("The refresh token is no longer valid.");
 
         return CreatePrincipal(user, tenantId);
     }

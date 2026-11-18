@@ -15,4 +15,6 @@ public class AppTenant : IBaseEntity<string>
     public string? Description { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    public virtual List<AppUserTenant> UserTenants { get; set; } = new();
 }

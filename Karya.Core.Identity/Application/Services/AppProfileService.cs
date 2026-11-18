@@ -2,6 +2,8 @@
 using DevExtreme.AspNet.Data.ResponseModel;
 using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Identity.Extensions;
+using Karya.Core.Identity.Infrastructure.Persistence;
+using Karya.Core.Identity.Infrastructure.Persistence.Repositories;
 using Karya.Core.Interfaces.Identities;
 using Karya.Core.Results;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +17,7 @@ public interface IAppProfileService
 {
     Task<BaseResult<AppProfileDto>> GetBasicAsync();
     Task<BaseResult<AppProfileUserDto>> GetAsync();
+    Task<BaseResult<AppProfileTenantListDto>> GetTenantsAsync();
 
     Task<BaseResult<AppProfileDto>> UpdateAsync(Dictionary<string, object> updateData);
 
@@ -33,13 +36,16 @@ public class AppProfileService : IAppProfileService
 {
     protected readonly UserManager<AppUser> UserManager;
     protected readonly AppTenantService TenantService;
+    protected readonly IdentityUnitOfWork _uow;
     protected readonly ICurrentUser CurrentUser;
     protected readonly UserProfileOptions Options;
 
-    public AppProfileService(UserManager<AppUser> userManager, AppTenantService tenantService, ICurrentUser currentUser, IOptions<CoreIdentityOptions> options)
+
+    public AppProfileService(UserManager<AppUser> userManager, AppTenantService tenantService, IdentityUnitOfWork uow, ICurrentUser currentUser, IOptions<CoreIdentityOptions> options)
     {
         UserManager = userManager;
         TenantService = tenantService;
+        _uow = uow;
         CurrentUser = currentUser;
         Options = options.Value.Profile;
     }
@@ -150,6 +156,62 @@ public class AppProfileService : IAppProfileService
             LastName = user.LastName,
             IsActive = user.IsActive
         });
+    }
+
+    public virtual async Task<BaseResult<AppProfileTenantListDto>> GetTenantsAsync()
+    {
+        var user = await FindCurrentUserAsync();
+        if (user is null)
+            return BaseResult<AppProfileTenantListDto>.Error("404", "User not found.", null);
+
+        var currentTenantId = string.IsNullOrWhiteSpace(CurrentUser.TenantId) ? user.TenantId : CurrentUser.TenantId;
+
+        var membershipTenants = await (
+            from ut in _uow.Repo<AppUserTenantRepository>().Query().Where(x => x.UserId == user.Id)
+            join t in TenantService.Query() on ut.TenantId equals t.Id into tenantJoin
+            from t in tenantJoin.DefaultIfEmpty()
+            select new AppProfileTenantDto
+            {
+                TenantId = ut.TenantId,
+                TenantName = t != null ? t.Name : null,
+                IsActive = t != null && t.IsActive,
+                IsUserTenant = string.Equals(ut.TenantId, user.TenantId, StringComparison.Ordinal)
+            })
+            .ToListAsync();
+
+        var userTenant = await (
+            from u in UserManager.Users.Where(x => x.Id == user.Id)
+            join t in TenantService.Query() on u.TenantId equals t.Id into tenantJoin
+            from t in tenantJoin.DefaultIfEmpty()
+            select new AppProfileTenantDto
+            {
+                TenantId = u.TenantId,
+                TenantName = t != null ? t.Name : null,
+                IsActive = t != null && t.IsActive,
+                IsUserTenant = true
+            })
+            .FirstOrDefaultAsync();
+
+        var allTenants = new List<AppProfileTenantDto>(membershipTenants);
+        if (userTenant is not null)
+            allTenants.Add(userTenant);
+
+        var tenants = allTenants
+            .GroupBy(x => x.TenantId)
+            .Select(g => g.First())
+            .OrderBy(x => x.TenantId)
+            .ToList();
+
+        tenants.ForEach(x => x.IsCurrentTenant = string.Equals(currentTenantId, x.TenantId, StringComparison.Ordinal));
+
+        var data = new AppProfileTenantListDto
+        {
+            UserTenantId = user.TenantId,
+            CurrentTenantId = currentTenantId,
+            Tenants = tenants
+        };
+
+        return BaseResult<AppProfileTenantListDto>.Success("200", null, data);
     }
 
     public virtual async Task<BaseResult<LoadResult>> GetClaimsAsync(DataSourceLoadOptionsBase loadOptions)

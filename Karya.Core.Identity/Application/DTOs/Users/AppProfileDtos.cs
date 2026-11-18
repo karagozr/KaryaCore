@@ -35,6 +35,22 @@ public class AppProfileUserDto
     public bool IsActive { get; set; }
 }
 
+public class AppProfileTenantListDto
+{
+    public string UserTenantId { get; set; } = null!;
+    public string CurrentTenantId { get; set; } = null!;
+    public List<AppProfileTenantDto> Tenants { get; set; } = new();
+}
+
+public class AppProfileTenantDto
+{
+    public string TenantId { get; set; } = null!;
+    public string? TenantName { get; set; }
+    public bool IsActive { get; set; }
+    public bool IsUserTenant { get; set; }
+    public bool IsCurrentTenant { get; set; }
+}
+
 /// <summary>Profil claim güncelleme. Değeri null/boş olan claim silinir.</summary>
 public class AppProfileUDto
 {
