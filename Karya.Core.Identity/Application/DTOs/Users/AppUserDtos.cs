@@ -2,7 +2,7 @@ using Karya.Core.Interfaces.DTOs;
 
 namespace Karya.Core.Identity.Application.DTOs.Users;
 
-/// <summary>Tekil kayýt görünümü.</summary>
+/// <summary>Tekil kayï¿½t gï¿½rï¿½nï¿½mï¿½.</summary>
 public class AppUserSDto : IByKeyDto
 {
     public Guid Id { get; set; }
@@ -11,14 +11,12 @@ public class AppUserSDto : IByKeyDto
     public string? PhoneNumber { get; set; }
     //public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; }
 }
 
-/// <summary>Liste görünümü.</summary>
+/// <summary>Liste gï¿½rï¿½nï¿½mï¿½.</summary>
 public class AppUserLDto : ISelectDto
 {
     public Guid Id { get; set; }
@@ -27,14 +25,12 @@ public class AppUserLDto : ISelectDto
     public string? PhoneNumber { get; set; }
     //public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; }
 }
 
-/// <summary>Kullanýcý ekleme.</summary>
+/// <summary>Kullanï¿½cï¿½ ekleme.</summary>
 public class AppUserADto : IInsertDto
 {
     public string UserName { get; set; } = null!;
@@ -43,21 +39,17 @@ public class AppUserADto : IInsertDto
     public string Password { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
     //public string TenantId { get; set; } = null!;
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; } = true;
 }
 
-/// <summary>Kullanýcý güncelleme.</summary>
+/// <summary>Kullanï¿½cï¿½ gï¿½ncelleme.</summary>
 public class AppUserUDto : IUpdateDto
 {
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; }

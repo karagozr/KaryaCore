@@ -11,8 +11,6 @@ public class AppUserSDto : IByKeyDto
     public string? PhoneNumber { get; set; }
     //public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; }
@@ -27,8 +25,6 @@ public class AppUserLDto : ISelectDto
     public string? PhoneNumber { get; set; }
     //public string TenantId { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; }
@@ -43,8 +39,6 @@ public class AppUserADto : IInsertDto
     public string Password { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
     //public string TenantId { get; set; } = null!;
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; } = true;
@@ -56,8 +50,6 @@ public class AppUserUDto : IUpdateDto
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public bool IsActive { get; set; }

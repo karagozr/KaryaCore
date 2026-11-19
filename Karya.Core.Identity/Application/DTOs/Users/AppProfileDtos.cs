@@ -27,8 +27,6 @@ public class AppProfileUserDto
     public string TenantId { get; set; } = null!;
     public string? TenantName { get; set; } = null!;
     public bool IsSystemAdmin { get; set; }
-    public string? ErpPersonId { get; set; }
-    public string? ErpUsername { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? FullName => $"{FirstName} {LastName}".Trim();
