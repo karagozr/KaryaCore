@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
@@ -70,11 +71,18 @@ public abstract class AppAuthController : ControllerBase
             return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, "The refresh token is no longer valid."),
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
+        var request = HttpContext.GetOpenIddictServerRequest();
+        var tenantId = request?.GetParameter("tenantId")?.ToString();
+
         ClaimsPrincipal principal;
         try
         {
-            principal = await _authService.RefreshAsync(result.Principal)
-                ?? throw new UnauthorizedAccessException("The refresh token is no longer valid.");
+            principal = string.IsNullOrWhiteSpace(tenantId)
+                ? await _authService.RefreshAsync(result.Principal)
+                : await _authService.ChangeTenantAsync(result.Principal, tenantId);
+
+            if (principal is null)
+                throw new UnauthorizedAccessException("The refresh token is no longer valid.");
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -99,11 +107,9 @@ public abstract class AppAuthController : ControllerBase
         if (request is null || string.IsNullOrWhiteSpace(request.TenantId))
             return BadRequest(new { error = "invalid_request", error_description = "TenantId is required." });
 
-        ClaimsPrincipal principal;
         try
         {
-            principal = await _authService.ChangeTenantAsync(User, request.TenantId)
-                ?? throw new UnauthorizedAccessException("Invalid session or tenant access.");
+            await _authService.ChangeTenantAsync(User, request.TenantId);
         }
         catch (ArgumentException ex)
         {
@@ -111,11 +117,14 @@ public abstract class AppAuthController : ControllerBase
         }
         catch (UnauthorizedAccessException ex)
         {
-            return Forbid(BuildError(OpenIddictConstants.Errors.InvalidGrant, ex.Message),
-                OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            return StatusCode(StatusCodes.Status403Forbidden, new
+            {
+                error = OpenIddictConstants.Errors.InvalidGrant,
+                error_description = ex.Message
+            });
         }
 
-        return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        return Ok();
     }
 
     private static AuthenticationProperties BuildError(string error, string description) =>
