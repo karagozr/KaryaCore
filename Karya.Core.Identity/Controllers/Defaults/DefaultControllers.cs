@@ -32,6 +32,9 @@ internal sealed class AppTenantController(IMediator mediator, AppTenantService s
 internal sealed class AppUserController(IMediator mediator, IAppUserService appUserService)
     : Base.AppUserController(mediator, appUserService);
 
+internal sealed class AppUserTenantController(IMediator mediator, DbContext context, AppUserTenantService service)
+    : Base.AppUserTenantController(mediator, context, service);
+
 internal sealed class AppUserRoleController(DbContext context, ICurrentUser currentUser)
     : Base.AppUserRoleController(context, currentUser);
 

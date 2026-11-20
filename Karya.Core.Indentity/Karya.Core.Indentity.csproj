@@ -7,7 +7,7 @@
     <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Karya.Core.Indentity</PackageId>
-    <Version>1.4.3</Version>
+    <Version>1.4.5</Version>
     <Authors>Ramazan Karagoz</Authors>
     <Company>Karagoz</Company>
     <Description>Karya Core Identity Layer - Authentication and Authorization for .NET 10</Description>
@@ -21,6 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.13" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="OpenIddict.AspNetCore" Version="7.8.0" />
