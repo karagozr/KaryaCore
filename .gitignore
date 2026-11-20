@@ -66,6 +66,9 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
+# Local application settings
+/Karya.Test.Web.Api/appsettings.json
+
 # StyleCop
 StyleCopReport.xml
 

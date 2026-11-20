@@ -17,7 +17,7 @@ namespace Karya.Test.Web.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -158,7 +158,7 @@ namespace Karya.Test.Web.Api.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AppRoles", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppRoleClaim", b =>
@@ -182,7 +182,7 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AppRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppRoleGroup", b =>
@@ -196,20 +196,17 @@ namespace Karya.Test.Web.Api.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
+                    b.Property<bool>("IsSystemRoleGroup")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnOrder(1);
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "Name")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("AppRoleGroups", (string)null);
@@ -228,19 +225,11 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnOrder(1);
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleGroupId");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("TenantId", "RoleGroupId", "RoleId")
+                    b.HasIndex("RoleGroupId", "RoleId")
                         .IsUnique();
 
                     b.ToTable("AppRoleGroupRoles", (string)null);
@@ -392,12 +381,6 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ErpPersonId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ErpUsername")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -406,9 +389,6 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.Property<bool>("IsSystemAdmin")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -443,9 +423,6 @@ namespace Karya.Test.Web.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Theme")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -463,7 +440,7 @@ namespace Karya.Test.Web.Api.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AppUsers", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUserClaim", b =>
@@ -487,7 +464,7 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AppUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUserLogin", b =>
@@ -508,7 +485,7 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AppUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUserRole", b =>
@@ -520,11 +497,6 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -532,12 +504,10 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("TenantId", "UserId", "RoleId")
+                    b.HasIndex("UserId", "RoleId")
                         .IsUnique();
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AppUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUserRoleGroup", b =>
@@ -550,12 +520,6 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Property<Guid>("RoleGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnOrder(1);
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -563,9 +527,7 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasIndex("RoleGroupId");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("TenantId", "UserId", "RoleGroupId")
+                    b.HasIndex("UserId", "RoleGroupId")
                         .IsUnique();
 
                     b.ToTable("AppUserRoleGroups", (string)null);
@@ -573,16 +535,25 @@ namespace Karya.Test.Web.Api.Migrations
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUserTenant", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
 
                     b.Property<string>("TenantId")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("UserId", "TenantId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId", "TenantId")
+                        .IsUnique();
 
                     b.ToTable("AppUserTenants", (string)null);
                 });
@@ -603,7 +574,7 @@ namespace Karya.Test.Web.Api.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AppUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Karya.Test.Web.Api.Localization.LocalizationResource", b =>
@@ -745,11 +716,19 @@ namespace Karya.Test.Web.Api.Migrations
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUserTenant", b =>
                 {
+                    b.HasOne("Karya.Core.Identity.Domains.Entities.AppTenant", "Tenant")
+                        .WithMany("UserTenants")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Karya.Core.Identity.Domains.Entities.AppUser", "User")
                         .WithMany("TenantMemberships")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tenant");
 
                     b.Navigation("User");
                 });
@@ -789,6 +768,11 @@ namespace Karya.Test.Web.Api.Migrations
                     b.Navigation("RoleGroupRoles");
 
                     b.Navigation("UserRoleGroups");
+                });
+
+            modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppTenant", b =>
+                {
+                    b.Navigation("UserTenants");
                 });
 
             modelBuilder.Entity("Karya.Core.Identity.Domains.Entities.AppUser", b =>
