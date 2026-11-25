@@ -1,7 +1,7 @@
 ﻿using Karya.Core.Identity.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
@@ -109,7 +109,8 @@ public abstract class AppAuthController : ControllerBase
 
         try
         {
-            await _authService.ChangeTenantAsync(User, request.TenantId);
+            var principal =  await _authService.ChangeTenantAsync(User, request.TenantId);
+            return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
         catch (ArgumentException ex)
         {
@@ -124,7 +125,6 @@ public abstract class AppAuthController : ControllerBase
             });
         }
 
-        return Ok();
     }
 
     private static AuthenticationProperties BuildError(string error, string description) =>
