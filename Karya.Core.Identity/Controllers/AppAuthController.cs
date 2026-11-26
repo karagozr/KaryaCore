@@ -13,8 +13,6 @@ namespace Karya.Core.Identity.Controllers;
 [ApiController]
 public abstract class AppAuthController : ControllerBase
 {
-    public sealed record ChangeTenantRequest(string TenantId);
-
     private readonly IAppAuthService _authService;
 
     public AppAuthController(IAppAuthService authService)
@@ -24,6 +22,7 @@ public abstract class AppAuthController : ControllerBase
 
     [HttpPost("~/connect/token")]
     [HttpPost("~/api/auth/login")]
+    [HttpPost("~/api/auth/change-tenant")]
     public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest();
@@ -98,33 +97,6 @@ public abstract class AppAuthController : ControllerBase
     {
         await _authService.ForgotPasswordAsync(email);
         return Ok();
-    }
-
-    [Authorize]
-    [HttpPost("~/api/auth/change-tenant")]
-    public async Task<IActionResult> ChangeTenant([FromBody] ChangeTenantRequest request)
-    {
-        if (request is null || string.IsNullOrWhiteSpace(request.TenantId))
-            return BadRequest(new { error = "invalid_request", error_description = "TenantId is required." });
-
-        try
-        {
-            var principal =  await _authService.ChangeTenantAsync(User, request.TenantId);
-            return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { error = "invalid_request", error_description = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return StatusCode(StatusCodes.Status403Forbidden, new
-            {
-                error = OpenIddictConstants.Errors.InvalidGrant,
-                error_description = ex.Message
-            });
-        }
-
     }
 
     private static AuthenticationProperties BuildError(string error, string description) =>

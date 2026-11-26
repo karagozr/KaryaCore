@@ -33,7 +33,7 @@ public abstract class AppProfileController : BaseController
         return ApiActionResult(result);
     }
 
-    [HttpGet("tenants")]
+    [HttpGet("~/api/AppProfile/tenants")]
     public virtual async Task<IActionResult> GetTenants()
     {
         var result = await _mediator.Send(new GetProfileTenantsCommand(ProfileService));

@@ -61,7 +61,7 @@ public class CoreIdentityOptions
 
 public class KaryaTokenOptions
 {
-    public string[] TokenEndpoints { get; set; } = ["/connect/token", "/api/auth/login"];
+    public string[] TokenEndpoints { get; set; } = ["/connect/token", "/api/auth/login", "/api/auth/change-tenant"];
 
     public TimeSpan? AccessTokenLifetime { get; set; } = TimeSpan.FromMinutes(15);
 
