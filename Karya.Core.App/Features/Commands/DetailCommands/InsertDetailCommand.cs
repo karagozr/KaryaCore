@@ -6,15 +6,16 @@ using Karya.Core.Results;
 
 namespace Karya.Core.App.Features.Commands.DetailCommands;
 
-public record InsertDetailCommand<TEntity, TId, TParentFilter, TDto>(
+public record InsertDetailCommand<TEntity, TId, TParentFilter, TDto, TrDto>(
      TParentFilter ParentFilter,
     TDto Dto,
     IBaseDetailService<TEntity, TId, TParentFilter> Service,
     string Permission = ""
-) : IExecutableCrudRequest<BaseResult>
+) : IExecutableCrudRequest<BaseResult<TrDto>>
     where TDto : class, IInsertDto, new()
+    where TrDto : class, IByKeyDto, new()
     where TParentFilter : class, IParentFilter, new()
 {
-    public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
-        => Service.Insert(ParentFilter, Dto);
+    public Task<BaseResult<TrDto>> ExecuteAsync(CancellationToken ct = default)
+        => Service.Insert<TDto, TrDto>(ParentFilter, Dto);
 }

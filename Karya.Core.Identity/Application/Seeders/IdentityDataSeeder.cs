@@ -64,7 +64,7 @@ public class IdentityDataSeeder : IDatabaseSeeder
         if (await _tenantService.Query().AnyAsync(x => x.Id == tenantId))
             return;
 
-        await _tenantService.Insert(new AppTenantADto
+        await _tenantService.Insert<AppTenantADto, AppTenantSDto>(new AppTenantADto
         {
             Id = tenantId,
             Name = _seedOptions.TenantName,

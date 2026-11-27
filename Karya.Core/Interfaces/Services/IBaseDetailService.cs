@@ -15,7 +15,8 @@ public interface IBaseDetailService<TEntity, TId, TParentFilter> : IBaseService
 
     Task<BaseResult<LoadResult>> Select<TDto>(TParentFilter parentFilter, DataSourceLoadOptionsBase filterDataOptions) where TDto : class, ISelectDto, new();
 
-    Task<BaseResult> Insert<TDto>(TParentFilter parentFilter, TDto dto) where TDto : class, IInsertDto, new();
+    Task<BaseResult<TrDto>> Insert<TDto,TrDto>(TParentFilter parentFilter, TDto dto) where TDto : class, IInsertDto, new()
+        where TrDto : class, IByKeyDto, new();
 
     Task<BaseResult> Update<TDto>(TParentFilter parentFilter, TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new();
 

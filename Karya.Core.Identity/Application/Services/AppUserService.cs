@@ -1,5 +1,6 @@
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
+using Karya.Core.Helpers.Generals;
 using Karya.Core.Identity.Domains.Entities;
 using Karya.Core.Identity.Infrastructure.Persistence;
 using Karya.Core.Identity.Infrastructure.Persistence.Repositories;
@@ -63,10 +64,10 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         return BaseResult<LoadResult>.Success("200", null, res);
     }
 
-    public override async Task<BaseResult> Insert<TDto>(TDto dto)
+    public override async Task<BaseResult<TrDto>> Insert<TDto, TrDto>(TDto dto)
     {
         if (dto is not AppUserADto add)
-            return await base.Insert(dto);
+            return await base.Insert<TDto, TrDto>(dto);
 
         var user = _entityFactory.CreateUser();
         user.UserName = add.UserName;
@@ -89,10 +90,10 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         if (!result.Succeeded)
         {
             var errors = result.Errors.ToDictionary(e => e.Code, e => e.Description);
-            return BaseResult.Error("400", "Kullanýcý oluþturulamadý.", errors);
+            return BaseResult<TrDto>.Error("400", "Kullanýcý oluþturulamadý.", null,errors);
         }
 
-        return BaseResult.SuccessCoded("201", MessageCodes.Created);
+        return BaseResult<TrDto>.Success("201", MessageCodes.Created, EntityMapper.MapToDto<AppUser, TrDto>(user));
     }
 
     /// <summary>Geniþletilmiþ kullanýcý alanlarýný doldurmak için override edilebilir.</summary>

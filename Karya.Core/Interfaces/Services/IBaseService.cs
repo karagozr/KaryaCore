@@ -21,7 +21,8 @@ public interface IBaseService<TEntity, TId> : IBaseService
 
     Task<BaseResult<LoadResult>> Lookup<TDto>(DataSourceLoadOptionsBase filterDataOptions, Expression<Func<TEntity, bool>>? predicate = null) where TDto : class, ILookupDto, new();
 
-    Task<BaseResult> Insert<TDto>(TDto dto) where TDto : class, IInsertDto, new();
+    Task<BaseResult<TrDto>> Insert<TDto, TrDto>(TDto dto) where TDto : class, IInsertDto, new()
+        where TrDto : class, IByKeyDto, new();
 
     Task<BaseResult> Update<TDto>(TId key, Dictionary<string, object> updateData) where TDto : class, IUpdateDto, new();
 

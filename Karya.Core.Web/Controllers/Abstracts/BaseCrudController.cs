@@ -44,7 +44,7 @@ public abstract class BaseCrudController<TEntity, TId, TSingleDto, TSelectDto, T
     public virtual async Task<ActionResult> Insert([FromBody] TInsertDto dto)
     {
         var result = await _mediator.Send(
-            new InsertCommand<TEntity, TId, TInsertDto>(dto, _service, $"{typeof(TEntity).Name}.Create"));
+            new InsertCommand<TEntity, TId, TInsertDto, TSingleDto>(dto, _service, $"{typeof(TEntity).Name}.Create"));
         return ApiActionResult(result);
     }
 

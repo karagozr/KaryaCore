@@ -5,13 +5,14 @@ using Karya.Core.Results;
 
 namespace Karya.Core.App.Features.Commands;
 
-public record InsertCommand<TEntity, TId, TDto>(
+public record InsertCommand<TEntity, TId, TDto,TrDto>(
     TDto Dto,
     IBaseService<TEntity, TId> Service,
     string Permission = ""
-) : IExecutableCrudRequest<BaseResult>
+) : IExecutableCrudRequest<BaseResult<TrDto>>
     where TDto : class, IInsertDto, new()
+    where TrDto : class, IByKeyDto, new()
 {
-    public Task<BaseResult> ExecuteAsync(CancellationToken ct = default)
-        => Service.Insert(Dto);
+    public Task<BaseResult<TrDto>> ExecuteAsync(CancellationToken ct = default)
+        => Service.Insert<TDto, TrDto>(Dto);
 }

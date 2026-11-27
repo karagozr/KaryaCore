@@ -1,3 +1,4 @@
+using Karya.Core.Helpers.Generals;
 using Karya.Core.Indentity.Domains.Entities;
 using Karya.Core.Indentity.DTOs;
 using Karya.Core.Indentity.Infrastructure;
@@ -21,10 +22,10 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         _currentUser = currentUser;
     }
 
-    public override async Task<BaseResult> Insert<TDto>(TDto dto)
+    public override async Task<BaseResult<TrDto>> Insert<TDto, TrDto>(TDto dto)
     {
         if (dto is not AppUserADto add)
-            return await base.Insert(dto);
+            return await base.Insert<TDto, TrDto>(dto);
 
         var user = new AppUser
         {
@@ -47,10 +48,10 @@ public class AppUserService : BaseService<AppUserRepository, AppUser, Guid>, IAp
         if (!result.Succeeded)
         {
             var errors = result.Errors.ToDictionary(e => e.Code, e => e.Description);
-            return BaseResult.Error("400", "Kullanıcı oluşturulamadı.", errors);
+            return BaseResult<TrDto>.Error("400", "Kullanıcı oluşturulamadı.", null, errors);
         }
 
-        return BaseResult.SuccessCoded("201", MessageCodes.Created);
+        return BaseResult<TrDto>.Success("201", MessageCodes.Created, EntityMapper.MapToDto<AppUser, TrDto>(user));
     }
 
     /// <summary>Genişletilmiş kullanıcı alanlarını doldurmak için override edilebilir.</summary>

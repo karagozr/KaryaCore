@@ -52,7 +52,7 @@ public abstract class BaseCrudDetailController<TEntity, TId, TParentFilter, TSin
     public virtual async Task<ActionResult> Insert([ModelBinder(typeof(GenericParentFilterModelBinder))] TParentFilter parent, [FromBody] TInsertDto dto)
     {
         var result = await _mediator.Send(
-            new InsertDetailCommand<TEntity, TId, TParentFilter, TInsertDto>(parent, dto, _service, $"{typeof(TEntity).Name}.Create"));
+            new InsertDetailCommand<TEntity, TId, TParentFilter, TInsertDto, TSingleDto>(parent, dto, _service, $"{typeof(TEntity).Name}.Create"));
         return ApiActionResult(result);
     }
 

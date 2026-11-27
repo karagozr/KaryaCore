@@ -83,14 +83,16 @@ public abstract class BaseService<TRepo, TEntity, TId> : BaseService, IBaseServi
 
     }
 
-    public virtual async Task<BaseResult> Insert<TDto>(TDto dto) where TDto : class, IInsertDto, new()
+    public virtual async Task<BaseResult<TrDto>> Insert<TDto, TrDto>(TDto dto) where TDto : class, IInsertDto, new()
+        where TrDto : class, IByKeyDto, new()
     {
-        
-        await _uow.Repo<TRepo>().AddAsync(EntityMapper.MapToEntity<TEntity, TDto>(dto));
+        var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
+
+        await _uow.Repo<TRepo>().AddAsync(entity);
         
         var result = await _uow.CompleteAsync();
-
-        return new BaseResult<TDto>(result,data:dto);
+        
+        return new BaseResult<TrDto>(result,data: EntityMapper.MapToDto<TEntity, TrDto>(entity));
         
     }
 

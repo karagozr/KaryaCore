@@ -8,6 +8,7 @@ using Karya.Core.Interfaces.Repositories;
 using Karya.Core.Interfaces.Services;
 using Karya.Core.Interfaces.UnitOfWorks;
 using Karya.Core.Results;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Karya.Core.Services;
 
@@ -63,14 +64,16 @@ public abstract class BaseDetailService<TRepo, TEntity, TId, TParentFilter> : Ba
 
 
 
-    public virtual async Task<BaseResult> Insert<TDto>(TParentFilter parentFilter, TDto dto) where TDto : class, IInsertDto, new()
+    public virtual async Task<BaseResult<TrDto>> Insert<TDto, TrDto>(TParentFilter parentFilter, TDto dto) where TDto : class, IInsertDto, new()
+        where TrDto : class, IByKeyDto, new()
     {
+        var entity = EntityMapper.MapToEntity<TEntity, TDto>(dto);
 
-        await _uow.Repo<TRepo>(parentFilter).AddAsync(EntityMapper.MapToEntity<TEntity, TDto>(dto));
+        await _uow.Repo<TRepo>(parentFilter).AddAsync(entity);
 
         var result = await _uow.CompleteAsync();
 
-        return new BaseResult<TDto>(result, data: dto);
+        return new BaseResult<TrDto>(result, data: EntityMapper.MapToDto<TEntity, TrDto>(entity));
 
     }
 
